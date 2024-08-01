@@ -1,0 +1,255 @@
+
+.search__content{
+  margin: 0 auto;
+  height: 100%;
+  max-width: 1230px;
+
+}
+.admin-form__heading {
+  padding-top: 10px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 24px;
+  color: #838383;
+
+}
+
+.search-form {
+  margin: 0 auto;
+  padding: 30px 15px;
+  width: 100%;
+  max-width: 1230px;
+    display: flex;
+  justify-content: center;
+}
+
+.search-form__item-group{
+   display: flex;
+  justify-content: center;
+}
+
+.search-form__item-group-item{
+  margin-left:30px;
+  height: 50px;
+  
+}
+
+.search-form__item-input {
+  width: 300px;
+  height: 40px;
+  border: none;
+  border-radius: 3px;
+  background-color: #d7d3c96a;
+
+  appearance: none;
+}
+
+.search-form-subcontent{
+  display: flex;
+  justify-content: space-between;
+  height: 30px;
+}
+.search-form__item-select
+{
+    position: relative;
+  
+}
+
+.search-form-subcontent__pagenation{
+  display: flex;
+  justify-content: center;
+}
+
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: auto;
+  height: auto;
+  background: transparent;
+  z-index: 1;
+}
+.search-form__item-calender{
+  width: 130px;
+  height: 40px;
+  border: none;
+  border-radius: 3px;
+  background-color: #d7d3c96a;
+}
+.search-form__item-select-wrapper{
+  position: relative;
+  margin: 0em 0em 0em 0em;
+  float: left;
+}
+.search-form__item-select-wrapper::after {
+   pointer-events: none;
+    content: "";
+    position: absolute;
+    top: 15px;
+    right: 12px;
+    border-right: 10px solid transparent;
+    border-left: 10px solid transparent;
+    border-top: 12px solid #5555555d;
+    border-bottom: 0;
+}
+.search-form__item-select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 5em;
+  height: 2.5em;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.2em;
+  padding: 0em 1em 0em 1em;
+
+    height: 40px;
+  background-color: #d7d3c96a;
+   border: none;
+  border-radius: 3px;
+}
+
+.search-form__item-select-gender{
+  width: 100px;
+}
+
+.search-form__item-select-category{
+  width: 300px;
+}
+
+.search-form__button {
+  width: 100%;
+  padding-left: 10px;
+
+  
+}
+
+.search-form__button-submit {
+
+  padding: 20px;
+  width: 80px;
+  height: 40px;
+  border: none;
+  background: #5d4323;
+  color: #fff;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.search-form__button-reset {
+
+  margin-left: 10px;
+  padding: 10px;
+  width: 90px;
+  height: 40px;
+  border: none;
+  border-radius: 3px;
+  color: #fff;
+  cursor: pointer;
+}
+
+
+.search__content {
+  margin: 0 auto;
+  padding: 30px 15px;
+  max-width: 1230px;
+}
+
+.search-table {
+  margin: 30px auto;
+  width: 70%;
+  text-align: center;
+}
+
+.search-table__inner {
+  width: 100%;
+}
+
+.search-table__row {
+  border-bottom: 1px solid #ddd;
+}
+
+.content__heading{
+  text-align: center;
+}
+.search-table__header {
+  padding: 13px;
+  width: 25%;
+  height: 20px;
+  font-weight: bold;
+  background: #835b38b5;
+  color: #fff;;
+}
+
+
+.search-table__item {
+  padding: 8px;
+}
+
+.search__table{
+  margin-top: 16px;
+  width: 100%;
+  text-align: center;
+   margin: 0 auto;
+   border-collapse: collapse;
+}
+
+.search__row{
+  padding-left: 20px;
+  text-align: center;
+}
+
+.search__row, .search__data {
+            padding: 10px;
+            border-top: 1px solid #000; /* 上部の罫線 */
+            border-bottom: 1px solid #000; /* 下部の罫線 */
+  height: 55px;
+
+        }
+th:first-child, td:first-child {
+            border-left: none; /* 左の罫線を非表示 */
+        }
+th:last-child, td:last-child {
+            border-right: none; /* 右の罫線を非表示 */
+}
+
+.date-switcher{
+text-align: center;
+}
+
+.user_name {
+  outline: none;
+  margin: 5px 0;
+  padding: 10px;
+  width: 20%;
+  background-color: transparent;
+  border: none;
+  text-align: center;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+
+
+.date-switcher-inner {
+            display: flex;
+            align-items: center;
+             justify-content: center;
+            margin: auto 0;
+            text-align: center;
+}
+
+.search-form-subcontent__pagenation{
+  display: flex;
+  justify-content: center;
+}
+
+.date-switcher__button{
+  margin:0 20px ;
+  color: #0080ff;
+  border: 1px solid #0080ff;
+  font-weight: bold;
+}

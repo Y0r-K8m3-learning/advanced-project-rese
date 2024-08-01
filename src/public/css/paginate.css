@@ -1,0 +1,54 @@
+.text-muted{
+    display: none;
+}
+.d-sm-none{
+    display: none;
+
+}
+.pagination {
+    display: flex;
+    padding-left: 0;
+    list-style: none;
+    border-radius: 0.25rem;
+}
+
+.page-item {
+    margin: 0 ;
+}
+
+.page-item .page-link {
+    position: relative;
+    display: block;
+    padding: 0.5rem 0.75rem;
+    line-height: 1.25;
+    color: #257bebc5;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    text-decoration: none;
+}
+
+.page-item.active .page-link {
+    z-index: 1;
+    color: #fff;
+    background-color: #1f9de1;
+    
+    border-color: #e3101022;
+}
+
+.page-item.disabled .page-link {
+    color: #6c757d;
+    pointer-events: none;
+    background-color: #fff;
+    border-color: #dee2e6;
+}
+
+.page-link:hover {
+    color: #0056b3;
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+}
+
+svg.w-5.h-5 {
+width: 30px;
+height: 30px;
+}
