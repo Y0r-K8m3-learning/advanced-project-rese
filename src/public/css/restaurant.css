@@ -1,0 +1,63 @@
+ .heart {
+            position: relative;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            display: inline-block;
+            background-color: grey;
+            transform: rotate(-45deg);
+            margin: 10px;
+        }
+
+        .heart::before,
+        .heart::after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: grey;
+            border-radius: 50%;
+        }
+
+        .heart::before {
+            top: -10px;
+            left: 0;
+        }
+
+        .heart::after {
+            left: 10px;
+            top: 0;
+        }
+
+        .heart.favorited {
+            background-color: red;
+        }
+
+        .heart.favorited::before,
+        .heart.favorited::after {
+            background-color: red;
+        }
+
+        button {
+            background: none;
+            border: none;
+            padding: 0;
+            margin: 0;
+        }
+
+       .search-input {
+        position: relative;
+    }
+
+    .search-input input {
+        padding-left: 30px; /* アイコン分のスペースを確保 */
+    }
+
+    .search-input .fa-search {
+        position: absolute;
+        left: 10px;
+        top: 60%;
+        transform: translateY(-50%);
+        color: #007bff; /* アイコンの色 */
+        pointer-events: none; /* アイコンがクリックされないように */
+    }

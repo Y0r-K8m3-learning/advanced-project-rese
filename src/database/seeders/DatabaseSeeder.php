@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use PhpParser\Node\Stmt\Break_;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,8 +13,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call(UsersTableSeeder::class);
-        $this->call(AttendancessTableSeeder::class);
-        $this->call(BreaksTableSeeder::class);
+        User::factory(20)->create();
+        $this->call(AreasTableSeeder::class);
+        $this->call(GenresTableSeeder::class);
+        $this->call(RestaurantsTableSeeder::class);
     }
 }

@@ -6,11 +6,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail as MustVerifyEmailContract;
 
-class User extends Authenticatable implements MustVerifyEmailContract
+class User extends Authenticatable
 {
-
     use HasFactory, Notifiable;
 
     /**
@@ -19,7 +17,6 @@ class User extends Authenticatable implements MustVerifyEmailContract
      * @var array<int, string>
      */
     protected $fillable = [
-        'id',
         'name',
         'email',
         'password',
@@ -48,8 +45,12 @@ class User extends Authenticatable implements MustVerifyEmailContract
         ];
     }
 
-    public function workLogs()
+    public function restaurant()
     {
-        return $this->hasMany(Attendance::class);
+        return $this->hasMany(Restaurant::class);
+    }
+    public function favorites()
+    {
+        return $this->belongsToMany(User::class, 'favorites')->withTimestamps();
     }
 }

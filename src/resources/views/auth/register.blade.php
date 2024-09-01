@@ -1,71 +1,53 @@
-@extends('layouts.app')
+<x-app-layout>
+    <x-auth-session-status class="mb-4" :status="session('status')" />
+    <form method="POST" action="{{ route('register') }}">
+        @csrf
 
-@section('css')
-<link rel="stylesheet" href="{{ asset('css/register.css') }}">
-@endsection
+        <!-- Name -->
+        <div>
+            <x-input-label for="name" :value="__('Name')" />
+            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
+            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+        </div>
 
-@section('content')
-<div class="register__content">
-  <div class="register-form__heading">
-    会員登録
-  </div>
-  <form class="form" action="/register" method="post">
-    @csrf
-    <div class="form__group">
-      <div class="form__group-content">
-        <div class="form__input--text">
-          <input type="text" name="name" placeholder="名前" value="{{ old('name') }}" />
+        <!-- Email Address -->
+        <div class="mt-4">
+            <x-input-label for="email" :value="__('Email')" />
+            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
+            <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
-        <div class="form__error">
-          @error('name')
-          {{ $message }}
-          @enderror
+
+        <!-- Password -->
+        <div class="mt-4">
+            <x-input-label for="password" :value="__('Password')" />
+
+            <x-text-input id="password" class="block mt-1 w-full"
+                type="password"
+                name="password"
+                required autocomplete="new-password" />
+
+            <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
-      </div>
-    </div>
-    <div class="form__group">
-      <div class="form__group-content">
-        <div class="form__input--text">
-          <input type="text" name="email" placeholder="メールアドレス" value="{{ old('email') }}" />
+
+        <!-- Confirm Password -->
+        <div class="mt-4">
+            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+
+            <x-text-input id="password_confirmation" class="block mt-1 w-full"
+                type="password"
+                name="password_confirmation" required autocomplete="new-password" />
+
+            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
-        <div class="form__error">
-          @error('email')
-          {{ $message }}
-          @enderror
+
+        <div class="flex items-center justify-end mt-4">
+            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
+                {{ __('Already registered?') }}
+            </a>
+
+            <x-primary-button class="ms-4">
+                {{ __('Register') }}
+            </x-primary-button>
         </div>
-      </div>
-    </div>
-    <div class="form__group">
-      <div class="form__group-content">
-        <div class="form__input--text">
-          <input type="password" name="password" placeholder="パスワード" />
-        </div>
-        <div class="form__error">
-          @error('password')
-          {{ $message }}
-          @enderror
-        </div>
-      </div>
-    </div>
-    <div class="form__group">
-      <div class="form__group-content">
-        <div class="form__input--text">
-          <input type="password" name="password_confirmation" placeholder="確認用パスワード" />
-        </div>
-        <div class="form__error">
-          @error('password_confirmation')
-          {{ $message }}
-          @enderror
-        </div>
-      </div>
-    </div>
-    <div class="form__button">
-      <button class="form__button-submit" type="submit">会員登録</button>
-    </div>
-  </form>
-  <div class="login__link">
-    <p>アカウントをお持ちの方はこちらから</p>
-    <a class="login__button-submit" href="/login">ログイン</a>
-  </div>
-</div>
-@endsection
+    </form>
+</x-app-layout>

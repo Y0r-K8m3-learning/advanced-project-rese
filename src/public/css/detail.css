@@ -1,0 +1,41 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    border: none;
+}
+.left-half {
+    flex: 1;
+    padding: 15px;
+}
+
+.left-half img{
+    width: 300px;
+    height: 200px;
+    border: 1px solid #ddd;
+}
+.right-half {
+    flex: 1;
+    padding: 15px;
+    background-color: #f8f9fa;
+}
+
+.form-group{
+    margin-top: 10px;
+}
+
+.reserve-content{
+     background-color: rgba(173, 216, 230, 0.5);
+}
+
+ .back-link {
+            display: inline-block;
+            font-size: 24px;
+            background-color: transparent;
+            border: solid;
+            text-decoration: none;
+            color:black;
+        }
+
+        .back-link:hover {
+            color: #0056b3;
+        }

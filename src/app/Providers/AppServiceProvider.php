@@ -3,9 +3,6 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Pagination\Paginator;
-use App\Services\AttendanceService;
-
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -14,9 +11,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->singleton(AttendanceService::class, function ($app) {
-            return new AttendanceService();
-        });
+        //
     }
 
     /**
@@ -25,6 +20,5 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         //
-        Paginator::useBootstrapFive();
     }
 }
