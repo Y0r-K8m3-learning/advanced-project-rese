@@ -11,6 +11,7 @@ use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class RestaurantConttoller extends Controller
 {
@@ -191,6 +192,35 @@ class RestaurantConttoller extends Controller
             'comment' => $request->input('comment'),
         ]);
 
-        return redirect()->back()->with('status', 'レビューが送信されました。');
+        return redirect()->back()->with('status', '');
+    }
+
+    // QRコード生成メソッド
+    public function showQrCode($id)
+    {
+        $reservation = Reservation::with(['restaurant', 'user'])->findOrFail($id);
+        // QRコードの生成（予約IDを含むURL）
+        $qrCode = QrCode::size(200)->generate(route('reservation.verify', $reservation->id));
+
+        return view('qrcode', compact('reservation', 'qrCode'));
+    }
+
+    // 照合メソッド
+    public function verify($id)
+    {
+        $reservation = Reservation::find($id);
+
+        if (!$reservation) {
+            return redirect()->route('index')->withErrors(['error' => '予約が見つかりませんでした。']);
+        }
+
+        $reservation->update([
+            'is_verified' => true,
+            'verified_datetime' => now(),
+        ]);
+        dd($reservation);
+        $status = "照合完了";
+
+        return view('qrcode-verify', compact('reservation', 'status'));
     }
 }

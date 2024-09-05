@@ -16,7 +16,7 @@
             <p class="card-text">{{ $restaurant['description'] }}</p>
 
             <!-- 5段階評価ボタン -->
-            <button type="button" class="btn btn-secondary mt-3" id="rateButton">評価とコメントを書く</button>
+            <button type="button" class="btn btn-secondary mt-3" id="rateButton">評価</button>
         </div>
 
         <div class="right-half p-3" style="flex: 1; background-color: #f8f9fa;">
@@ -47,7 +47,7 @@
                             $minutes=str_pad(($i % 2) * 30, 2, '0' , STR_PAD_LEFT);
                             $timeValue=$hours . ':' . $minutes;
                             $selected=($timeValue==$selectedTime) ? 'selected' : '' ;
-                            echo "<option value=\" $timeValue\" $selected>$timeValue</option>"; // 余分なスペースを削除
+                            echo "<option value=\" $timeValue\" $selected>$timeValue</option>";
                             }
                             @endphp
                     </select>
@@ -120,29 +120,13 @@
 
 <script>
     $(document).ready(function() {
-        // 評価モーダルのトリガー
-        $('#rateButton').click(function() {
-            $('#rateModal').modal('show');
-        });
-
-        // モーダルの閉じる機能
-        $('#rateModal').on('hidden.bs.modal', function() {
-            $(this).find('form').trigger('reset');
-        });
-
-        // モーダルのクローズボタンが動作しない問題を解決
-        $('.close, .btn-secondary').click(function() {
-            $('#rateModal').modal('hide');
-        });
-
-        // Bladeテンプレートで選択された時刻を初期表示する
-        // var initialTime = "{{ $selectedTime }}";
-        // $('#time').val(initialTime);
-        // $('#selected-time').text(initialTime);
+        // 初期化
+        updateTimes();
 
         // 日付が変更されたとき
         $('#date').change(function() {
             $('#selected-date').text($(this).val());
+            updateTimes();
         });
 
         // 時間が変更されたとき
@@ -153,6 +137,59 @@
         // 人数が変更されたとき
         $('#number').change(function() {
             $('#selected-number').text($(this).val() + '人');
+        });
+
+        // 現在の日付と現在時刻以降の時間を選択肢にする関数
+        function updateTimes() {
+            var timeSelect = $('#time');
+            timeSelect.empty(); // 既存の選択肢をクリア
+
+            var now = new Date();
+            var currentDate = now.toISOString().split('T')[0]; // 今日の日付を取得
+            var selectedDate = $('#date').val();
+            var currentTime = now.getHours() * 60 + now.getMinutes(); // 現在の時間を分単位で取得
+
+            if (selectedDate < currentDate) {
+                // 選択日が過去の場合、すべての時間を無効にする
+                var option = $('<option>').text('選択不可').prop('disabled', true);
+                timeSelect.append(option);
+            } else {
+                // 選択日が現在日以降の場合のみ、時間の選択肢を生成
+                for (var i = 0; i < 24 * 2; i++) {
+                    var hours = Math.floor(i / 2).toString().padStart(2, '0');
+                    var minutes = (i % 2 === 0) ? '00' : '30';
+                    var optionValue = hours + ':' + minutes;
+                    var optionTime = parseInt(hours) * 60 + parseInt(minutes);
+
+                    var option = $('<option>').val(optionValue).text(optionValue);
+
+                    // 選択日が今日の場合、現在時刻以降のみ選択可能にする
+                    if (selectedDate === currentDate && optionTime < currentTime) {
+                        option.prop('disabled', true);
+                    }
+
+                    timeSelect.append(option);
+                }
+
+                // 初期表示に選択された時間を設定
+                var initialTime = "{{ $selectedTime }}";
+                timeSelect.val(initialTime);
+                $('#selected-time').text(initialTime);
+            }
+        }
+
+        // 評価モーダルのトリガー
+        $('#rateButton').click(function() {
+            $('#rateModal').modal('show');
+        });
+
+        // モーダルの閉じる機能
+        $('#rateModal').on('hidden.bs.modal', function() {
+            $(this).find('form').trigger('reset');
+        });
+
+        $('.close, .btn-secondary').click(function() {
+            $('#rateModal').modal('hide');
         });
     });
 </script>

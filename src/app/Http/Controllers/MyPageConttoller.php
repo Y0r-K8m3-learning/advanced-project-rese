@@ -15,7 +15,7 @@ class MyPageConttoller extends Controller
         $user = Auth::user();
 
         // ユーザーの予約情報を取得
-        $reservations = Reservation::where('user_id', $user->id)->with('restaurants')->get();
+        $reservations = Reservation::where('user_id', $user->id)->with('restaurant')->get();
 
         $favorites = Favorite::where('user_id', $user->id)->with('restaurant')->get();
 

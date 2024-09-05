@@ -5,6 +5,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RestaurantConttoller;
 use App\Http\Controllers\MyPageConttoller;
 
+Route::get('/reservations/verify/{id}', [RestaurantConttoller::class, 'verify'])->name('reservation.verify');
+
+Route::get('/qrtest/{id}', [RestaurantConttoller::class, 'generateQrCode']);
+Route::get('/reservations/{id}/qrcode', [RestaurantConttoller::class, 'showQrCode'])->name('reservation.qrcode');
 
 Route::get('/reservation/complete', [RestaurantConttoller::class, 'complete'])->name('reservation.complete');
 

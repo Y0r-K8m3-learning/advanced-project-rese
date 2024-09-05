@@ -20,7 +20,8 @@ return new class extends Migration
             );
             $table->time('reservation_time');
             $table->integer('number_of_people');
-
+            $table->boolean('is_verified')->default(false);
+            $table->timestamp('verified_datetime')->nullable();
             $table->timestamps();
         });
     }

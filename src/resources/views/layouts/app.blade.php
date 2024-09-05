@@ -74,44 +74,8 @@
 
 
     </div>
-    <!-- モーダルを開くボタン -->
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-        -
-    </button>Rese
-
-    <!-- モーダル -->
-    <div class="modal fade custom-modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
-                <div class="modal-body">
-                    <nav class="nav flex-column">
-                        <a class="nav-link active" href="/login">Home</a>
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-
-                            <x-dropdown-link :href="route('logout')" onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                <div class="nav-link">
-                                    {{ __('Log Out') }}
-
-                                </div>
-                            </x-dropdown-link>
-                        </form>
-                        @if (Auth::check())
 
 
-                        <a class="nav-link" href="/">Mypage</a>
-                        @else
-                        <a class="nav-link" href="/register">Registration</a>
-                        <a class="nav-link" href="/login">Login</a>
-                        @endif
-                    </nav>
-                </div>
-
-            </div>
-        </div>
-    </div>
 
 
     @isset($header)

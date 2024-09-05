@@ -14,10 +14,14 @@
                 @foreach ($reservations as $reservation)
                 <div class="reservation-item" id="reservation-{{ $reservation->id }}">
                     <span class="remove-button" data-id="{{ $reservation->id }}">×</span>
-                    <p><strong>Shop:</strong> {{ $reservation->restaurants->name }}</p>
+                    <p><strong>Shop:</strong> {{ $reservation->restaurant->name }}</p>
                     <p><strong>Date:</strong> {{ $reservation->reservation_date }}</p>
                     <p><strong>Time:</strong> {{ $reservation->formatted_time }}</p>
                     <p><strong>Number:</strong> {{ $reservation->number_of_people }}人</p>
+
+                    <!-- QRコード表示ページへのリンク -->
+                    <a href="{{ route('reservation.qrcode', $reservation->id) }}" class="btn btn-primary">予約QR</a>
+
 
                     <!-- 予約編集ボタン -->
                     <button type="button" class="btn btn-secondary edit-button" data-id="{{ $reservation->id }}" data-date="{{ $reservation->reservation_date }}" data-time="{{ $reservation->formatted_time }}" data-number="{{ $reservation->number_of_people }}">編集</button>
@@ -69,11 +73,27 @@
 
                         <div class="form-group">
                             <label for="edit-date">日付</label>
-                            <input type="date" id="edit-date" name="date" class="form-control" required>
+                            <input type="date" id="edit-date" name="date" class="form-control" required value="{{ date('Y-m-d') }}" min="{{ date('Y-m-d') }}">
                         </div>
-                        <div class="form-group">
+                        <div class=" form-group">
                             <label for="edit-time">時間</label>
-                            <select id="edit-time" name="time" class="form-control" required></select>
+                            <select id="edit-time" name="time" class="form-control" required>
+                                @php
+                                $currentTime = date('H:i');
+                                $currentMinutes = date('i');
+                                // 30分単位の丸め
+                                $roundedMinutes = ($currentMinutes < 30) ? '00' : '30' ;
+                                    $selectedTime=date('H') . ':' . $roundedMinutes;
+
+                                    for ($i=0; $i < 24 * 2; $i++) {
+                                    $hours=str_pad(floor($i / 2), 2, '0' , STR_PAD_LEFT);
+                                    $minutes=str_pad(($i % 2) * 30, 2, '0' , STR_PAD_LEFT);
+                                    $timeValue=$hours . ':' . $minutes;
+                                    $selected=($timeValue==$selectedTime) ? 'selected' : '' ;
+                                    echo "<option value=\" $timeValue\" $selected>$timeValue</option>";
+                                    }
+                                    @endphp
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="edit-number">人数</label>
@@ -86,7 +106,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">キャンセル</button>
-                        <button type="submit" class="btn btn-primary">変更を保存</button>
+                        <button type="submit" class="btn btn-primary">変更</button>
                     </div>
                 </form>
             </div>
@@ -107,17 +127,8 @@
             $('#editModal #edit-number').val(reservationNumber);
             $('#editReservationForm').attr('action', '/reservations/' + reservationId);
 
-            // 時間の選択肢をクリアして再生成
-            var timeSelect = $('#editModal #edit-time');
-            timeSelect.empty();
-            for (var i = 0; i < 24 * 2; i++) {
-                var hours = Math.floor(i / 2).toString().padStart(2, '0');
-                var minutes = (i % 2 === 0) ? '00' : '30';
-                var optionValue = hours + ':' + minutes;
-                var option = $('<option>').val(optionValue).text(optionValue);
-                timeSelect.append(option);
-            }
-            timeSelect.val(reservationTime); // ここで時刻をセット
+            // 時間の選択肢を生成
+            updateTimes(reservationDate, reservationTime);
 
             $('#editModal').modal('show');
         });
@@ -127,10 +138,45 @@
             $(this).find('form').trigger('reset');
         });
 
-        // モーダルのクローズボタンが動作しない問題を解決
+        // モーダルのクローズボタン
         $('.close, .btn-secondary').click(function() {
             $('#editModal').modal('hide');
         });
+
+        // 日付変更時に時間の選択肢を更新
+        $('#edit-date').change(function() {
+            var selectedDate = $(this).val();
+            updateTimes(selectedDate, null);
+        });
+
+        function updateTimes(selectedDate, selectedTime) {
+            var timeSelect = $('#edit-time');
+            timeSelect.empty();
+
+            var now = new Date();
+            var currentTime = now.getHours() * 60 + now.getMinutes(); // 現在の時間を分単位で取得
+            var today = new Date().toISOString().split('T')[0]; // 今日の日付を取得
+
+            for (var i = 0; i < 24 * 2; i++) {
+                var hours = Math.floor(i / 2).toString().padStart(2, '0');
+                var minutes = (i % 2 === 0) ? '00' : '30';
+                var optionValue = hours + ':' + minutes;
+                var optionTime = parseInt(hours) * 60 + parseInt(minutes);
+
+                var option = $('<option>').val(optionValue).text(optionValue);
+
+                // 選択日が今日の場合、現在時刻以降のみ選択可能にする
+                if (selectedDate === today && optionTime < currentTime) {
+                    option.prop('disabled', true);
+                }
+
+                timeSelect.append(option);
+            }
+
+            if (selectedTime) {
+                timeSelect.val(selectedTime); // 既存の予約時間を選択状態にする
+            }
+        }
 
         // お気に入り解除機能
         $('.heart').click(function() {
@@ -167,6 +213,23 @@
                 },
                 error: function(xhr) {
                     console.error(xhr.responseText);
+                }
+            });
+        });
+
+        $('#showQrCodeButton').click(function() {
+            var reservationId = $(this).data('id');
+            $.ajax({
+                url: '/reservations/' + reservationId + '/qrcode',
+                type: 'GET',
+                success: function(response) {
+                    $('#qrCode').html(response.qrCode); // QRコードを表示
+
+                    console.log(response);
+                    $('#qrCodeArea').show(); // QRコードエリアを表示
+                },
+                error: function(xhr) {
+                    console.error(xhr);
                 }
             });
         });
