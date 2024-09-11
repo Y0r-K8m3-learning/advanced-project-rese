@@ -3,7 +3,35 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RestaurantConttoller;
+use App\Http\Controllers\AdminConttoller;
 use App\Http\Controllers\MyPageConttoller;
+
+
+Route::middleware('auth')->group(function () {
+    Route::get('/admin/owners', [AdminConttoller::class, 'index'])->name('admin.owners.index');
+    Route::post('/admin/owners', [AdminConttoller::class, 'store'])->name('admin.owners.store');
+});
+
+// 店舗一覧
+Route::get('/owner', [RestaurantConttoller::class, 'owner'])->name('owner');
+
+// 予約一覧
+Route::get('/owner/restaurants/{id}/reservations', [RestaurantConttoller::class, 'reservations'])->name('owner.restaurants.reservations');
+
+
+// 店舗登録フォーム表示
+Route::get('/restaurants/create', [RestaurantConttoller::class, 'owner_create'])->name('restaurants.create');
+
+
+// 店舗登録
+Route::post('/owner/restaurants/store', [RestaurantConttoller::class, 'owner_store'])->name('owner.restaurants.store');
+
+// 店舗編集
+Route::put('/owner/restaurants/{id}', [RestaurantConttoller::class, 'update'])->name('owner.restaurants.update');
+
+// 予約一覧
+Route::get('/owner/restaurants/{id}/reservations', [RestaurantConttoller::class, 'reservations'])->name('reservations');
+
 
 Route::get('/reservations/verify/{id}', [RestaurantConttoller::class, 'verify'])->name('reservation.verify');
 

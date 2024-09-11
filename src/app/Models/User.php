@@ -6,10 +6,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Cashier\Billable;
 
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
+    use Billable;
+    // 役割を定数で管理
+    const ROLE_USER = 10;
+    const ROLE_OWNER = 20;
+    const ROLE_ADMIN = 30;
 
     /**
      * The attributes that are mass assignable.
@@ -20,6 +26,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role_id',
     ];
 
     /**
@@ -52,5 +59,23 @@ class User extends Authenticatable
     public function favorites()
     {
         return $this->belongsToMany(User::class, 'favorites')->withTimestamps();
+    }
+
+    // 管理者かどうかを確認
+    public function isAdmin(): bool
+    {
+        return $this->role_id === self::ROLE_ADMIN;
+    }
+
+    // オーナーかどうかを確認
+    public function isOwner(): bool
+    {
+        return $this->role_id === self::ROLE_OWNER;
+    }
+
+    // 一般ユーザーかどうかを確認
+    public function isUser(): bool
+    {
+        return $this->role_id === self::ROLE_USER;
     }
 }

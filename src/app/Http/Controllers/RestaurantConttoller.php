@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Facades\Storage;
 
 class RestaurantConttoller extends Controller
 {
@@ -120,6 +121,7 @@ class RestaurantConttoller extends Controller
             'time' => 'required',
             'number' => 'required|integer|min:1|max:10',
         ]);
+        dd($request);
 
         // 重複チェック
         $existingReservation = Reservation::where('restaurant_id', $request->input('restaurant_id'))
@@ -222,5 +224,88 @@ class RestaurantConttoller extends Controller
         $status = "照合完了";
 
         return view('qrcode-verify', compact('reservation', 'status'));
+    }
+
+    public function reservations($id)
+    {
+        $restaurant = Restaurant::findOrFail($id);
+        $reservations = Reservation::where('restaurant_id', $id)->get();
+
+        return view('reservations', compact('restaurant', 'reservations'));
+    }
+
+    public function owner(Request $request)
+    {
+        $owner = Auth::user();
+        $restaurants = $owner->restaurant; // ログインユーザーが所有する店舗
+        $areas = Area::all();
+        $genres = Genre::all();
+
+        return view('owner_restaurant', compact('restaurants', 'areas', 'genres'));
+    }
+
+    public function owner_store(Request $request)
+    {
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'area_id' => 'required|exists:areas,id',
+            'genre_id' => 'required|exists:genres,id',
+            'image_url' => 'nullable|image|max:2048',
+        ]);
+
+        $restaurant = new Restaurant();
+        $restaurant->name = $request->name;
+        $restaurant->description = $request->description;
+        $restaurant->area_id = $request->area_id;
+        $restaurant->genre_id = $request->genre_id;
+
+        if ($request->hasFile('image_url')) {
+            $path = $request->file('image_url')->store('public/images');
+            $restaurant->image_url = $path;
+            $restaurant->image_url  = Storage::url($path);
+        }
+
+        // owner_id を追加
+        $restaurant->user_id = Auth::id();
+
+        $restaurant->save();
+
+        return redirect()->route('owner')->with('success', '店舗が登録されました。');
+    }
+
+    public function owner_edit($id)
+    {
+        $restaurant = Restaurant::findOrFail($id);
+        $areas = Area::all();
+        $genres = Genre::all();
+        return view('restaurants.edit', compact('restaurant', 'areas', 'genres'));
+    }
+
+    public function owner_update(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'area_id' => 'required|exists:areas,id',
+            'genre_id' => 'required|exists:genres,id',
+            'image_url' => 'nullable|image|max:2048',
+        ]);
+
+        $restaurant = Restaurant::findOrFail($id);
+        $restaurant->name = $request->name;
+        $restaurant->description = $request->description;
+        $restaurant->area_id = $request->area_id;
+        $restaurant->genre_id = $request->genre_id;
+
+        if ($request->hasFile('image_url')) {
+            $path = $request->file('image_url')->store('public/images');
+            $restaurant->image_url = $path;
+        }
+
+        $restaurant->save();
+
+        return redirect()->route('restaurants.index')->with('success', '店舗情報が更新されました。');
     }
 }
