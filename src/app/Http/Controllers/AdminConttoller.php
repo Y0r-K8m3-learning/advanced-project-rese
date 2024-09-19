@@ -15,7 +15,10 @@ class AdminConttoller extends Controller
         $owners = User::where('role_id', User::ROLE_OWNER)->get(); // オーナーの役割を role_id で識別
 
 
-        return view('admin.owners.index', compact('owners'));
+        // role_id が 10 のユーザは一般利用者
+        $users = User::where('role_id', User::ROLE_USER)->get();
+
+        return view('admin.owners.index', compact('owners', 'users'));
     }
 
     // オーナー情報を登録する処理

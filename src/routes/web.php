@@ -2,10 +2,31 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MailController;
 use App\Http\Controllers\RestaurantConttoller;
 use App\Http\Controllers\AdminConttoller;
 use App\Http\Controllers\MyPageConttoller;
+use App\Http\Controllers\StripePaymentsController;
 
+Route::post('/admin/sendMailToAll', [MailController::class, 'sendMailToAll'])->name('admin.sendMailToAll');
+
+
+Route::post('/admin/sendMail', [MailController::class, 'sendMail'])->name('admin.sendMail');
+
+// Route::middleware(['auth', 'admin'])->group(function () {
+//     Route::get('/admin/mail', [MailController::class, 'create'])->name('admin.mail.create');
+//     Route::post('/admin/mail', [MailController::class, 'send'])->name('admin.mail.send');
+// });
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/', function () {
+        return view('restaurant');
+    });
+});
+
+Route::get('/payment/index', [StripePaymentsController::class, 'index'])->name('paymentindex');
+Route::post('/payment', [StripePaymentsController::class, 'payment'])->name('payment.store');
+Route::get('/complete', [StripePaymentsController::class, 'complete'])->name('complete');
 
 Route::middleware('auth')->group(function () {
     Route::get('/admin/owners', [AdminConttoller::class, 'index'])->name('admin.owners.index');

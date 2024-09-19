@@ -42,11 +42,11 @@ class RegisteredUserController extends Controller
         ]);
 
         event(new Registered($user));
-
         //Auth::login($user);
+        dd(999);
+        return redirect()->route('verification.notice');
 
-        return
-            redirect(route('register.complete'));
-        return redirect(route('dashboard', absolute: false));
+        //return redirect(route('register.complete'));
+        //return redirect(route('register.complete', absolute: false));
     }
 }
