@@ -121,7 +121,6 @@ class RestaurantConttoller extends Controller
             'time' => 'required',
             'number' => 'required|integer|min:1|max:10',
         ]);
-        dd($request);
 
         // 重複チェック
         $existingReservation = Reservation::where('restaurant_id', $request->input('restaurant_id'))
@@ -220,7 +219,6 @@ class RestaurantConttoller extends Controller
             'is_verified' => true,
             'verified_datetime' => now(),
         ]);
-        dd($reservation);
         $status = "照合完了";
 
         return view('qrcode-verify', compact('reservation', 'status'));

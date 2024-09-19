@@ -21,4 +21,6 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd
 
+#extパッケージ
+RUN docker-php-ext-install bcmath
 WORKDIR /var/www
