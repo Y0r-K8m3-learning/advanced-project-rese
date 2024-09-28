@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\DB;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Facades\Storage;
 
+use App\Http\Requests\ReservationRequest;
+
 class RestaurantConttoller extends Controller
 {
     public function index(Request $request)
@@ -113,14 +115,15 @@ class RestaurantConttoller extends Controller
         return view('detail', compact('restaurant'));
     }
 
-    public function store(Request $request)
+    public function store(ReservationRequest  $request)
     {
-        // バリデーション
-        $request->validate([
-            'date' => 'required|date|after_or_equal:today',
-            'time' => 'required',
-            'number' => 'required|integer|min:1|max:10',
-        ]);
+        if (!Auth::check()) {
+            // ログインしていない場合、現在のURLをセッションに保存
+            session(['redirect_url' => url()->current()]);
+            return redirect()->route('login');
+        }
+        
+
 
         // 重複チェック
         $existingReservation = Reservation::where('restaurant_id', $request->input('restaurant_id'))

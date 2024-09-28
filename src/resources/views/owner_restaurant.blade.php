@@ -1,6 +1,11 @@
+@section('css')
+<link rel="stylesheet" href="{{ asset('css/owner.css') }}">
+
+@endsection
+
 <x-app-layout>
-    <div class="container mt-5">
-        <h2 class="mt-5">店舗一覧</h2>
+    <div class="container mt-40">
+        <h2 class="mt-1">店舗一覧</h2>
 
         <!-- 店舗登録ボタン -->
         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#restaurantCreateModal">

@@ -15,6 +15,9 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
 
+
+    <link rel="stylesheet" href="{{ asset('css/reset.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/icons.css') }}">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -26,58 +29,56 @@
 </head>
 
 <body class="font-sans antialiased">
-    <div class="hanguagur">
-        <!-- ハンバーグメニュー -->
+    <div class="header">
 
-        <!-- メニューボタンとテキスト -->
-        <div class="menu-button-container" onclick="toggleMenu()">
-            <!-- 四角の中に三本線のメニューボタン -->
-            <div class="menu-button" id="menuButton">
-                <div class="menu-icon">
-                    <span></span>
-                    <span></span>
-                    <span></span>
+        <div class="hanguagur">
+            <!-- ハンバーグメニュー -->
+
+            <!-- メニューボタンとテキスト -->
+            <div class="menu-button-container" onclick="toggleMenu()">
+                <!-- 四角の中に三本線のメニューボタン -->
+                <div class="menu-button bg-blue-500 border-start-0" id="menuButton">
+                    <div class="menu-icon">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
                 </div>
-            </div>
 
-            <!-- 「メニュー」テキスト -->
-            <div id="menuText" style="margin-left: 10px; color: #007bff; font-size: 18px;">
-                Rese
+                <!-- 「メニュー」テキスト -->
+                <div id="menuText" style="margin-left: 10px; color: #007bff; font-size: 24px;">
+                    <h1 class="fw-bold">Rese<h1>
+                </div>
+
             </div>
 
         </div>
+        <!-- ハンバーガーメニュー -->
+        <div class="side-menu" id="sideMenu">
+            <div class="close-button" onclick="toggleMenu()">×</div>
+            <a class="nav-link active" href="/">Home</a>
+            @if (Auth::check())
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
 
-    </div>
-    <!-- ハンバーガーメニュー -->
-    <div class="side-menu" id="sideMenu">
-        <div class="close-button" onclick="toggleMenu()">×</div>
-        <a class="nav-link active" href="/login">Home</a>
-        @if (Auth::check())
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-
-            <x-dropdown-link :href="route('logout')" onclick="event.preventDefault();
+                <x-dropdown-link :href="route('logout')" onclick="event.preventDefault();
                                                 this.closest('form').submit();">
-                <div class="nav-link">
-                    {{ __('Log Out') }}
+                    <div class="nav-link">
+                        {{ __('Log Out') }}
 
-                </div>
-            </x-dropdown-link>
-        </form>
+                    </div>
+                </x-dropdown-link>
+            </form>
 
-        <a class="nav-link" href="/">Mypage</a>
-        @else
-        <a class="nav-link" href="/register">Registration</a>
-        <a class="nav-link" href="/login">Login</a>
-        @endif
+            <a class="nav-link" href="/mypage">Mypage</a>
+            @else
+            <a class="nav-link" href="/register">Registration</a>
+            <a class="nav-link" href="/login">Login</a>
+            @endif
+        </div>
+
+
     </div>
-
-
-    </div>
-
-
-
-
     @isset($header)
     <header class="bg-white shadow">
         <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">

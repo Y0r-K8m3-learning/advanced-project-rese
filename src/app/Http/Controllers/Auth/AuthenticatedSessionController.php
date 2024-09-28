@@ -19,16 +19,33 @@ class AuthenticatedSessionController extends Controller
         return view('auth.login');
     }
 
+
+
     /**
      * Handle an incoming authentication request.
      */
     public function store(LoginRequest $request): RedirectResponse
     {
+        $request->validated();
+
         $request->authenticate();
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        // セッションにリダイレクト先がある場合はそのURLにリダイレクト
+        $redirectUrl = session('redirect_url', route('dashboard', absolute: false));
+        $request->session()->forget('redirect_url'); // リダイレクト後にURLをクリア
+        $user = $request->user();
+
+        // ロールに応じてリダイレクト
+        if ($user->isAdmin()) {
+            return redirect()->route('admin.owners.index'); // 管理者用のダッシュボード
+        } elseif ($user->isOwner()) {
+            return redirect()->route('owner'); // 一般ユーザー用のダッシュボード
+        }
+
+
+        return redirect()->intended($redirectUrl);
     }
 
     /**

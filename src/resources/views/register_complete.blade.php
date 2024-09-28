@@ -8,6 +8,6 @@
         </div>
         <div>
 
-            <a href="{{ route('login') }}" class="back-button">ログイン</a>
+            <!-- <a href="{{ route('login') }}" class="back-button">ログイン</a> -->
         </div>
 </x-app-layout>

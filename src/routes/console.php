@@ -10,7 +10,7 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote')->hourly();
 
 
-Schedule::command('send:reminder-emails')->dailyAt('21:54');
+Schedule::command('send:reminder-emails')->dailyAt('22:50');
 
 Artisan::command('send:reminder-emails', function () {
     $this->call(SendReminderEmails::class);
