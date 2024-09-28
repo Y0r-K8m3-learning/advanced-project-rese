@@ -2,13 +2,22 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\RestaurantConttoller;
 use App\Http\Controllers\AdminConttoller;
 use App\Http\Controllers\MyPageConttoller;
 use App\Http\Controllers\StripePaymentsController;
 
+Route::get('/register', [AuthController::class, 'getRegister']);
+Route::post('/register', [AuthController::class, 'postRegister']);
+
+Route::get('/login', [AuthController::class, 'getLogin'])->name('login');;
+Route::post('/login', [AuthController::class, 'postLogin']);
+
 Route::post('/admin/sendMailToAll', [MailController::class, 'sendMailToAll'])->name('admin.sendMailToAll');
+
+
 
 
 Route::post('/admin/sendMail', [MailController::class, 'sendMail'])->name('admin.sendMail');
@@ -17,14 +26,14 @@ Route::post('/admin/sendMail', [MailController::class, 'sendMail'])->name('admin
 //     Route::get('/admin/mail', [MailController::class, 'create'])->name('admin.mail.create');
 //     Route::post('/admin/mail', [MailController::class, 'send'])->name('admin.mail.send');
 // });
+Route::get('/dashboard', [RestaurantConttoller::class, 'index'])->name('dashboard');
+Route::get('/', [
+    RestaurantConttoller::class,
+    'index'
+])->name('index');
+Route::middleware(['auth', 'verified'])->group(function () {});
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/', function () {
-        return view('restaurant');
-    });
-});
-
-Route::get('/payment/index', [StripePaymentsController::class, 'index'])->name('paymentindex');
+Route::post('/payment/index', [StripePaymentsController::class, 'index'])->name('paymentindex');
 Route::post('/payment', [StripePaymentsController::class, 'payment'])->name('payment.store');
 Route::get('/complete', [StripePaymentsController::class, 'complete'])->name('complete');
 
@@ -85,9 +94,6 @@ Route::post('/reservations', [RestaurantConttoller::class, 'store'])->name('rese
 
 Route::post('/restaurants/{id}/rate', [RestaurantConttoller::class, 'rate'])->name('restaurant.rate');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/reservations/{id}/edit', [RestaurantConttoller::class, 'edit'])->name('reservation.edit');
 Route::put('/reservations/{id}', [RestaurantConttoller::class, 'update'])->name('reservation.update');

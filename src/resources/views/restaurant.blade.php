@@ -9,36 +9,38 @@
 
 @endsection
 <x-app-layout>
-    ログイン{{Auth::check()}}
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
+
+    ログイン状態:{{Auth::check()}}
+
     <div class="container mt-4">
         <form method="GET" action="{{ route('restaurants.index') }}" class="form-inline">
-            <div class="form-group mr-2">
-                <label for="area" class="mr-2">県の検索</label>
-                <select name="area" id="area" class="form-control">
-                    <option value="">選択してください</option>
-                    @foreach($areas as $area)
-                    <option value="{{ $area->id }}" {{ request('area') == $area->id ? 'selected' : '' }}>{{ $area->name }}</option>
-                    @endforeach
-                </select>
-            </div>
+            <div class="search-item">
 
-            <div class="form-group mr-2">
-                <label for="genre" class="mr-2">ジャンルの検索</label>
-                <select name="genre" id="genre" class="form-control">
-                    <option value="">選択してください</option>
-                    @foreach($genres as $genre)
-                    <option value="{{ $genre->id }}" {{ request('genre') == $genre->id ? 'selected' : '' }}>{{ $genre->name }}</option>
-                    @endforeach
-                </select>
-            </div>
+                <div class="form-group mr-2">
+                    <select name="area" id="area" class="form-control">
+                        <option value="">All area</option>
+                        @foreach($areas as $area)
+                        <option value="{{ $area->id }}" {{ request('area') == $area->id ? 'selected' : '' }}>{{ $area->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
 
-            <!-- 店名検索フィールドに検索アイコンを追加 -->
-            <div class="form-group mr-2 search-input">
-                <label for="name" class="mr-2">店名の検索</label>
-                <input type="text" name="name" id="name" class="form-control" value="{{ request('name') }}" placeholder="部分一致で検索">
-                <i class="fas fa-search"></i>
+                <div class="form-group mr-2 ">
+                    <select name="genre" id="genre" class="form-control">
+                        <option value="">All geenre</option>
+                        @foreach($genres as $genre)
+                        <option value="{{ $genre->id }}" {{ request('genre') == $genre->id ? 'selected' : '' }}>{{ $genre->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <!-- 店名検索フィールドに検索アイコンを追加 -->
+                <div class="form-group mr-3 search-input">
+                    <input type="text" name="name" id="name" class="form-control" value="{{ request('name') }}" placeholder="Search...">
+                    <i class="fas fa-search"></i>
+                </div>
             </div>
 
             <button type="submit" class="btn btn-primary">検索</button>
@@ -54,7 +56,7 @@
                     <div class="card-body">
 
                         <h5 class="card-title">{{ $restaurant['name'] }}</h5>
-                        <p class="card-text">{{ $restaurant['description'] }}</p>
+                        <p hidden class="card-text">{{ $restaurant['description'] }}</p>
                         <p class="card-hash">#{{ $restaurant['area']['name'] }}</p>
                         <p class="card-hash">#{{ $restaurant['genre']['name'] }}</p>
                         <form method="GET" action="{{ route('restaurant.detail', $restaurant->id) }}">

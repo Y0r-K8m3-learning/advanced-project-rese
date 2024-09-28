@@ -4,7 +4,7 @@
 <x-app-layout>
     <div class="container">
         <div class="message">
-            ご予約ありがとうございます！
+            ご予約ありがとうございます
         </div>
         <div>
             <a href="{{ route('restaurants.index') }}" class="back-button">戻る</a>

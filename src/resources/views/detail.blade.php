@@ -27,18 +27,19 @@
             </div>
             @endif
             <h3>予約</h3>
-            <form method="POST" action="{{ route('reservation.store') }}">
+            <!-- <form method="POST" action="{{ route('reservation.store') }}"> -->
+            <form method="POST" action="{{ route('paymentindex') }}">
                 @csrf
                 <input type="hidden" name="restaurant_id" value="{{ $restaurant->id }}">
                 <div class="form-group">
                     <input type="date" id="date" name="date" class="form-control" required value="{{ date('Y-m-d') }}" min="{{ date('Y-m-d') }}">
+                    <x-input-error :messages="$errors->get('date')" class="mt-2 pl-9" />
                 </div>
                 <div class="form-group">
                     <select id="time" name="time" class="form-control" required>
                         @php
                         $currentTime = date('H:i');
                         $currentMinutes = date('i');
-                        // 30分単位の丸め
                         $roundedMinutes = ($currentMinutes < 30) ? '00' : '30' ;
                             $selectedTime=date('H') . ':' . $roundedMinutes;
 
@@ -51,6 +52,8 @@
                             }
                             @endphp
                     </select>
+                    <x-input-error :messages="$errors->get('time')" class="mt-2 pl-9" />
+
                 </div>
                 <div class="form-group">
                     <select id="number" name="number" class="form-control" required>
@@ -58,6 +61,8 @@
                             <option value="{{ $i }}">{{ $i }}人</option>
                             @endfor
                     </select>
+                    <x-input-error :messages="$errors->get('number')" class="mt-2 pl-9" />
+
                 </div>
                 <div class="reserve-content">
                     <div class="reserve-content-item">
@@ -73,7 +78,7 @@
                         Number: <span id="selected-number">1人</span>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary">予約する</button>
+                <button type="submit" class="btn btn-primary" id="reservation-button">予約する</button>
             </form>
         </div>
     </div>
@@ -132,6 +137,7 @@
         // 時間が変更されたとき
         $('#time').change(function() {
             $('#selected-time').text($(this).val());
+            updateTimes();
         });
 
         // 人数が変更されたとき
@@ -147,7 +153,17 @@
             var now = new Date();
             var currentDate = now.toISOString().split('T')[0]; // 今日の日付を取得
             var selectedDate = $('#date').val();
-            var currentTime = now.getHours() * 60 + now.getMinutes(); // 現在の時間を分単位で取得
+            var currentTimeMinutes = now.getHours() * 60 + now.getMinutes(); // 現在時刻を分単位で取得
+
+            // 現在時刻を次の30分単位の丸めた時間に変更
+            if (now.getMinutes() > 30) {
+                now.setHours(now.getHours() + 1); // 1時間追加
+                now.setMinutes(0); // 分を0に設定
+            } else {
+                now.setMinutes(30); // 30分に設定
+            }
+
+            var roundedTimeMinutes = now.getHours() * 60 + now.getMinutes();
 
             if (selectedDate < currentDate) {
                 // 選択日が過去の場合、すべての時間を無効にする
@@ -164,7 +180,7 @@
                     var option = $('<option>').val(optionValue).text(optionValue);
 
                     // 選択日が今日の場合、現在時刻以降のみ選択可能にする
-                    if (selectedDate === currentDate && optionTime < currentTime) {
+                    if (selectedDate === currentDate && optionTime < roundedTimeMinutes) {
                         option.prop('disabled', true);
                     }
 
@@ -172,11 +188,18 @@
                 }
 
                 // 初期表示に選択された時間を設定
-                var initialTime = "{{ $selectedTime }}";
+                var initialTime = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
                 timeSelect.val(initialTime);
                 $('#selected-time').text(initialTime);
             }
         }
+
+
+        $('#reservation-button').click(function(event) {
+            if (!confirm('予約を確定します。よろしいですか？')) {
+                event.preventDefault(); // ユーザーがキャンセルした場合、送信を防ぐ
+            }
+        });
 
         // 評価モーダルのトリガー
         $('#rateButton').click(function() {

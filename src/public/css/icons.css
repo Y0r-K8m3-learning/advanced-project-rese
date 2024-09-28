@@ -1,0 +1,39 @@
+.dli-mail {
+  display: inline-block;
+  vertical-align: middle;
+  color: #fefefe;
+  background-color: black;
+  line-height: 1;
+  position: relative;
+  width: 1.3em;
+  height: 1.1em;
+  border: 0.3em solid currentColor;
+  border-radius: 0.3em;
+  box-sizing: content-box;
+  overflow: hidden;
+}
+
+.dli-mail::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  background-color: black;
+  width: 0.9em;
+  height: 0.9em;
+  border: 0.15em solid currentColor;
+  border-top-color: transparent;
+  border-right-color: transparent;
+  border-radius: 0 0 0 0.1em;
+  box-sizing: content-box;
+  transform: translate(-50%, -50%) rotate(-45deg) skew(10deg, 10deg);
+}
+
+.material-symbols-outlined {
+  margin-right: 12px;
+  font-variation-settings:
+  'FILL' 1,
+  'wght' 300,
+  'GRAD' 200,
+  'opsz' 24
+}
