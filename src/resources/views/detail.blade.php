@@ -7,80 +7,95 @@
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
     <div class="container">
-        <div class="left-half p-3" style="flex: 1;">
-            <h5> <a href="{{ route('index') }}" class="back-link">＜</a>{{ $restaurant['name'] }}</h5>
-            <img src="{{ $restaurant['image_url'] }}" class="img-fluid" alt="{{ $restaurant['title'] }}">
-            <p class="card-hash">#{{ $restaurant['area']['name'] }}</p>
-            <p class="card-hash">#{{ $restaurant['genre']['name'] }}</p>
-            <p>{{ $restaurant['description'] }}</p>
-            <p class="card-text">{{ $restaurant['description'] }}</p>
+        <div class="left-half fw-bold" style="flex: 1;">
+            <div class="mb-4 mt-3">
+                <a href="{{ route('index') }}" class="border back-button ">&lt;</a>
+                <span class="pl-2 fs-4">{{ $restaurant['name'] }}</span>
+            </div>
+            <img src="{{ $restaurant['image_url'] }}" class="h-50 w-100" alt="{{ $restaurant['title'] }}">
+            <div class="flex items-center">
+                <p class="card-hash">#{{ $restaurant['area']['name'] }}</p>
+                <p class="card-hash p-2">#{{ $restaurant['genre']['name'] }}</p>
+            </div>
+            <div>
+                <p class="card-text">{{ $restaurant['description'] }}</p>
+            </div>
 
             <!-- 5段階評価ボタン -->
             <button type="button" class="btn btn-secondary mt-3" id="rateButton">評価</button>
         </div>
 
-        <div class="right-half p-3" style="flex: 1; background-color: #f8f9fa;">
+        <div class="right-half bg-primary rounded shadow d-flex flex-column justify-content-between">
             <!-- エラーメッセージの表示 -->
             @if ($errors->has('error'))
             <div class="alert alert-danger">
                 {{ $errors->first('error') }}
             </div>
             @endif
-            <h3>予約</h3>
-            <!-- <form method="POST" action="{{ route('reservation.store') }}"> -->
-            <form method="POST" action="{{ route('paymentindex') }}">
-                @csrf
-                <input type="hidden" name="restaurant_id" value="{{ $restaurant->id }}">
-                <div class="form-group">
-                    <input type="date" id="date" name="date" class="form-control" required value="{{ date('Y-m-d') }}" min="{{ date('Y-m-d') }}">
-                    <x-input-error :messages="$errors->get('date')" class="mt-2 pl-9" />
-                </div>
-                <div class="form-group">
-                    <select id="time" name="time" class="form-control" required>
-                        @php
-                        $currentTime = date('H:i');
-                        $currentMinutes = date('i');
-                        $roundedMinutes = ($currentMinutes < 30) ? '00' : '30' ;
-                            $selectedTime=date('H') . ':' . $roundedMinutes;
+            <h2 class="text-white fs-5 fw-bold ps-3 mt-3">予約</h2>
 
-                            for ($i=0; $i < 24 * 2; $i++) {
-                            $hours=str_pad(floor($i / 2), 2, '0' , STR_PAD_LEFT);
-                            $minutes=str_pad(($i % 2) * 30, 2, '0' , STR_PAD_LEFT);
-                            $timeValue=$hours . ':' . $minutes;
-                            $selected=($timeValue==$selectedTime) ? 'selected' : '' ;
-                            echo "<option value=\" $timeValue\" $selected>$timeValue</option>";
-                            }
-                            @endphp
-                    </select>
-                    <x-input-error :messages="$errors->get('time')" class="mt-2 pl-9" />
+            <div class="d-flex flex-column w-100 flex-grow-1 mt-3">
+                <form method="POST" action="{{ route('paymentindex') }}">
+                    @csrf
+                    <input type="hidden" name="restaurant_id" value="{{ $restaurant->id }}">
 
-                </div>
-                <div class="form-group">
-                    <select id="number" name="number" class="form-control" required>
-                        @for ($i = 1; $i <= 10; $i++)
-                            <option value="{{ $i }}">{{ $i }}人</option>
-                            @endfor
-                    </select>
-                    <x-input-error :messages="$errors->get('number')" class="mt-2 pl-9" />
+                    <div class="form-group">
+                        <input type="date" id="date" name="date" class="form-control w-50 ms-4 rounded" required value="{{ date('Y-m-d') }}" min="{{ date('Y-m-d') }}">
+                        <x-input-error :messages="$errors->get('date')" class="mt-2" />
+                    </div>
 
-                </div>
-                <div class="reserve-content">
-                    <div class="reserve-content-item">
-                        Shop: <span id="shop-name">{{$restaurant['name']}}</span>
+                    <div class="form-group mt-2">
+                        <select id="time" name="time" class="form-control w-75 ms-4" required>
+                            @php
+                            $currentTime = date('H:i');
+                            $currentMinutes = date('i');
+                            $roundedMinutes = ($currentMinutes < 30) ? '00' : '30' ;
+                                $selectedTime=date('H') . ':' . $roundedMinutes;
+                                for ($i=0; $i < 24 * 2; $i++) {
+                                $hours=str_pad(floor($i / 2), 2, '0' , STR_PAD_LEFT);
+                                $minutes=str_pad(($i % 2) * 30, 2, '0' , STR_PAD_LEFT);
+                                $timeValue=$hours . ':' . $minutes;
+                                $selected=($timeValue==$selectedTime) ? 'selected' : '' ;
+                                echo "<option value=\" $timeValue\" $selected>$timeValue</option>";
+                                }
+                                @endphp
+                        </select>
+                        <x-input-error :messages="$errors->get('time')" class="mt-2 pl-9" />
                     </div>
-                    <div class="reserve-content-item">
-                        Date: <span id="selected-date">{{ date('Y-m-d') }}</span>
+
+                    <div class="form-group mt-2">
+                        <select id="number" name="number" class="form-control w-75 ms-4" required>
+                            @for ($i = 1; $i <= 10; $i++)
+                                <option value="{{ $i }}">{{ $i }}人</option>
+                                @endfor
+                        </select>
+                        <x-input-error :messages="$errors->get('number')" class="mt-2 pl-9" />
                     </div>
-                    <div class="reserve-content-item">
-                        Time: <span id="selected-time">{{ $selectedTime }}</span>
+
+                    <div class="mt-3 reserve-content w-75 ms-4 text-left ps-3 rounded text-light ">
+                        <div class="reserve-content-item mt-5 mb-3 pt-3">
+                            Shop <span id="shop-name" class="ms-5">{{ $restaurant['name'] }}</span>
+                        </div>
+                        <div class="reserve-content-item  mb-3">
+                            Date <span id="selected-date" class="ms-5">{{ date('Y-m-d') }}</span>
+                        </div>
+                        <div class="reserve-content-item mb-3">
+                            Time <span id="selected-time" class="ms-5">{{ $selectedTime }}</span>
+                        </div>
+                        <div class="reserve-content-item mb-3 pb-2">
+                            Number <span id="selected-number" class="ms-4">1人</span>
+                        </div>
                     </div>
-                    <div class="reserve-content-item">
-                        Number: <span id="selected-number">1人</span>
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary" id="reservation-button">予約する</button>
+            </div>
+            <!-- 予約ボタン -->
+            <div class="under-right-content">
+                <button type="submit" class="btn-reserve  w-100 text-white shadow rounded" id="reservation-button">予約する</button>
+            </div>
             </form>
+
         </div>
+
+
     </div>
 
     <!-- 評価とコメントのモーダル -->
@@ -137,7 +152,6 @@
         // 時間が変更されたとき
         $('#time').change(function() {
             $('#selected-time').text($(this).val());
-            updateTimes();
         });
 
         // 人数が変更されたとき
@@ -148,6 +162,7 @@
         // 現在の日付と現在時刻以降の時間を選択肢にする関数
         function updateTimes() {
             var timeSelect = $('#time');
+            var selectedTime = timeSelect.val(); // 現在選択されている時間を保存
             timeSelect.empty(); // 既存の選択肢をクリア
 
             var now = new Date();
@@ -187,18 +202,23 @@
                     timeSelect.append(option);
                 }
 
-                // 初期表示に選択された時間を設定
-                var initialTime = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
-                timeSelect.val(initialTime);
-                $('#selected-time').text(initialTime);
+                // ユーザーが以前に選択した時間を再選択
+                if (selectedTime && timeSelect.find('option[value="' + selectedTime + '"]').length) {
+                    timeSelect.val(selectedTime);
+                    $('#selected-time').text(selectedTime);
+                } else {
+                    // 初期表示に選択された時間を設定
+                    var initialTime = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+                    timeSelect.val(initialTime);
+                    $('#selected-time').text(initialTime);
+                }
             }
         }
 
-
         $('#reservation-button').click(function(event) {
-            if (!confirm('予約を確定します。よろしいですか？')) {
-                event.preventDefault(); // ユーザーがキャンセルした場合、送信を防ぐ
-            }
+            //if (!confirm('予約を確定します。よろしいですか？')) {
+            //    event.preventDefault(); // ユーザーがキャンセルした場合、送信を防ぐ
+            //}
         });
 
         // 評価モーダルのトリガー

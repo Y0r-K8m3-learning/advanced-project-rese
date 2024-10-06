@@ -27,7 +27,9 @@ class StripePaymentsController extends Controller
         return view('paymentindex', [
             'number' => $request->number,
             'time' => $request->time,
-            'date' => $request->date,
+            'date' =>
+            $request->date,
+            'restaurant_id' => $request->restaurant_id,
         ]);
     }
 
@@ -49,22 +51,20 @@ class StripePaymentsController extends Controller
             return redirect()->back()->withErrors(['error' => 'この時間帯にはすでに予約が入っています。別の時間を選択してください。'])->withInput();
         }
 
-
         \Stripe\Stripe::setApiKey(config('stripe.stripe_secret_key'));
-
         try {
-            // \Stripe\Charge::create([
-            //     'source' => $request->stripeToken,
-            //     'amount' => 1000,
-            //     'currency' => 'jpy',
-            // ]);
+            \Stripe\Charge::create([
+                'source' => $request->stripeToken,
+                'amount' => $request->total_price,
+                'currency' => 'jpy',
+            ]);
 
             // サービスクラスを使って予約を登録
             $this->reservationService->createReservation($request);
         } catch (Exception $e) {
             return back()->with('flash_alert', '決済に失敗しました！(' . $e->getMessage() . ')');
         }
-        return view('reservation_complete')->with('status', '決済が完了しました！');
+        return view('reservation_complete')->with('status', '予約が完了しました！');
 
         //return back()->with('status', '決済が完了しました！');
     }

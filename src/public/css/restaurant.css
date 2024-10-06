@@ -38,26 +38,65 @@
             background-color: red;
         }
 
-        button {
-            background: none;
-            border: none;
-            padding: 0;
-            margin: 0;
-        }
+        /*虫眼鏡*/
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 1,
+  'wght' 300,
+  'GRAD' 0,
+  'opsz' 24;
+  padding: 0;
+}
 
-       .search-input {
-        position: relative;
+
+
+.custom-select,
+.custom-input {
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    outline: none;
+}
+
+/* 検索条件 */
+.search-container {
+  position: fixed;
+    top: 0px; /* 上からの距離 */
+    right: 20px; /* 右からの距離 */
+    z-index: 1000; /* 他の要素の上に表示 */
+    padding: 10px; /* 内側の余白 */
+}
+
+@media (max-width: 658px) {
+    .search-container {
+        top: 60px; /* ヘッダーメニューの高さに合わせて調整 */
+        right: 10px;
+        width: 90%; /* 幅を画面に収まるように調整 */
+        left: 5%; /* 中央に配置 */
     }
 
-    .search-input input {
-        padding-left: 30px; /* アイコン分のスペースを確保 */
-    }
 
-    .search-input .fa-search {
-        position: absolute;
-        left: 10px;
-        top: 60%;
-        transform: translateY(-50%);
-        color: #007bff; /* アイコンの色 */
-        pointer-events: none; /* アイコンがクリックされないように */
-    }
+
+/* 検索項目全体を1つに繋げる */
+.search-item {
+    border: none;
+    padding: 5px;
+}
+
+/* 項目間の縦線 */
+.vertical-line {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 70%; 
+    width: 1px;
+    background-color: #ccc;
+}
+
+.search-item .search-input .vertical-line {
+    display: none;
+}
+
+
+

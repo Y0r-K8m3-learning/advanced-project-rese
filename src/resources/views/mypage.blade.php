@@ -1,5 +1,6 @@
 @section('css')
 <link rel="stylesheet" href="{{ asset('css/mypage.css') }}">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 @endsection
 
 <x-app-layout>
@@ -9,18 +10,26 @@
     <div class="container">
         <!-- ページ左半分: 予約状況 -->
         <div class="left-half">
-            <h2>予約状況</h2>
-            <div class="reservation-list">
+            <h2 class="fs-4 fw-bolder mt-5 mb-1">予約状況</h2>
+            <div class="reservation-list ">
                 @foreach ($reservations as $reservation)
-                <div class="reservation-item" id="reservation-{{ $reservation->id }}">
-                    <span class="remove-button" data-id="{{ $reservation->id }}">×</span>
-                    <p><strong>Shop:</strong> {{ $reservation->restaurant->name }}</p>
-                    <p><strong>Date:</strong> {{ $reservation->reservation_date }}</p>
-                    <p><strong>Time:</strong> {{ $reservation->formatted_time }}</p>
-                    <p><strong>Number:</strong> {{ $reservation->number_of_people }}人</p>
+
+                <div class="reservation-item text-white" id="reservation-{{ $reservation->id }}">
+                    <div class="flex  ms-3 mb-3">
+                        <span class="material-symbols-outlined fs-5">
+                            schedule
+                        </span>予約{{$loop->iteration}}
+                    </div>
+                    <div class="mb-3">
+                        <span class="remove-button" data-id="{{ $reservation->id }}">×</span>
+                        <p><strong class="ms-2 me-5">Shop:</strong> {{ $reservation->restaurant->name }}</p>
+                        <p><strong class="ms-2 me-5">Date:</strong> {{ $reservation->reservation_date }}</p>
+                        <p><strong class="ms-2 me-5">Time:</strong> {{ $reservation->formatted_time }}</p>
+                        <p><strong class="ms-2 me-4">Number:</strong> {{ $reservation->number_of_people }}人</p>
+                    </div>
 
                     <!-- QRコード表示ページへのリンク -->
-                    <a href="{{ route('reservation.qrcode', $reservation->id) }}" class="btn btn-primary">予約QR</a>
+                    <a href="{{ route('reservation.qrcode', $reservation->id) }}" class="btn btn-info ms-2">予約QR</a>
 
 
                     <!-- 予約編集ボタン -->
@@ -31,28 +40,40 @@
         </div>
 
         <!-- ページ右半分: お気に入り店舗 -->
-        <div class="right-half">
-            <div class="username">{{Auth::user()->name}}さん</div>
-            <h2>お気に入り店舗</h2>
-            <div class="favorite-list">
+        <div class="right-half ms-4 mt-2">
+            <div class="username mb-2 fs-4 fw-bolder">{{ Auth::user()->name }}さん</div>
+            <h2 class="mb-2 fs-4 fw-bolder">お気に入り店舗</h2>
+            <div class="favorite-list row ">
                 @foreach ($favorites as $favorite)
-                <div class="card" id="favorite-{{ $favorite->restaurant->id }}">
-                    <img src="{{ $favorite->restaurant->image_url }}" alt="{{ $favorite->restaurant->name }}">
-                    <div class="details">
-                        <h3>{{ $favorite->restaurant->name }}</h3>
-                        <p class="card-hash">#{{ $favorite->restaurant->area->name }}</p>
-                        <p class="card-hash">#{{ $favorite->restaurant->genre->name }}</p>
-                        <p>{{ $favorite->restaurant->description }}</p>
+                <div class="col-12 col-md-6 mb-4"> <!-- カラムサイズを指定 -->
+                    <div class="card shadow  w-100 h-100" id="favorite-{{ $favorite->restaurant->id }}">
+                        <img src="{{ $favorite->restaurant->image_url }}" alt="{{ $favorite->restaurant->name }}">
+                        <div class="details">
+                            <h5 class="card-title mt-2 ms-4 fs-4 fw-bold">{{ $favorite->restaurant->name }}</h3>
+                                <div class="ms-1 row fw-bold">
+                                    <div class="col-4 col-md-4 w-50">
+                                        #{{ $favorite->restaurant->area->name }}
+                                    </div>
+                                    <div class="col-3 col-md-4 w-50">
+                                        #{{ $favorite->restaurant->genre->name }}
+                                    </div>
+                                    <p hidden>{{ $favorite->restaurant->description }}</p>
+                                </div>
+                        </div>
+                        <form method="GET" action="{{ route('restaurant.detail', $favorite->restaurant->id) }}">
+                            @csrf
+                            <div class="ms-1 d-flex align-items-center justify-content-between fw-bold">
+                                <button type="submit" class="btn btn-primary m-1">詳しく見る</button>
+                                <span class="heart favorited me-4" data-id="{{ $favorite->restaurant->id }}"></span>
+
+                            </div>
+                        </form>
                     </div>
-                    <form method="GET" action="{{ route('restaurant.detail', $favorite->restaurant->id) }}">
-                        @csrf
-                        <button type="submit" class="btn btn-primary">詳しく見る</button>
-                        <span class="heart favorited" data-id="{{ $favorite->restaurant->id }} "></span>
-                    </form>
                 </div>
                 @endforeach
             </div>
         </div>
+
     </div>
 
     <!-- 予約変更モーダル -->

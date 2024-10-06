@@ -4,13 +4,15 @@
 @endsection
 
 <x-app-layout>
-    <div class="container mt-40">
-        <h2 class="mt-1">店舗一覧</h2>
+    <div class="container ms-4">
 
-        <!-- 店舗登録ボタン -->
-        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#restaurantCreateModal">
-            登録
-        </button>
+        <div class="mt-1">
+            <!-- 店舗登録ボタン -->
+            <button type=" button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#restaurantCreateModal">
+                店舗登録
+            </button>
+        </div>
+        <h2 class="fw-bold fs-3 mt-4">店舗一覧</h2>
 
         <!-- 店舗一覧 -->
         <div class="row mt-4">
@@ -27,13 +29,20 @@
                     $imageUrl = $restaurant->image_url;
                     }
                     @endphp
-                    <img src="{{ $imageUrl }}" class="card-img-top" alt="{{ $restaurant->name }}">
+                    <img src="{{ $imageUrl }}" class="card-img-top h-75" alt="{{ $restaurant->name }}">
                     <div class="card-body">
-                        <h5 class="card-title">{{ $restaurant->name }}</h5>
-                        <p class="card-text">{{ $restaurant->description }}</p>
-                        <p class="card-hash">#{{ $restaurant->area->name }}</p>
-                        <p class="card-hash">#{{ $restaurant->genre->name }}</p>
+                        <h5 class="card-title fw-bold">{{ $restaurant['name'] }}</h5>
+                        <p hidden class="card-text">{{ $restaurant['description'] }}</p>
 
+                        <div class="row fw-bold">
+                            <div class="col-5">
+                                #{{ $restaurant['area']['name'] }}
+                            </div>
+                            <div class="col-5">
+                                #{{ $restaurant['genre']['name'] }}
+                            </div>
+
+                        </div>
                         <!-- 編集ボタン -->
                         <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#restaurantEditModal" data-id="{{ $restaurant->id }}" data-name="{{ $restaurant->name }}" data-description="{{ $restaurant->description }}" data-area-id="{{ $restaurant->area_id }}" data-genre-id="{{ $restaurant->genre_id }}" data-image-url="{{ $restaurant->image_url }}">
                             編集
@@ -110,7 +119,7 @@
                     @csrf
                     @method('PUT')
                     <div class="modal-header">
-                        <h5 class="modal-title" id="restaurantEditModalLabel">店舗編集</h5>
+                        <h5 class="modal-title" id="restaurantEditModalLabel">更新</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -121,7 +130,7 @@
                         </div>
                         <!-- 店舗概要 -->
                         <div class="form-group">
-                            <label for="edit-description">店舗概要</label>
+                            <label for="edit-description">概要</label>
                             <textarea class="form-control" id="edit-description" name="description" rows="3" required></textarea>
                         </div>
                         <!-- エリア選択 -->
@@ -156,30 +165,47 @@
             </div>
         </div>
     </div>
-
-    <script>
-        // モーダルに店舗情報を反映する処理
-        $('#restaurantEditModal').on('show.bs.modal', function(event) {
-            var button = $(event.relatedTarget);
-            var id = button.data('id');
-            var name = button.data('name');
-            var description = button.data('description');
-            var areaId = button.data('area-id');
-            var genreId = button.data('genre-id');
-            var imageUrl = button.data('image-url');
-
-            var modal = $(this);
-            modal.find('#edit-name').val(name);
-            modal.find('#edit-description').val(description);
-            modal.find('#edit-area-id').val(areaId);
-            modal.find('#edit-genre-id').val(genreId);
-
-            // フォームのアクションURLを動的に変更
-            $('#restaurantEditForm').attr('action', '/owner/restaurants/' + id);
-        });
-
-        $(document).ready(function() {
-            // もし他に必要な初期化があればここに書く
-        });
-    </script>
 </x-app-layout>
+
+<script>
+    // モーダルに店舗情報を反映する処理
+    $('#restaurantEditModal').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget); // ボタンのデータ属性から情報を取得
+        var id = button.data('id');
+        var name = button.data('name');
+        var description = button.data('description');
+        var areaId = button.data('area-id');
+        var genreId = button.data('genre-id');
+        var imageUrl = button.data('image-url');
+
+        var modal = $(this);
+
+        // 店舗情報のセット
+        modal.find('#edit-name').val(name);
+        modal.find('#edit-description').val(description);
+
+        // セレクトボックスの値をセット
+        modal.find('#edit-area-id').val(areaId);
+        modal.find('#edit-genre-id').val(genreId);
+
+        // 画像のプレビューを表示
+        if (imageUrl) {
+            var previewImage = modal.find('#edit-image-preview');
+            if (!previewImage.length) {
+                // プレビュー画像の要素を作成して追加
+                modal.find('.form-group').last().append('<img id="edit-image-preview" src="" alt="プレビュー画像" style="max-width: 100%; height: 50%; margin-top: 10px;">');
+            }
+            modal.find('#edit-image-preview').attr('src', imageUrl);
+        } else {
+            // 画像がない場合はプレビューを削除
+            modal.find('#edit-image-preview').remove();
+        }
+
+        // フォームのアクションURLを動的に変更
+        $('#restaurantEditForm').attr('action', '/owner/restaurants/' + id);
+    });
+
+    $(document).ready(function() {
+        // 他の初期化処理が必要ならここに追加
+    });
+</script>
