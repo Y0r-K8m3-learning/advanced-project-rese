@@ -1,8 +1,7 @@
-<!-- resources/views/admin/owners/index.blade.php -->
-
 <x-app-layout>
-    <div class="container mt-5">
-        <h2>管理画面</h2>
+    <div class="container mt-5 w-75">
+        <h2 class="fw-bold fs-4 mb-4">管理画面</h2>
+
         @if(session('success'))
         <script>
             alert("{{ session('success') }}");
@@ -10,13 +9,13 @@
         @endif
 
         <!-- オーナー登録ボタン -->
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ownerCreateModal">
-            登録
+        <button type="button" class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#ownerCreateModal">
+            <i class="bi bi-person-plus"></i> 登録
         </button>
 
         <!-- メール送信ボタン -->
         <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#emailSendModal">
-            メール送信@利用者
+            <i class="bi bi-envelope"></i> メール送信 @利用者
         </button>
 
         <!-- オーナー一覧 -->
@@ -27,9 +26,9 @@
             </div>
             @endif
 
-            <div class="col-12">
-                <table class="table">
-                    <thead>
+            <div class="col-12 rounded">
+                <table class="table table-striped table-hover  table-bordered align-middle table-secondary shadow ">
+                    <thead class="table-secondary text-center">
                         <tr>
                             <th>ID</th>
                             <th>名前</th>
@@ -39,7 +38,7 @@
                     </thead>
                     <tbody>
                         @foreach($owners as $owner)
-                        <tr>
+                        <tr class="text-center">
                             <td>{{ $owner->id }}</td>
                             <td>{{ $owner->name }}</td>
                             <td>{{ $owner->email }}</td>
@@ -50,6 +49,7 @@
                 </table>
             </div>
         </div>
+    </div>
     </div>
 
     <!-- オーナー登録モーダル -->
@@ -64,18 +64,18 @@
                     </div>
                     <div class="modal-body">
                         <!-- 名前 -->
-                        <div class="form-group">
-                            <label for="name">名前</label>
+                        <div class="form-group mb-3">
+                            <label for="name" class="form-label">名前</label>
                             <input type="text" class="form-control" id="name" name="name" required>
                         </div>
                         <!-- メールアドレス -->
-                        <div class="form-group">
-                            <label for="email">メールアドレス</label>
+                        <div class="form-group mb-3">
+                            <label for="email" class="form-label">メールアドレス</label>
                             <input type="email" class="form-control" id="email" name="email" required>
                         </div>
                         <!-- パスワード -->
-                        <div class="form-group">
-                            <label for="password">パスワード</label>
+                        <div class="form-group mb-3">
+                            <label for="password" class="form-label">パスワード</label>
                             <input type="password" class="form-control" id="password" name="password" required>
                         </div>
                     </div>
@@ -100,13 +100,13 @@
                     </div>
                     <div class="modal-body">
                         <!-- メールタイトル -->
-                        <div class="form-group">
-                            <label for="subject">件名</label>
+                        <div class="form-group mb-3">
+                            <label for="subject" class="form-label">件名</label>
                             <input type="text" class="form-control" id="subject" name="subject" required>
                         </div>
                         <!-- メール本文 -->
-                        <div class="form-group">
-                            <label for="message">本文</label>
+                        <div class="form-group mb-3">
+                            <label for="message" class="form-label">本文</label>
                             <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
                         </div>
                     </div>
@@ -118,8 +118,6 @@
             </div>
         </div>
     </div>
-
-
 
     <script>
         $(document).ready(function() {

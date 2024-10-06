@@ -18,7 +18,6 @@ class ReservationService
 
     public function createReservation(Request $request)
     {
-        dd($request);
         // 予約データの作成
         $reservation = new Reservation();
         $reservation->user_id = Auth::id(); // 現在のユーザーID

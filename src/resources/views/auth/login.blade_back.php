@@ -3,7 +3,7 @@
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
     <div class="flex items-center justify-center min-h-screen">
-        <div class="w-full max-w-md bg-white border border-gray-300 rounded-lg p-6 shadow-md" style="max-width: 50%;">
+        <div class="w-full max-w-md bg-white border border-gray-300 rounded-lg p-6 shadow-md">
             <div class="text-center text-xl font-bold mb-4">
                 {{ __('Login') }}
             </div>

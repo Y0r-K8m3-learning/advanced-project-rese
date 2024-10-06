@@ -37,10 +37,10 @@ Route::post('/payment/index', [StripePaymentsController::class, 'index'])->name(
 Route::post('/payment', [StripePaymentsController::class, 'payment'])->name('payment.store');
 Route::get('/complete', [StripePaymentsController::class, 'complete'])->name('complete');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/admin/owners', [AdminConttoller::class, 'index'])->name('admin.owners.index');
-    Route::post('/admin/owners', [AdminConttoller::class, 'store'])->name('admin.owners.store');
-});
+// Route::middleware('auth')->group(function () {
+//     Route::get('/admin/owners', [AdminConttoller::class, 'index'])->name('admin.owners.index');
+//     Route::post('/admin/owners', [AdminConttoller::class, 'store'])->name('admin.owners.store');
+// });
 
 // 店舗一覧
 Route::get('/owner', [RestaurantConttoller::class, 'owner'])->name('owner');
@@ -77,6 +77,11 @@ Route::get('/register/complete', function () {
     return view('register_complete');
 })->name('register.complete');
 
+Route::get('/reservation/complete', function () {
+    return view('reservation_complete');
+});
+
+
 Route::get('/mypage', [MyPageConttoller::class, 'index'])->name('mypage.index');
 
 Route::post('/reservations/{id}/delete', [MyPageConttoller::class, 'destroy'])->name('reservations.destroy');
@@ -106,3 +111,4 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__ . '/auth.php';
+require __DIR__ . '/owner.php';

@@ -15,12 +15,10 @@
 }
 .right-half {
     flex: 1;
-    padding: 15px;
     background-color: #f8f9fa;
-}
-
-.form-group{
-    margin-top: 10px;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 35em;
 }
 
 .reserve-content{
@@ -39,3 +37,20 @@
         .back-link:hover {
             color: #0056b3;
         }
+
+        .back-button {
+    font-size: 1rem; /* ボタンの文字サイズを調整 */
+    padding: 2px 8px; /* ボタン内側の余白を小さくして領域を縮小 */
+    box-shadow: 0.5px 0.5px;
+    border-radius: 30%;
+
+}
+.under-right-content {
+    display: flex;
+    justify-content: flex-end;
+    height: 50px;
+}
+
+.btn-reserve {
+    background-color: #2600ff;
+}
