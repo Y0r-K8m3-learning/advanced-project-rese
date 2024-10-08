@@ -1,0 +1,28 @@
+.custom-modal .modal-content {
+    background-color: #f8f9fa; /* 背景色 */
+    border-radius: 10px; /* 角の丸み */
+    border: none; /* ボーダーの削除 */
+}
+.custom-modal .modal-header {
+    border-bottom: 1px solid #dee2e6; 
+    background-color: #343a40; 
+    color: #fff; 
+}
+.custom-modal .btn-close{
+    color: white;
+    background-color:#0058ff;
+    margin: 10px;
+}
+.custom-modal .modal-body {
+    font-size: 1.1em; 
+    color: #495057;
+}
+
+.custom-modal .nav-link {
+    color: #007bff; 
+    font-weight: bold; 
+    text-align: center;
+}
+.custom-modal .nav-link:hover {
+    color: #0056b3;
+}
