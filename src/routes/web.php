@@ -9,23 +9,20 @@ use App\Http\Controllers\AdminConttoller;
 use App\Http\Controllers\MyPageConttoller;
 use App\Http\Controllers\StripePaymentsController;
 
+
+//ユーザ登録
 Route::get('/register', [AuthController::class, 'getRegister']);
 Route::post('/register', [AuthController::class, 'postRegister']);
 
+//ログイン
 Route::get('/login', [AuthController::class, 'getLogin'])->name('login');;
 Route::post('/login', [AuthController::class, 'postLogin']);
 
 Route::post('/admin/sendMailToAll', [MailController::class, 'sendMailToAll'])->name('admin.sendMailToAll');
 
 
-
-
 Route::post('/admin/sendMail', [MailController::class, 'sendMail'])->name('admin.sendMail');
 
-// Route::middleware(['auth', 'admin'])->group(function () {
-//     Route::get('/admin/mail', [MailController::class, 'create'])->name('admin.mail.create');
-//     Route::post('/admin/mail', [MailController::class, 'send'])->name('admin.mail.send');
-// });
 Route::get('/dashboard', [RestaurantConttoller::class, 'index'])->name('dashboard');
 Route::get('/', [
     RestaurantConttoller::class,
@@ -37,10 +34,6 @@ Route::post('/payment/index', [StripePaymentsController::class, 'index'])->name(
 Route::post('/payment', [StripePaymentsController::class, 'payment'])->name('payment.store');
 Route::get('/complete', [StripePaymentsController::class, 'complete'])->name('complete');
 
-// Route::middleware('auth')->group(function () {
-//     Route::get('/admin/owners', [AdminConttoller::class, 'index'])->name('admin.owners.index');
-//     Route::post('/admin/owners', [AdminConttoller::class, 'store'])->name('admin.owners.store');
-// });
 
 // 店舗一覧
 Route::get('/owner', [RestaurantConttoller::class, 'owner'])->name('owner');
@@ -112,3 +105,4 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__ . '/auth.php';
 require __DIR__ . '/owner.php';
+require __DIR__ . '/admin.php';
