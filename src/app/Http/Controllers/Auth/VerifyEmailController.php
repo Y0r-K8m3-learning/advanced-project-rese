@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class VerifyEmailController extends Controller
 {
@@ -14,30 +16,25 @@ class VerifyEmailController extends Controller
      */
     public function __invoke(EmailVerificationRequest $request): RedirectResponse
     {
-        $user = $request->user();
 
-        // if ($user === null) {
-        //     // ユーザーが認証されていない場合、ログインページにリダイレクト
-        //     return redirect()->route('login')->withErrors(['message' => 'ログインが必要です']);
-        // }
+      
+        $user = User::findOrFail($request->route('id'));
 
-        // if ($user->hasVerifiedEmail()) {
-        //     return redirect()->route('registration.complete'); // 既に確認済みなら完了画面へ
-        // }
-
-        if ($user->markEmailAsVerified()) {
-            event(new Verified($user));
+        if (Auth::guest()) {
+            $user = User::findOrFail($request->route('id'));
+            Auth::login($user);
         }
 
-
+        // メールアドレスがすでに確認されている場合
         if ($request->user()->hasVerifiedEmail()) {
-            return redirect()->intended(route('dashboard', absolute: false) . '?verified=1');
+            return redirect('/')->with('verified', true);
         }
 
+        // メールを確認し、イベントを発行
         if ($request->user()->markEmailAsVerified()) {
             event(new Verified($request->user()));
         }
 
-        return redirect()->intended(route('dashboard', absolute: false) . '?verified=1');
+        return redirect()->intended(route('home', absolute: false) . '?verified=1');
     }
 }

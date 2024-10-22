@@ -8,17 +8,15 @@
 <x-app-layout>
 
     <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+    <x-auth-session-status class="mb-5" :status="session('status')" />
 
-    <div class="flex items-center justify-center min-h-screen">
+    <div class="flex items-center justify-center mt-5 ">
         <div class="w-full max-w-md rounded-lg shadow-md">
             <div class="rounded-3 border-bottom  border-end border-white">
 
-                <!-- 上段部分（背景青 + 枠も青） -->
                 <div class="bg-blue-500 text-white text-xl font-bold p-4 rounded-t-lg  rounded-top">
                     {{ __('Login') }}
                 </div>
-                <!-- 下段部分（背景白 + 枠白） -->
                 <div class="bg-white p-6 rounded-b-lg border border-white">
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
@@ -53,6 +51,12 @@
 
                         <!-- Log in Button -->
                         <div class="w-full flex items-center justify-end">
+                            @if (session('error'))
+                            <div class="alert-danger pull-left fs-6 w-75">
+                                {{ session('error') }}
+                            </div>
+                            @endif
+
                             <button class="py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
                                 {{ __('Log in') }}
                             </button>

@@ -14,8 +14,8 @@
     <x-auth-session-status :status="session('status')" />
 
     <!-- 検索バー（固定） -->
-    <div class="search-container">
-        <form method=" GET" action="{{ route('restaurants.index') }}" class="form-inline pull-right">
+    <div class="search-container w-75" id="all-content">
+        <form method="GET" id="searchFrom" action="{{ route('restaurants.index') }}" class="form-inline pull-right">
             <div class="shadow search-item d-flex align-items-center ">
                 <div class="form-group position-relative">
                     <select name="area" id="area" class="custom-select">
@@ -41,21 +41,20 @@
                     <div class="vertical-line"></div>
                 </div>
 
-                <div class="form-group position-relative search-input">
+                <div class="form-group position-relative search-input w-100 bg-white">
                     <div class="flex">
-                        <span class="material-symbols-outlined p-2">
+                        <span class="material-symbols-outlined p-2 bg-white">
                             search
                         </span>
-                        <input type="text" name="name" id="name" class="custom-input w-100" value="{{ request('name') }}" placeholder="Search...">
+                        <input type="text" name="name" id="name" class="custom-input w-100 bg-white" value="{{ request('name') }}" placeholder="Search...">
                     </div>
                 </div>
             </div>
         </form>
     </div>
 
-    <!-- コンテンツ領域 -->
-    <div class="container"> <!-- 検索バーとメニューの高さに合わせて余白を設定 -->
-        <div class="row">
+    <div class="container">
+        <div class="row" id="search-result">
             @foreach($restaurants as $restaurant)
             <div class="col-md-4 col-lg-3 col-6 mb-4">
                 <div class="card h-100 w-100 mt-0">
@@ -78,11 +77,11 @@
                             </form>
 
                             @if (Auth::check())
-                            <!-- 初期表示時にお気に入り状態を確認してクラスを切り替える -->
+
                             <span class="heart {{ in_array($restaurant->id, $favoriteRestaurantIds) ? 'favorited' : '' }}"
                                 data-id="{{ $restaurant->id }}"></span>
                             @else
-                            <span class="heart" data-id="{{ $restaurant->id }} "></span> <!-- ログインしていない場合 -->
+                            <span class="heart" data-id="{{ $restaurant->id }} "></span>
                             @endif
                         </div>
                     </div>
@@ -107,8 +106,6 @@
                         _token: '{{ csrf_token() }}',
                     },
                     success: function(response) {
-                        console.log(response);
-
                         heart.addClass('favorited');
                     },
                     error: function(xhr) {
@@ -129,7 +126,6 @@
                         _token: '{{ csrf_token() }}',
                     },
                     success: function(response) {
-                        console.log(response);
                         heart.removeClass('favorited');
                     },
                     error: function(xhr) {
@@ -139,8 +135,54 @@
             }
         });
 
-        $('#area, #genre, #name').on('change keyup', function() {
-            $(this).closest('form').submit();
+        //inputイベント制御用
+        let typingTimer;
+        const doneTypingInterval = 700;
+
+        $('#name').on('input', function() {
+            clearTimeout(typingTimer);
+
+            typingTimer = setTimeout(function() {
+                Search();
+            }, doneTypingInterval);
         });
+
+        $('#area, #genre').on('change', function() {
+            $('#searchFrom').submit();
+
+        });
+
+
+
+        function Search() {
+            formData = {
+                area: $('#area').val(),
+                genre: $('#genre').val(),
+                name: $('#name').val(),
+            }
+
+            $.ajax({
+                url: "{{route('restaurants.index')}}",
+                type: 'GET',
+                data: formData,
+                cache: true,
+                success: function(data) {
+                    $('body').html(data);
+                    $('#name').off('input');
+                    $('#area, #genre').off('change');
+
+                    $('#name').focus();
+                    var tmpStr = $('#name').val();
+                    $('#name').val('');
+                    $('#name').val(tmpStr);
+
+                },
+                error: function() {
+                    alert('検索に失敗しました。');
+                }
+            });
+        }
+
+
     });
 </script>

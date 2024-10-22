@@ -9,15 +9,13 @@
 <x-app-layout>
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
-    <!-- 全体を中央に配置するためのラッパー -->
-    <div class="flex items-center justify-center min-h-screen">
+    <div class="flex items-center justify-center mt-5">
         <div class="w-full max-w-md rounded-lg shadow-md">
 
             <div class="bg-blue-500 text-white text-xl font-bold p-4 rounded-t-lg  rounded-top">
                 {{ __('Registration') }}
             </div>
 
-            <!-- 下段部分（背景白 + 枠白） -->
             <div class="bg-white p-6 rounded-b-lg border border-white">
                 <form method="POST" action="{{ route('register') }}">
                     @csrf
@@ -33,10 +31,10 @@
                         <x-input-error :messages="$errors->get('name')" class="mt-2 pl-9 ms-4" />
                     </div>
 
-                    <!-- Email Address -->
                     <div class="mb-4">
                         <div class="flex items-center">
                             <span class="dli-mail"></span>
+                            <!-- メールアドレス -->
                             <x-my-text-input
                                 class="ring-0 focus:outline-none focus:ring-0 focus:border-transparent"
                                 id="email"
@@ -49,11 +47,11 @@
                         </div>
                         <x-input-error :messages="$errors->get('email')" class="mt-2 pl-9 ms-4" />
                         <div class="mb-4">
-                            <!-- Password -->
                             <div class="flex items-center">
                                 <span class="material-symbols-outlined">
                                     lock
                                 </span>
+                                <!-- パスワード -->
                                 <x-my-text-input id="password" class="ring-0 focus:outline-none focus:ring-0 focus:border-transparent" type="password" name="password" autocomplete="new-password" placeholder="Password" />
                                 <x-input-error :messages="$errors->get('password')" class="mt-2" />
                             </div>

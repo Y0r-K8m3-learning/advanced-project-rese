@@ -88,7 +88,6 @@
         </div>
     </div>
 
-    <!-- メール送信モーダル -->
     <div class="modal fade" id="emailSendModal" tabindex="-1" aria-labelledby="emailSendModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -99,12 +98,10 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <!-- メールタイトル -->
                         <div class="form-group mb-3">
                             <label for="subject" class="form-label">件名</label>
                             <input type="text" class="form-control" id="subject" name="subject" required>
                         </div>
-                        <!-- メール本文 -->
                         <div class="form-group mb-3">
                             <label for="message" class="form-label">本文</label>
                             <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
@@ -120,8 +117,6 @@
     </div>
 
     <script>
-        $(document).ready(function() {
-            // もし他に必要な初期化があればここに記述
-        });
+        $(document).ready(function() {});
     </script>
 </x-app-layout>

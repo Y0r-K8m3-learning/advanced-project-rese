@@ -4,12 +4,12 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MailController;
-use App\Http\Controllers\RestaurantConttoller;
+use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\AdminConttoller;
 use App\Http\Controllers\MyPageConttoller;
 use App\Http\Controllers\StripePaymentsController;
 
-
+Route::middleware(['auth', 'verified'])->group(function () {});
 //ユーザ登録
 Route::get('/register', [AuthController::class, 'getRegister']);
 Route::post('/register', [AuthController::class, 'postRegister']);
@@ -23,9 +23,8 @@ Route::post('/admin/sendMailToAll', [MailController::class, 'sendMailToAll'])->n
 
 Route::post('/admin/sendMail', [MailController::class, 'sendMail'])->name('admin.sendMail');
 
-Route::get('/dashboard', [RestaurantConttoller::class, 'index'])->name('dashboard');
 Route::get('/', [
-    RestaurantConttoller::class,
+    RestaurantController::class,
     'index'
 ])->name('index');
 Route::middleware(['auth', 'verified'])->group(function () {});
@@ -36,35 +35,36 @@ Route::get('/complete', [StripePaymentsController::class, 'complete'])->name('co
 
 
 // 店舗一覧
-Route::get('/owner', [RestaurantConttoller::class, 'owner'])->name('owner');
+Route::get('/owner', [RestaurantController::class, 'owner'])->name('owner');
 
-// 予約一覧
-Route::get('/owner/restaurants/{id}/reservations', [RestaurantConttoller::class, 'reservations'])->name('owner.restaurants.reservations');
+// 店舗予約一覧
+Route::get('/owner/restaurants/{id}/reservations', [RestaurantController::class, 'reservations'])->name('owner.restaurants.reservations');
 
 
 // 店舗登録フォーム表示
-Route::get('/restaurants/create', [RestaurantConttoller::class, 'owner_create'])->name('restaurants.create');
+Route::get('/restaurants/create', [RestaurantController::class, 'owner_create'])->name('restaurants.create');
 
 
 // 店舗登録
-Route::post('/owner/restaurants/store', [RestaurantConttoller::class, 'owner_store'])->name('owner.restaurants.store');
+Route::post('/owner/restaurants/store', [RestaurantController::class, 'owner_store'])->name('owner.restaurants.store');
 
 // 店舗編集
-Route::put('/owner/restaurants/{id}', [RestaurantConttoller::class, 'update'])->name('owner.restaurants.update');
+Route::put('/owner/restaurants/{id}', [RestaurantController::class, 'update'])->name('owner.restaurants.update');
 
 // 予約一覧
-Route::get('/owner/restaurants/{id}/reservations', [RestaurantConttoller::class, 'reservations'])->name('reservations');
+Route::get('/owner/restaurants/{id}/reservations', [RestaurantController::class, 'reservations'])->name('reservations');
 
 
-Route::get('/reservations/verify/{id}', [RestaurantConttoller::class, 'verify'])->name('reservation.verify');
+Route::get('/reservations/verify/{id}', [RestaurantController::class, 'verify'])->name('reservation.verify');
 
-Route::get('/qrtest/{id}', [RestaurantConttoller::class, 'generateQrCode']);
-Route::get('/reservations/{id}/qrcode', [RestaurantConttoller::class, 'showQrCode'])->name('reservation.qrcode');
+Route::get('/qrtest/{id}', [RestaurantController::class, 'generateQrCode']);
+Route::get('/reservations/{id}/qrcode', [RestaurantController::class, 'showQrCode'])->name('reservation.qrcode');
 
-Route::get('/reservation/complete', [RestaurantConttoller::class, 'complete'])->name('reservation.complete');
+Route::get('/reservation/complete', [RestaurantController::class, 'complete'])->name('reservation.complete');
 
-Route::get('/', [RestaurantConttoller::class, 'index'])->name('index');
-Route::post('/favorite', [RestaurantConttoller::class, 'favorite'])->name('favorite.store');
+Route::get('/', [RestaurantController::class, 'index'])->name('index');
+Route::get('/', [RestaurantController::class, 'index'])->name('home');
+Route::post('/favorite', [RestaurantController::class, 'favorite'])->name('favorite.store');
 
 Route::get('/register/complete', function () {
     return view('register_complete');
@@ -79,23 +79,23 @@ Route::get('/mypage', [MyPageConttoller::class, 'index'])->name('mypage.index');
 
 Route::post('/reservations/{id}/delete', [MyPageConttoller::class, 'destroy'])->name('reservations.destroy');
 
-Route::get('/restaurants', [RestaurantConttoller::class, 'index'])->name('restaurants.index');
+Route::get('/restaurants', [RestaurantController::class, 'index'])->name('restaurants.index');
 
-Route::get('/restaurant/{id}', [RestaurantConttoller::class, 'detail'])->name('restaurant.detail');
+Route::get('/restaurant/{id}', [RestaurantController::class, 'detail'])->name('restaurant.detail');
 
-Route::post('/restaurants/{id}/favorite', [RestaurantConttoller::class, 'favorite']);
+Route::post('/restaurants/{id}/favorite', [RestaurantController::class, 'favorite']);
 
-Route::post('/restaurants/{id}/unfavorite', [RestaurantConttoller::class, 'favorite'])->name('restaurants.favorite');
-Route::post('/restaurants/{id}/unfavorite', [RestaurantConttoller::class, 'unfavorite'])->name('restaurants.unfavorite');
+Route::post('/restaurants/{id}/unfavorite', [RestaurantController::class, 'favorite'])->name('restaurants.favorite');
+Route::post('/restaurants/{id}/unfavorite', [RestaurantController::class, 'unfavorite'])->name('restaurants.unfavorite');
 
-Route::post('/reservations', [RestaurantConttoller::class, 'store'])->name('reservation.store');
+Route::post('/reservations', [RestaurantController::class, 'store'])->name('reservation.store');
 
-Route::post('/restaurants/{id}/rate', [RestaurantConttoller::class, 'rate'])->name('restaurant.rate');
+Route::post('/restaurants/{id}/rate', [RestaurantController::class, 'rate'])->name('restaurant.rate');
 
 
-Route::get('/reservations/{id}/edit', [RestaurantConttoller::class, 'edit'])->name('reservation.edit');
-Route::put('/reservations/{id}', [RestaurantConttoller::class, 'update'])->name('reservation.update');
-Route::get('/reservations', [RestaurantConttoller::class, 'index'])->name('reservations.index');
+Route::get('/reservations/{id}/edit', [RestaurantController::class, 'edit'])->name('reservation.edit');
+Route::put('/reservations/{id}', [RestaurantController::class, 'update'])->name('reservation.update');
+Route::get('/reservations', [RestaurantController::class, 'index'])->name('reservations.index');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

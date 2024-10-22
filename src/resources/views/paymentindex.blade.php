@@ -7,12 +7,10 @@
             {{ session('status') }}
         </div>
         @endif
-        <div class="p-4">
+        <div class="mx-auto" style="width: 600px;">
             <div class="col-6 card fw-bold">
                 <div class="card-header  bg-blue-100 ">-決済-
-                    <div>
-                        カード情報を入力してください。
-                    </div>
+                    カード情報を入力してください。
 
                 </div>
                 <form id="card-form" action="{{ route('payment.store') }}" method="POST">
@@ -24,31 +22,31 @@
                         <!-- 日付 -->
                         <div class="form-group">
                             <label for="date_labale">日付</label>
-                            <input type="text" id="date" class="form-control" name="date" value="{{$date}}" readonly>
+                            <input type="text" id="date" class="form-control p-1" name="date" value="{{$date}}" readonly>
                         </div>
 
                         <!-- 時刻 -->
                         <div class="form-group">
                             <label for="date_labale">時刻</label>
-                            <input type="text" id="time" class="form-control" name="time" value="{{$time}}" readonly>
+                            <input type="text" id="time" class="form-control  p-1" name="time" value="{{$time}}" readonly>
                         </div>
 
                         <!-- 人数選択 -->
                         <div class="form-group">
                             <label for="number_of_people">人数</label>
-                            <input type="number" id="number_of_people" class="form-control" name="number" value="{{$number}}" min="1" readonly>
+                            <input type="number" id="number_of_people" class="form-control p-0" name="number" value="{{$number}}" min="1" readonly>
                         </div>
 
                         <!-- 単価を設定 -->
                         <div class="form-group">
                             <label for="price_per_person">単価</label>
-                            <input type="text" id="price_per_person" class="form-control" value="1000" readonly>
+                            <input type="text" id="price_per_person" class="form-control p-1" value="1000" readonly>
                         </div>
 
                         <!-- 合計金額表示 -->
                         <div class="form-group">
                             <label for="total_price">合計金額</label>
-                            <input type="text" id="total_price" name="amount" class="form-control" readonly>
+                            <input type="text" id="total_price" name="amount" class="form-control p-1" readonly>
                         </div>
 
 

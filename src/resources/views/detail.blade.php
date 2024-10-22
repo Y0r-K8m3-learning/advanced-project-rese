@@ -9,7 +9,7 @@
     <div class="container">
         <div class="left-half fw-bold" style="flex: 1;">
             <div class="mb-4 mt-3">
-                <a href="{{ route('index') }}" class="border back-button ">&lt;</a>
+                <a href="{{ route('home') }}" class="border back-button ">&lt;</a>
                 <span class="pl-2 fs-4">{{ $restaurant['name'] }}</span>
             </div>
             <img src="{{ $restaurant['image_url'] }}" class="h-50 w-100" alt="{{ $restaurant['title'] }}">
