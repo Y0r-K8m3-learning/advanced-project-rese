@@ -31,8 +31,6 @@ class RegisteredUserController extends Controller
     public function store(RegisterRequest  $request): RedirectResponse
     {
 
-
-        // 検証済みのデータを使用
         $request->validated();
 
         $user = User::create([

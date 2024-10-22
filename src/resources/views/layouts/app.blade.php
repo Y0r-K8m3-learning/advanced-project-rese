@@ -66,7 +66,7 @@
     </div>
 
     <!-- コンテンツ  -->
-    <div class="content-container" style="margin-top: 70px; padding: 20px; height: calc(100vh - 80px); overflow-y: auto;">
+    <div class="content-container" style="margin-top: 30px; padding: 20px; height: calc(100vh - 80px); overflow-y: auto;">
         @isset($header)
         <header class="bg-white shadow">
             <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">

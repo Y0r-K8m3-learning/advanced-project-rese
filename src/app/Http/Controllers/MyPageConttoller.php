@@ -14,8 +14,23 @@ class MyPageConttoller extends Controller
     {
         $user = Auth::user();
 
-        // ユーザーの予約情報を取得
-        $reservations = Reservation::where('user_id', $user->id)->with('restaurant')->get();
+        $now = Carbon::now();
+
+        $reservations = Reservation::where('user_id', $user->id)->where('reservation_date', '>', $now->format('Y-m-d'))
+            ->orWhere(function ($query) use ($now) {
+                $query->where(
+                    'reservation_date',
+                    '=',
+                    $now->format('Y-m-d')
+                )
+                    ->where(
+                        'reservation_time',
+                        '>',
+                        $now->format('H:i:s')
+                    );
+            })
+            ->with('restaurant')
+            ->get();
 
         $favorites = Favorite::where('user_id', $user->id)->with('restaurant')->get();
 
@@ -30,7 +45,6 @@ class MyPageConttoller extends Controller
     {
         $user = Auth::user();
 
-        // 予約を削除
         Reservation::where('user_id', $user->id)
             ->where('id', $id)
             ->delete();

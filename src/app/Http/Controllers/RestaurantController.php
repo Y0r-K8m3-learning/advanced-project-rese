@@ -16,50 +16,41 @@ use Illuminate\Support\Facades\Storage;
 
 use App\Http\Requests\ReservationRequest;
 
-class RestaurantConttoller extends Controller
+class RestaurantController extends Controller
 {
     public function index(Request $request)
     {
 
-
-        // 検索条件の取得
         $areaId = $request->input('area');
         $genreId = $request->input('genre');
         $name = $request->input('name');
-
-        // クエリの構築
         $query = Restaurant::query();
 
-        // エリアの検索条件
         if ($areaId) {
+
             $query->where('area_id', $areaId);
         }
 
-        // ジャンルの検索条件
         if ($genreId) {
             $query->where('genre_id', $genreId);
         }
-        // 店名の検索条件（部分一致）
         if ($name) {
             $query->where('name', 'LIKE', '%' . $name . '%');
         }
 
 
-        // クエリの実行
-
         $restaurants = $query->with(['area', 'genre'])->get();
 
-        // エリアとジャンルのリストを取得
         $areas = Area::all();
         $genres = Genre::all();
-        // $restaurants = Restaurant::with(['area', 'genre'])->get();
 
 
 
-        $user = Auth::user(); // 現在のユーザーを取得
+        $user = Auth::user();
 
-        // ログインしているユーザーのお気に入りレストランのIDを取得
+
         $favoriteRestaurantIds = $user ? $user->favorites()->pluck('restaurant_id')->toArray() : [];
+
 
         return view(
             'restaurant',
@@ -67,19 +58,15 @@ class RestaurantConttoller extends Controller
         );
     }
 
-    public function test()
-    {
-        $d = 1;
-        return $d;
-    }
+
     public function favorite($restaurant_id)
     {
         if (!Auth::check()) {
-            return response()->json(['status' => 'not_logged_in'], 401); // 未ログインなら401エラーを返す
+            return response()->json(['status' => 'not_logged_in'], 401);
         }
 
 
-        $user = Auth::user(); // 現在のユーザーを取得
+        $user = Auth::user();
         if (!$user->favorites()->where('restaurant_id', $restaurant_id)->exists()) {
             Favorite::create([
                 'user_id' => $user->id,
@@ -93,12 +80,10 @@ class RestaurantConttoller extends Controller
 
     public function unfavorite($restaurant_id)
     {
-        $restaurant = Restaurant::findOrFail($restaurant_id); // 対象のレストランを取得
-        $user = Auth::user(); // 現在のユーザーを取得
+        $restaurant = Restaurant::findOrFail($restaurant_id);
+        $user = Auth::user();
 
-        // チェック: レコードが存在するか
         if ($user->favorites()->where('restaurant_id', $restaurant->id)->exists()) {
-            // お気に入りを解除
             Favorite::where('user_id', $user->id)
                 ->where('restaurant_id', $restaurant->id)
                 ->delete();
@@ -109,7 +94,6 @@ class RestaurantConttoller extends Controller
 
     public function detail($restaurant_id)
     {
-        // 指定されたIDのレストランを取得
         $restaurant = Restaurant::with(['area', 'genre'])->findOrFail($restaurant_id);
 
         return view('detail', compact('restaurant'));
@@ -118,14 +102,10 @@ class RestaurantConttoller extends Controller
     public function store(ReservationRequest  $request)
     {
         if (!Auth::check()) {
-            // ログインしていない場合、現在のURLをセッションに保存
             session(['redirect_url' => url()->current()]);
             return redirect()->route('login');
         }
-        
 
-
-        // 重複チェック
         $existingReservation = Reservation::where('restaurant_id', $request->input('restaurant_id'))
             ->where('reservation_date', $request->input('date'))
             ->where('reservation_time', $request->input('time'))
@@ -136,17 +116,15 @@ class RestaurantConttoller extends Controller
         }
 
 
-        // 予約データの作成
         $reservation = new Reservation();
-        $reservation->user_id = Auth::id(); // 現在のユーザーID
-        $reservation->restaurant_id = $request->input('restaurant_id'); // 隠しフィールドまたは別の方法で渡されたレストランID
+        $reservation->user_id = Auth::id();
+        $reservation->restaurant_id = $request->input('restaurant_id');
         $reservation->reservation_date = $request->input('date');
         $reservation->reservation_time = $request->input('time');
         $reservation->number_of_people = $request->input('number');
         $reservation->save();
         return redirect()->route('reservation.complete');
 
-        // 予約完了メッセージを表示
         return redirect()->back()->with('success', '予約が完了');
     }
 
@@ -165,14 +143,12 @@ class RestaurantConttoller extends Controller
     {
         $reservation = Reservation::findOrFail($id);
 
-        // 入力の検証
         $request->validate([
             'date' => 'required|date',
             'time' => 'required|string',
             'number_of_people' => 'required|integer|min:1|max:10'
         ]);
 
-        // 予約の更新
         $reservation->reservation_date = $request->input('date');
         $reservation->reservation_time = $request->input('time');
         $reservation->number_of_people = $request->input('number_of_people');
@@ -232,7 +208,7 @@ class RestaurantConttoller extends Controller
         $restaurant = Restaurant::findOrFail($id);
         $reservations = Reservation::where('restaurant_id', $id)->get();
 
-        return view('reservations', compact('restaurant', 'reservations'));
+        return view('owner.reservations', compact('restaurant', 'reservations'));
     }
 
     public function owner(Request $request)
@@ -242,7 +218,7 @@ class RestaurantConttoller extends Controller
         $areas = Area::all();
         $genres = Genre::all();
 
-        return view('owner_restaurant', compact('restaurants', 'areas', 'genres'));
+        return view('owner.restaurant', compact('restaurants', 'areas', 'genres'));
     }
 
     public function owner_store(Request $request)

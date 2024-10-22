@@ -10,7 +10,6 @@
 @endsection
 <x-app-layout>
     ログイン{{Auth::check()}}
-    <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
 
@@ -33,11 +32,10 @@
 
 
                         @if (Auth::check())
-                        <!-- 初期表示時にお気に入り状態を確認してクラスを切り替える -->
                         <span class="heart {{ in_array($restaurant->id, $favoriteRestaurantIds) ? 'favorited' : '' }}"
                             data-id="{{ $restaurant->id }}"></span>
                         @else
-                        <span class="heart" data-id="{{ $restaurant->id }} "></span> <!-- ログインしていない場合 -->
+                        <span class="heart" data-id="{{ $restaurant->id }} "></span>
                         @endif
                     </div>
                 </div>
@@ -52,7 +50,6 @@
             var heart = $(this);
             var restaurantId = heart.data('id');
             if (!heart.hasClass('favorited')) {
-                // お気に入り追加
                 $.ajax({
                     url: '/restaurants/' + restaurantId + '/favorite',
                     type: 'POST',
@@ -66,7 +63,6 @@
                     },
                     error: function(xhr) {
                         if (xhr.status === 401) {
-                            // 未ログインならログイン画面にリダイレクト
                             window.location.href = '/login';
                         } else {
                             console.error(xhr.responseText);
@@ -74,7 +70,6 @@
                     }
                 });
             } else {
-                // お気に入り解除
                 $.ajax({
                     url: '/restaurants/' + restaurantId + '/unfavorite',
                     type: 'POST',

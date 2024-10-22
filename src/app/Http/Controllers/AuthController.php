@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests\RegisterRequest;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\LoginRequest;
+use Illuminate\Support\Facades\Auth;
+
 
 class AuthController extends Controller
 {
@@ -17,7 +19,6 @@ class AuthController extends Controller
 
     public function postRegister(RegisterRequest $request)
     {
-        dd(2);
         try {
             User::create([
                 'name' => $request['name'],
