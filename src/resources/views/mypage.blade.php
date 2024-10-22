@@ -14,7 +14,7 @@
             <div class="reservation-list ">
                 @foreach ($reservations as $reservation)
 
-                <div class="reservation-item text-white" id="reservation-{{ $reservation->id }}">
+                <div class="mb-3 reservation-item text-white" id="reservation-{{ $reservation->id }}">
                     <div class="flex  ms-3 mb-3">
                         <span class="material-symbols-outlined fs-5">
                             schedule

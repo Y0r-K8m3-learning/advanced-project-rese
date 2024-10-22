@@ -32,10 +32,22 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        // セッションにリダイレクト先がある場合はそのURLにリダイレクト
-        $redirectUrl = session('redirect_url', route('dashboard', absolute: false));
-        $request->session()->forget('redirect_url'); // リダイレクト後にURLをクリア
         $user = $request->user();
+
+        // メールアドレスが確認済みかチェック
+        if (!$user->hasVerifiedEmail()) {
+
+            $user->sendEmailVerificationNotification();
+
+            Auth::logout();
+
+            return redirect('/login')->with('error', 'メールアドレスが認証されていません。' . "\n" . '確認リンクをメールで再送信しました。');
+        }
+
+
+        // セッションにリダイレクト先がある場合はそのURLにリダイレクト
+        $redirectUrl = session('redirect_url', route('home', absolute: false));
+        $request->session()->forget('redirect_url'); // リダイレクト後にURLをクリア
 
         // ロールに応じてリダイレクト
         if ($user->isAdmin()) {
