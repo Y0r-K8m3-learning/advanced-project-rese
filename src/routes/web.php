@@ -5,8 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\RestaurantController;
-use App\Http\Controllers\AdminConttoller;
-use App\Http\Controllers\MyPageConttoller;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\MyPageController;
 use App\Http\Controllers\StripePaymentsController;
 
 Route::middleware(['auth', 'verified'])->group(function () {});
@@ -75,9 +75,9 @@ Route::get('/reservation/complete', function () {
 });
 
 
-Route::get('/mypage', [MyPageConttoller::class, 'index'])->name('mypage.index');
+Route::get('/mypage', [MyPageController::class, 'index'])->name('mypage.index');
 
-Route::post('/reservations/{id}/delete', [MyPageConttoller::class, 'destroy'])->name('reservations.destroy');
+Route::post('/reservations/{id}/delete', [MyPageController::class, 'destroy'])->name('reservations.destroy');
 
 Route::get('/restaurants', [RestaurantController::class, 'index'])->name('restaurants.index');
 
