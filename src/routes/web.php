@@ -49,7 +49,7 @@ Route::get('/restaurants/create', [RestaurantController::class, 'owner_create'])
 Route::post('/owner/restaurants/store', [RestaurantController::class, 'owner_store'])->name('owner.restaurants.store');
 
 // 店舗編集
-Route::put('/owner/restaurants/{id}', [RestaurantController::class, 'update'])->name('owner.restaurants.update');
+Route::put('/owner/restaurants/{id}', [RestaurantController::class, 'owner_update'])->name('owner.restaurants.update');
 
 // 予約一覧
 Route::get('/owner/restaurants/{id}/reservations', [RestaurantController::class, 'reservations'])->name('reservations');
@@ -74,14 +74,9 @@ Route::get('/reservation/complete', function () {
     return view('reservation_complete');
 });
 
-
-Route::get('/mypage', [MyPageController::class, 'index'])->name('mypage.index');
-
 Route::post('/reservations/{id}/delete', [MyPageController::class, 'destroy'])->name('reservations.destroy');
 
 Route::get('/restaurants', [RestaurantController::class, 'index'])->name('restaurants.index');
-
-Route::get('/restaurant/{id}', [RestaurantController::class, 'detail'])->name('restaurant.detail');
 
 Route::post('/restaurants/{id}/favorite', [RestaurantController::class, 'favorite']);
 
@@ -101,6 +96,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/mypage', [MyPageController::class, 'index'])->name('mypage.index');
+    Route::get('/restaurant/{id}', [RestaurantController::class, 'detail'])->name('restaurant.detail');
 });
 
 require __DIR__ . '/auth.php';

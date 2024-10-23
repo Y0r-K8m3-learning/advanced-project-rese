@@ -243,7 +243,6 @@ class RestaurantController extends Controller
             $restaurant->image_url = $path;
             $restaurant->image_url  = Storage::url($path);
         }
-
         // owner_id を追加
         $restaurant->user_id = Auth::id();
 
@@ -283,6 +282,6 @@ class RestaurantController extends Controller
 
         $restaurant->save();
 
-        return redirect()->route('restaurants.index')->with('success', '店舗情報が更新されました。');
+        return redirect()->route('owner')->with('success', '店舗情報が更新されました。');
     }
 }
