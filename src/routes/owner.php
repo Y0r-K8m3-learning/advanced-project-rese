@@ -1,9 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AdminConttoller;
+use App\Http\Controllers\AdminController;
 
 Route::middleware('auth')->group(function () {
-    Route::get('/admin/owners', [AdminConttoller::class, 'index'])->name('admin.owners.index');
-    Route::post('/admin/owners', [AdminConttoller::class, 'store'])->name('admin.owners.store');
+    Route::get('/admin/owners', [AdminController::class, 'index'])->name('admin.owners.index');
+    Route::post('/admin/owners', [AdminController::class, 'store'])->name('admin.owners.store');
 });

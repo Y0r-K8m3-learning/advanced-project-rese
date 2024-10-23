@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
-class AdminConttoller extends Controller
+class AdminController extends Controller
 {
     // オーナー一覧画面
     public function index()

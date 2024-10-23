@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
-class MyPageConttoller extends Controller
+class MyPageController extends Controller
 {
     public function index()
     {
