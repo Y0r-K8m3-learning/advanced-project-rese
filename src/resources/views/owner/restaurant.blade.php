@@ -180,32 +180,25 @@
 
         var modal = $(this);
 
-        // 店舗情報のセット
         modal.find('#edit-name').val(name);
         modal.find('#edit-description').val(description);
 
-        // セレクトボックスの値をセット
         modal.find('#edit-area-id').val(areaId);
         modal.find('#edit-genre-id').val(genreId);
 
-        // 画像のプレビューを表示
         if (imageUrl) {
             var previewImage = modal.find('#edit-image-preview');
             if (!previewImage.length) {
-                // プレビュー画像の要素を作成して追加
                 modal.find('.form-group').last().append('<img id="edit-image-preview" src="" alt="プレビュー画像" style="max-width: 100%; height: 50%; margin-top: 10px;">');
             }
             modal.find('#edit-image-preview').attr('src', imageUrl);
         } else {
-            // 画像がない場合はプレビューを削除
             modal.find('#edit-image-preview').remove();
         }
 
-        // フォームのアクションURLを動的に変更
         $('#restaurantEditForm').attr('action', '/owner/restaurants/' + id);
     });
 
     $(document).ready(function() {
-        // 他の初期化処理が必要ならここに追加
     });
 </script>

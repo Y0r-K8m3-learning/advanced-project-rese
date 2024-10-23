@@ -32,7 +32,7 @@ class UserSeeder extends Seeder
         // 管理者
         User::create([
             'name' => 'Test Admin',
-            'email' => 'test_admin@example.co',
+            'email' => 'test_admin@example.com',
             'password' => Hash::make('adminadmin'),  // パスワードをハッシュ化
             'role_id' => User::ROLE_ADMIN,
         ]);
