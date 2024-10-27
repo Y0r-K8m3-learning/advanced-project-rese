@@ -38,19 +38,13 @@ class RestaurantController extends Controller
             $query->where('name', 'LIKE', '%' . $name . '%');
         }
 
-
         $restaurants = $query->with(['area', 'genre'])->get();
 
         $areas = Area::all();
         $genres = Genre::all();
-
-
-
         $user = Auth::user();
 
-
         $favoriteRestaurantIds = $user ? $user->favorites()->pluck('restaurant_id')->toArray() : [];
-
 
         return view(
             'restaurant',
@@ -214,7 +208,7 @@ class RestaurantController extends Controller
     public function owner(Request $request)
     {
         $owner = Auth::user();
-        $restaurants = $owner->restaurant; // ログインユーザーが所有する店舗
+        $restaurants = $owner->restaurant;
         $areas = Area::all();
         $genres = Genre::all();
 
@@ -243,9 +237,7 @@ class RestaurantController extends Controller
             $restaurant->image_url = $path;
             $restaurant->image_url  = Storage::url($path);
         }
-        // owner_id を追加
-        $restaurant->user_id = Auth::id();
-
+        $restaurant->owner_id = Auth::id();
         $restaurant->save();
 
         return redirect()->route('owner')->with('success', '店舗が登録されました。');

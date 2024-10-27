@@ -45,15 +45,14 @@ class AuthenticatedSessionController extends Controller
         }
 
 
-        // セッションにリダイレクト先がある場合はそのURLにリダイレクト
         $redirectUrl = session('redirect_url', route('home', absolute: false));
-        $request->session()->forget('redirect_url'); // リダイレクト後にURLをクリア
+        $request->session()->forget('redirect_url'); 
 
         // ロールに応じてリダイレクト
         if ($user->isAdmin()) {
-            return redirect()->route('admin.owners.index'); // 管理者用のダッシュボード
+            return redirect()->route('admin.owners.index'); 
         } elseif ($user->isOwner()) {
-            return redirect()->route('owner'); // 一般ユーザー用のダッシュボード
+            return redirect()->route('owner'); 
         }
 
 
