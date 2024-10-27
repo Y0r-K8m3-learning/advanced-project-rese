@@ -9,7 +9,7 @@
 
  ## アプリケーションURL
  - デプロイ用
-### [Atte](https://ec2-54-238-18-150.ap-northeast-1.compute.amazonaws.com/)
+### [Atte](http://ec2-54-238-18-150.ap-northeast-1.compute.amazonaws.com/)
 
 
  ## リポジトリURL
