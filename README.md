@@ -14,8 +14,8 @@
 
  ## リポジトリURL
  - 開発用
- ### [github](https://github.com/Y0r-K8m3-learning/beginner-project-atte.git)
-
+ ### [github](https://github.com/Y0r-K8m3-learning/advanced-project-rese)
+ 
  ## 機能一覧
  - ログイン
  - ユーザ登録(メール認証有)
