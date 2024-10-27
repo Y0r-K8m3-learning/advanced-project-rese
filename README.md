@@ -79,10 +79,10 @@
  9. `npm run build`
  10. 日時バッチメール設定 クーロンに下記を設定してください。
      - crontab -e
-     - `* * * * * /usr/local/bin/php /var/www/artisan schedule:run >> /dev/null 2>&1`
+      - `* * * * * /usr/local/bin/php /var/www/artisan schedule:run >> /dev/null 2>&1`
      - ※ 手動実行する場合 /src/routes/console.php内の下記日時部分を現在時刻に変更してrunコマンドを実行してください。
-       `Schedule::command('send:reminder-emails')->dailyAt('09:00');`<br>
-       `php artisan schedule:run`<br>
+       - `Schedule::command('send:reminder-emails')->dailyAt('09:00');`<br>
+       - `php artisan schedule:run`<br>
      
 ## 本番環境(AWS)について
   ### http接続(非SSL認証)のため、ブラウザ設定によっては接続できません。
