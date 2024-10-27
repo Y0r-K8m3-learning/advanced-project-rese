@@ -1,7 +1,8 @@
 # beginner-project-atte(上級模擬案件)
 # アプリケーションの説明
  - 飲食店予約サービスアプリ
-![image](https://github.com/user-attachments/assets/9fec8b38-4109-428e-962c-a96c27afa043)
+![image](https://github.com/user-attachments/assets/e8aa1cf5-c1ff-4b94-94a6-e3347a195e21)
+
 
 ## 作成した目的
  - 自社で予約サービスを展開するため
@@ -42,14 +43,16 @@
 
 
 ## テーブル設計
-![image](https://github.com/user-attachments/assets/e9b2b50a-e2fe-4569-9643-5314d5b14390)
+![image](https://github.com/user-attachments/assets/802ceb72-2ea1-48bc-b41d-fe8787a4d016)
 
-![image](https://github.com/user-attachments/assets/1c12c735-ce30-4732-89b1-cb9c33dad35f)
+![image](https://github.com/user-attachments/assets/eed2fc3a-f7e9-4cf5-a3bc-75916bb6e64a)
 
+![image](https://github.com/user-attachments/assets/3036c1f8-35dd-43b0-9d4d-ff101754f53f)
 
 
 ## ER図
-![image](https://github.com/user-attachments/assets/69447efa-8ba4-4753-9e72-404bf86bf78d)
+![rese_ER](https://github.com/user-attachments/assets/498601ea-6a44-4fbd-9892-9efed8434be8)
+
 
 
 
@@ -85,14 +88,14 @@
     ログインして検証する場合は以下の各権限毎に以下のユーザ情報を使用してください。
     
     - 一般権限
-       - メールアドレス :`test_user@example.com`
-       - パスワード     :`testtest`
+       - メールアドレス : test_user@example.com
+       - パスワード     : testtest
     - オーナ権限
-       - メールアドレス :`test_owner@example.com`
-       - パスワード     :`ownerowner`
+       - メールアドレス : test_owner@example.com
+       - パスワード     : ownerowner
     - 管理者
-       - メールアドレス :`test_admin@example.co`
-       - パスワード     :`adminadmin`
+       - メールアドレス : test_admin@example.com
+       - パスワード     : adminadmin
        
   - 決済について
     stripeのテスト機能を使用しています。こちらも決済データはすべて開発者のstripeアカウントに送信されます。
