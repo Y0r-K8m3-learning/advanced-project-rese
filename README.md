@@ -71,10 +71,10 @@
  4. `php artisan key:generate`
  5. `php artisan migrate`
  6. `php artisan db:seed`
-     -イニシャルセットについて
-      - 各マスタデータ[areas,genres,roles]
-      - 既定の店舗データ
-      - Users ダミーデータ 10件。
+     - イニシャルセットについて
+       - 各マスタデータ[areas,genres,roles]
+       - 既定の店舗データ
+       - Users ダミーデータ 3件(一般、オーナ、管理者権限ユーザ）
  8. `npm install`
  9. `npm run build`
  10. 日時バッチメール設定 クーロンに下記を設定してください。
@@ -101,8 +101,9 @@
        - パスワード     : adminadmin
        
   - 決済について
-    stripeのテスト機能を使用しています。こちらも決済データはすべて開発者のstripeアカウントに送信されます。
-    処理を行う場合はカード番号は決済フォーム記載の番号　`4242 4242 4242 4242`を入力してください。
+    stripeのテスト機能を使用しています。こちらも決済データはすべて開発者のstripeアカウントに送信されるため確認はできません。
+    カード番号は決済フォーム記載の番号　`4242 4242 4242 4242`を入力してください。
+    
 　　![image](https://github.com/user-attachments/assets/0ba7cda3-f37f-4b98-8f23-13c4dbe52b8e)
 
     
