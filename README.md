@@ -80,7 +80,8 @@
       - 各マスタデータ[areas,genres,roles]
       - 既定の店舗データ
       - Users ダミーデータ 10件。
- 8. `npm run build`
+ 8. `npm install`
+ 9. `npm run build`
 
 ## 本番環境(AWS)について
   ### http接続(非SSL認証)のため、ブラウザ設定によっては接続できません。
