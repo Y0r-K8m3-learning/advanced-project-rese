@@ -30,7 +30,7 @@ class VerifyEmailController extends Controller
             return redirect('/')->with('verified', true);
         }
 
-        // メールを確認し、イベントを発行
+        // 認証処理
         if ($request->user()->markEmailAsVerified()) {
             event(new Verified($request->user()));
         }

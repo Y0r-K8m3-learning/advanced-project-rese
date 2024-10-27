@@ -43,7 +43,7 @@ class RestaurantsTableSeeder extends Seeder
         ];
 
         foreach ($restaurants as $restaurant) {
-            $restaurant['user_id'] = User::inRandomOrder()->first()->id; // ランダムにユーザーを選択
+            $restaurant['owner_id'] = User::inRandomOrder()->first()->id; // ランダムにユーザーを選択
 
             Restaurant::create($restaurant); // Eloquentのcreateメソッドを使用してレコードを作成
         }
