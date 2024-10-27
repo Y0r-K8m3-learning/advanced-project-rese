@@ -113,7 +113,7 @@
  2. .envについて
  - DB設定はそのまま利用できます。（確認用のため明記しています）
  - 実行環境に応じて必要なメール設定を行ってください。
-`
+```plaintext
  MAIL_MAILER=
  MAIL_HOST=
  MAIL_PORT=
@@ -122,13 +122,13 @@
  MAIL_ENCRYPTION=
  MAIL_FROM_ADDRESS=test@exmaple.come
  MAIL_FROM_NAME="${APP_NAME}"
-`
+```
 
 -決済機能を設定する場合はstripeのapikeyを設定してください。
-`
+```plaintext
 STRIPE_PUBLIC_KEY=
 STRIPE_SECRET_KEY=
 STRIPE_WEBHOOK_SECRET=
-`
+```
  
 
