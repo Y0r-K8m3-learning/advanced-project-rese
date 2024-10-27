@@ -9,13 +9,13 @@ class Restaurant extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['genre_id', 'area_id', 'user_id', 'name', 'description', 'image_url'];
+    protected $fillable = ['genre_id', 'area_id', 'owner_id', 'name', 'description', 'image_url'];
 
 
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'owner_id');
     }
 
     public function genre()

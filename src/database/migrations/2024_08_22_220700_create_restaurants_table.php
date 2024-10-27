@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('restaurants', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger(
-                'user_id'
+                'owner_id'
             );
             $table->unsignedBigInteger('genre_id');
             $table->unsignedBigInteger('area_id');

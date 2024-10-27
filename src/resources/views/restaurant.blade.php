@@ -1,14 +1,17 @@
 @section('css')
 <link rel="stylesheet" href="{{ asset('css/card.css') }}">
 <link rel="stylesheet" href="{{ asset('css/restaurant.css') }}">
-
-
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 @endsection
 
 @section('js')
-
+<script>
+    window.csrfToken = "{{ csrf_token() }}";
+    window.searchUrl = "{{ route('restaurants.index') }}";
+</script>
+<script src="{{ asset('js/restaurant.js') }}"></script>
 @endsection
+
 <x-app-layout>
     <!-- Session Status -->
     <x-auth-session-status :status="session('status')" />
@@ -91,98 +94,3 @@
         </div>
     </div>
 </x-app-layout>
-
-<script>
-    $(document).ready(function() {
-        $('.heart').click(function() {
-            var heart = $(this);
-            var restaurantId = heart.data('id');
-            if (!heart.hasClass('favorited')) {
-                // お気に入り追加
-                $.ajax({
-                    url: '/restaurants/' + restaurantId + '/favorite',
-                    type: 'POST',
-                    data: {
-                        _token: '{{ csrf_token() }}',
-                    },
-                    success: function(response) {
-                        heart.addClass('favorited');
-                    },
-                    error: function(xhr) {
-                        if (xhr.status === 401) {
-                            // 未ログインならログイン画面にリダイレクト
-                            window.location.href = '/login';
-                        } else {
-                            console.error(xhr.responseText);
-                        }
-                    }
-                });
-            } else {
-                // お気に入り解除
-                $.ajax({
-                    url: '/restaurants/' + restaurantId + '/unfavorite',
-                    type: 'POST',
-                    data: {
-                        _token: '{{ csrf_token() }}',
-                    },
-                    success: function(response) {
-                        heart.removeClass('favorited');
-                    },
-                    error: function(xhr) {
-                        console.error(xhr.responseText);
-                    }
-                });
-            }
-        });
-
-        //inputイベント制御用
-        let typingTimer;
-        const doneTypingInterval = 700;
-
-        $('#name').on('input', function() {
-            clearTimeout(typingTimer);
-
-            typingTimer = setTimeout(function() {
-                Search();
-            }, doneTypingInterval);
-        });
-
-        $('#area, #genre').on('change', function() {
-            $('#searchFrom').submit();
-
-        });
-
-
-
-        function Search() {
-            formData = {
-                area: $('#area').val(),
-                genre: $('#genre').val(),
-                name: $('#name').val(),
-            }
-
-            $.ajax({
-                url: "{{route('restaurants.index')}}",
-                type: 'GET',
-                data: formData,
-                cache: true,
-                success: function(data) {
-                    $('body').html(data);
-                    $('#name').off('input');
-                    $('#area, #genre').off('change');
-
-                    $('#name').focus();
-                    var tmpStr = $('#name').val();
-                    $('#name').val('');
-                    $('#name').val(tmpStr);
-
-                },
-                error: function() {
-                    alert('検索に失敗しました。');
-                }
-            });
-        }
-
-
-    });
-</script>

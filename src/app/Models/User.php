@@ -55,7 +55,7 @@ class User extends Authenticatable implements MustVerifyEmailContract
 
     public function restaurant()
     {
-        return $this->hasMany(Restaurant::class);
+        return $this->hasMany(Restaurant::class, 'owner_id');
     }
     public function favorites()
     {
