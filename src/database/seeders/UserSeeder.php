@@ -20,6 +20,8 @@ class UserSeeder extends Seeder
             'email' => 'test_user@example.com',
             'password' => Hash::make('testtest'),
             'role_id' =>  User::ROLE_USER,
+            'email_verified_at' => Carbon::now(),
+
         ]);
 
         // オーナー
