@@ -54,11 +54,6 @@
 ## ER図
 ![rese_ER](https://github.com/user-attachments/assets/498601ea-6a44-4fbd-9892-9efed8434be8)
 
-
-
-
-
-
 ## 環境構築
 ### Docker環境で実行
 ### ビルドからマイグレーション、シーディングまでを記述する
@@ -82,7 +77,13 @@
       - Users ダミーデータ 10件。
  8. `npm install`
  9. `npm run build`
-
+ 10. 日時バッチメール設定 クーロンに下記を設定してください。
+     - crontab -e
+     - `* * * * * /usr/local/bin/php /var/www/artisan schedule:run >> /dev/null 2>&1`
+     - ※ 手動実行する場合 /src/routes/console.php内の下記日時部分を現在時刻に変更してrunコマンドを実行してください。
+       `Schedule::command('send:reminder-emails')->dailyAt('09:00');`<br>
+       `php artisan schedule:run`<br>
+     
 ## 本番環境(AWS)について
   ### http接続(非SSL認証)のため、ブラウザ設定によっては接続できません。
 　- 検証用ユーザ
@@ -107,8 +108,10 @@
     
 ## その他
   1. OSによっては実行時にログファイル権限エラーが発生します。
- 　- (stream or flie ～ Permission deinied」）エラーが発生する場合は下記コマンドを実行してください。<br>
-     `sudo chmod 777 -R storage`
+ 　- (stream or flie ～ Permission deinied」）エラーが発生する場合はsrc内のファイル権限を変更してください。<br>
+     コマンド<br>
+     `cd src`
+     `sudo chmod 777 -R *`
 
  2. .envについて
  - DB設定はそのまま利用できます。（確認用のため明記しています）
