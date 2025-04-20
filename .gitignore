@@ -23,5 +23,6 @@ Homestead.json
 .phpunit.result.cache
 
 docker/mysql/data/*
-src/vendor/*
-src/storage/*
+/vendor/
+src/vendor/
+
