@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StorePaymentRequest;
 use Illuminate\Http\Request;
 use Stripe\Stripe;
-use Stripe\Customer;
-use Stripe\Charge;
 use App\Http\Requests\ReservationRequest;
 use App\Services\ReservationService;
 use Illuminate\Support\Facades\Auth;

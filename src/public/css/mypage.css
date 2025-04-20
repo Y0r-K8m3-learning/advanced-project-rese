@@ -1,128 +1,58 @@
- .container {
-            display: flex;
-            justify-content: space-between;
-            padding: 20px;
-        }
+.container {
+    display: flex;
+    flex-direction: row;
+    border: none;
+}
 
-        .left-half, .right-half {
-            width: 50%;
-        }
-        
-        
-        .reservation-list {
-            border: none;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-        }
+.left-half {
+    flex: 1;
+    padding: 15px;
+}
 
-        .reservation-item, .favorite-item {
-            border-bottom: 1px solid #ddd;
-            padding: 10px 0;
-            position: relative;
-            background-color: rgb(0, 85, 255);
+.left-half img {
+    width: 300px;
+    height: 200px;
+    border: 1px solid #ddd;
+}
 
-        }
+.right-half {
+    flex: 1;
+    background-color: #f8f9fa;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 35em;
+}
 
-        .reservation-item:last-child, .favorite-item:last-child {
-            border-bottom: none;
-        }
+.reserve-content {
+    background-color: rgba(173, 216, 230, 0.5);
+}
 
-        .remove-button {
-            position: absolute;
-            right: 10px;
-            top: 10px;
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            border: 2px solid white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            background-color:rgb(0, 85, 255);
-            color: white;
-            font-size: 28px;
-            font-weight: bold;
-            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-        }
+.back-link {
+    display: inline-block;
+    font-size: 24px;
+    background-color: transparent;
+    border: solid;
+    text-decoration: none;
+    color: black;
+}
 
-        .remove-button:hover {
-            background-color: rgb(255, 255, 255);
-            color: white;
-            border-color: white;
-        }
+.back-link:hover {
+    color: #0056b3;
+}
 
-        .favorite-card {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 10px;
-            margin-bottom: 10px;
-        }
+.back-button {
+    font-size: 1rem; /* ボタンの文字サイズを調整 */
+    padding: 2px 8px; /* ボタン内側の余白を小さくして領域を縮小 */
+    box-shadow: 0.5px 0.5px;
+    border-radius: 30%;
+}
 
-        .favorite-card img {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 5px;
-        }
+.under-right-content {
+    display: flex;
+    justify-content: flex-end;
+    height: 50px;
+}
 
-        .favorite-card .details {
-            flex-grow: 1;
-            margin-left: 10px;
-        }
-
-       .heart {
-            position: relative;
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-            display: inline-block;
-            background-color: grey;
-            transform: rotate(-45deg);
-            margin: 10px;
-        }
-
-        .heart::before,
-        .heart::after {
-            content: "";
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background-color: grey;
-            border-radius: 50%;
-        }
-
-        .heart::before {
-            top: -10px;
-            left: 0;
-        }
-
-        .heart::after {
-            left: 10px;
-            top: 0;
-        }
-
-        .heart.favorited {
-            background-color: red;
-        }
-
-        .heart.favorited::before,
-        .heart.favorited::after {
-            background-color: red;
-        }
-
-                .btn {
-                    width: 100px;
-        }
-
-.material-symbols-outlined {
-  font-variation-settings:
-  'FILL' 0,
-  'wght' 400,
-  'GRAD' 0,
-  'opsz' 24
+.btn-reserve {
+    background-color: #2600ff;
 }

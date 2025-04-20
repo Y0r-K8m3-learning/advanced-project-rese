@@ -3,16 +3,18 @@
     flex-direction: row;
     border: none;
 }
+
 .left-half {
     flex: 1;
     padding: 15px;
 }
 
-.left-half img{
+.left-half img {
     width: 300px;
     height: 200px;
     border: 1px solid #ddd;
 }
+
 .right-half {
     flex: 1;
     background-color: #f8f9fa;
@@ -21,30 +23,30 @@
     height: 35em;
 }
 
-.reserve-content{
-     background-color: rgba(173, 216, 230, 0.5);
+.reserve-content {
+    background-color: rgba(173, 216, 230, 0.5);
 }
 
- .back-link {
-            display: inline-block;
-            font-size: 24px;
-            background-color: transparent;
-            border: solid;
-            text-decoration: none;
-            color:black;
-        }
+.back-link {
+    display: inline-block;
+    font-size: 24px;
+    background-color: transparent;
+    border: solid;
+    text-decoration: none;
+    color: black;
+}
 
-        .back-link:hover {
-            color: #0056b3;
-        }
+.back-link:hover {
+    color: #0056b3;
+}
 
-        .back-button {
+.back-button {
     font-size: 1rem; /* ボタンの文字サイズを調整 */
     padding: 2px 8px; /* ボタン内側の余白を小さくして領域を縮小 */
     box-shadow: 0.5px 0.5px;
     border-radius: 30%;
-
 }
+
 .under-right-content {
     display: flex;
     justify-content: flex-end;
