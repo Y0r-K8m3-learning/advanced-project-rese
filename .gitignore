@@ -24,4 +24,4 @@ Homestead.json
 
 docker/mysql/data/*
 src/vendor/*
-
+src/storage/*
