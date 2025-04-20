@@ -26,3 +26,4 @@ docker/mysql/data/*
 /vendor/
 src/vendor/
 
+src/public/storage
