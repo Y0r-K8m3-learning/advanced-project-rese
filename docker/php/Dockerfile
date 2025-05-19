@@ -27,3 +27,9 @@ RUN apt-get update && apt-get install -y cron vim
 #extパッケージ
 RUN docker-php-ext-install bcmath
 WORKDIR /var/www
+
+#ユーザ作成
+ARG APP_USER_ID
+ARG APP_USER_NAME
+
+RUN useradd -u ${APP_USER_ID} -m ${APP_USER_NAME}
