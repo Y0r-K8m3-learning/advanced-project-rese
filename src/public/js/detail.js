@@ -87,4 +87,6 @@ $(document).ready(function() {
     $('.close, .btn-secondary').click(function() {
         $('#rateModal').modal('hide');
     });
+
+    
 });

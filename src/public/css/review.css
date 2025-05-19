@@ -1,0 +1,104 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    border: none;
+}
+
+.left-half {
+    flex: 1;
+    padding: 15px;
+}
+
+.left-half img {
+    width: 300px;
+    height: 200px;
+    border: 1px solid #ddd;
+}
+
+.right-half {
+    flex: 1;
+    background-color: #f8f9fa;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 35em;
+}
+
+.reserve-content {
+    background-color: rgba(173, 216, 230, 0.5);
+}
+
+.back-link {
+    display: inline-block;
+    font-size: 24px;
+    background-color: transparent;
+    border: solid;
+    text-decoration: none;
+    color: black;
+}
+
+.back-link:hover {
+    color: #0056b3;
+}
+
+.back-button {
+    font-size: 1rem; /* ボタンの文字サイズを調整 */
+    padding: 2px 8px; /* ボタン内側の余白を小さくして領域を縮小 */
+    box-shadow: 0.5px 0.5px;
+    border-radius: 30%;
+}
+
+.under-right-content {
+    display: flex;
+    justify-content: flex-end;
+    height: 50px;
+}
+
+.btn-reserve {
+    background-color: #2600ff;
+}
+/* 星マーク */
+.rate-form {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+  }
+  .rate-form input[type=radio] {
+    display: none;
+  }
+  .rate-form label {
+    position: relative;
+    padding: 0 5px;
+    color: #ccc;
+    cursor: pointer;
+    font-size: 35px;
+  }
+  .rate-form label:hover {
+    color: #ffcc00;
+  }
+  .rate-form label:hover ~ label {
+    color: #ffcc00;
+  }
+  .rate-form input[type=radio]:checked ~ label {
+    color: #ffcc00;
+  }
+
+  .upload-area {
+    border: 2px dashed #aaa;
+    border-radius: 8px;
+    padding: 30px;
+    text-align: center;
+    color: #666;
+    cursor: pointer;
+    width: 100%;
+    max-width: 320px;
+    margin: 20px auto;
+    transition: border-color 0.2s;
+    position: relative;
+    background: #fafafa;
+  }
+  
+  .upload-area.dragover {
+    border-color: #3182ce;
+    background: #f0f8ff;
+    color: #3182ce;
+  }

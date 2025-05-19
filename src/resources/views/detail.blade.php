@@ -26,6 +26,7 @@
 
             <!-- 5段階評価ボタン -->
             <button type="button" class="btn btn-secondary mt-3" id="rateButton">評価</button>
+            <a href="{{ route('review.index',$restaurant->id) }}" class="">口コミを投稿する</a>
         </div>
 
         <div class="right-half bg-primary rounded shadow d-flex flex-column justify-content-between">
@@ -43,7 +44,8 @@
                     <input type="hidden" name="restaurant_id" value="{{ $restaurant->id }}">
 
                     <div class="form-group">
-                        <input type="date" id="date" name="date" class="form-control w-50 ms-4 rounded" required value="{{ date('Y-m-d') }}" min="{{ date('Y-m-d') }}">
+                        <input type="date" id="date" name="date" class="form-control w-50 ms-4 rounded" required
+                            value="{{ date('Y-m-d') }}" min="{{ date('Y-m-d') }}">
                         <x-input-error :messages="$errors->get('date')" class="mt-2" />
                     </div>
 
@@ -52,13 +54,10 @@
                             @php
                             $currentTime = date('H:i');
                             $currentMinutes = date('i');
-                            $roundedMinutes = ($currentMinutes < 30) ? '00' : '30' ;
-                                $selectedTime=date('H') . ':' . $roundedMinutes;
-                                for ($i=0; $i < 24 * 2; $i++) {
-                                $hours=str_pad(floor($i / 2), 2, '0' , STR_PAD_LEFT);
-                                $minutes=str_pad(($i % 2) * 30, 2, '0' , STR_PAD_LEFT);
-                                $timeValue=$hours . ':' . $minutes;
-                                $selected=($timeValue==$selectedTime) ? 'selected' : '' ;
+                            $roundedMinutes = ($currentMinutes < 30) ? '00' : '30' ; $selectedTime=date('H') . ':' .
+                                $roundedMinutes; for ($i=0; $i < 24 * 2; $i++) { $hours=str_pad(floor($i / 2), 2, '0' ,
+                                STR_PAD_LEFT); $minutes=str_pad(($i % 2) * 30, 2, '0' , STR_PAD_LEFT); $timeValue=$hours
+                                . ':' . $minutes; $selected=($timeValue==$selectedTime) ? 'selected' : '' ;
                                 echo "<option value=\" $timeValue\" $selected>$timeValue</option>";
                                 }
                                 @endphp
@@ -68,8 +67,7 @@
 
                     <div class="form-group mt-2">
                         <select id="number" name="number" class="form-control w-75 ms-4" required>
-                            @for ($i = 1; $i <= 10; $i++)
-                                <option value="{{ $i }}">{{ $i }}人</option>
+                            @for ($i = 1; $i <= 10; $i++) <option value="{{ $i }}">{{ $i }}人</option>
                                 @endfor
                         </select>
                         <x-input-error :messages="$errors->get('number')" class="mt-2 pl-9" />
@@ -92,7 +90,8 @@
             </div>
             <!-- 予約ボタン -->
             <div class="under-right-content">
-                <button type="submit" class="btn-reserve  w-100 text-white shadow rounded" id="reservation-button">予約する</button>
+                <button type="submit" class="btn-reserve  w-100 text-white shadow rounded"
+                    id="reservation-button">予約する</button>
             </div>
             </form>
 
@@ -102,6 +101,7 @@
     </div>
 
     <!-- 評価とコメントのモーダル -->
+
     <div class="modal fade" id="rateModal" tabindex="-1" aria-labelledby="rateModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">

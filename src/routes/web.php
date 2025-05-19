@@ -7,6 +7,7 @@ use App\Http\Controllers\MailController;
 use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\MyPageController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\StripePaymentsController;
 
 //ユーザ登録
@@ -42,6 +43,10 @@ Route::get('/reservation/complete', function () {
 
 Route::get('/restaurants', [RestaurantController::class, 'index'])->name('restaurants.index');
 
+//pro課題 レビュー画面
+Route::get('/restaurants/review/{restaurant_id}', [ReviewController::class, 'index'])->name('review.index');
+Route::post('/restaurants/review', [ReviewController::class, 'store'])->name('review.store');
+
 Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::post('/admin/sendMailToAll', [MailController::class, 'sendMailToAll'])->name('admin.sendMailToAll');
@@ -52,7 +57,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/payment/index', [StripePaymentsController::class, 'index'])->name('paymentindex');
     Route::post('/payment', [StripePaymentsController::class, 'payment'])->name('payment.store');
 
-    
+
 
 
     Route::get('/reservations/verify/{id}', [RestaurantController::class, 'verify'])->name('reservation.verify');
@@ -69,6 +74,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::post('/restaurants/{id}/unfavorite', [RestaurantController::class, 'favorite'])->name('restaurants.favorite');
     Route::post('/restaurants/{id}/unfavorite', [RestaurantController::class, 'unfavorite'])->name('restaurants.unfavorite');
+
+
+
 
     Route::post('/reservations', [RestaurantController::class, 'store'])->name('reservation.store');
 

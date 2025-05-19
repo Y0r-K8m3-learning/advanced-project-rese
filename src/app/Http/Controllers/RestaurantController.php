@@ -6,14 +6,16 @@ use App\Models\Restaurant;
 use App\Models\Area;
 use App\Models\Genre;
 use App\Models\Favorite;
-use App\Models\Review;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Facades\Storage;
 
+
 use App\Http\Requests\ReservationRequest;
+use App\Http\Requests\ReviewRequest;
+use App\Models\ReviewImage;
 
 class RestaurantController extends Controller
 {
@@ -150,23 +152,8 @@ class RestaurantController extends Controller
         return redirect()->route('mypage.index')->with('status', '予約を変更しました。');
     }
 
-    public function rate(Request $request, $id)
-    {
-        $request->validate([
-            'rating' => 'required|integer|min:1|max:5',
-            'comment' => 'required|string|max:500',
-        ]);
 
-        // レビューの保存
-        Review::create([
-            'restaurant_id' => $id,
-            'user_id' => auth()->id(),
-            'rating' => $request->input('rating'),
-            'comment' => $request->input('comment'),
-        ]);
-
-        return redirect()->back()->with('status', '');
-    }
+   
 
     // QRコード生成メソッド
     public function showQrCode($id)
