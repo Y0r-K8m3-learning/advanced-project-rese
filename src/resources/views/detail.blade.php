@@ -26,7 +26,7 @@
 
             <!-- 5段階評価ボタン -->
             <button type="button" class="btn btn-secondary mt-3" id="rateButton">評価</button>
-            <a href="{{ route('review.index',$restaurant->id) }}" class="">口コミを投稿する</a>
+            <a href="{{ route('review.create',$restaurant->id) }}" class="">口コミを投稿する</a>
         </div>
 
         <div class="right-half bg-primary rounded shadow d-flex flex-column justify-content-between">

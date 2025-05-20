@@ -93,7 +93,7 @@ $(document).ready(function () {
     const message = document.getElementById("drop-message");
 
     // エリアクリックでファイル選択
-    dropArea.addEventListener("click", () => fileInput.click());
+   dropArea.addEventListener("click", () => fileInput.click());
 
     // ドラッグ＆ドロップ
     dropArea.addEventListener("dragover", (e) => {

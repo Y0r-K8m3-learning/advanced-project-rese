@@ -44,8 +44,14 @@ Route::get('/reservation/complete', function () {
 Route::get('/restaurants', [RestaurantController::class, 'index'])->name('restaurants.index');
 
 //pro課題 レビュー画面
-Route::get('/restaurants/review/{restaurant_id}', [ReviewController::class, 'index'])->name('review.index');
+Route::get('/restaurants/review/{restaurant_id}', [ReviewController::class, 'create'])->name('review.create');
 Route::post('/restaurants/review', [ReviewController::class, 'store'])->name('review.store');
+
+Route::get('/restaurants/review/edit/{restaurant_id}', [ReviewController::class, 'edit'])->name('review.edit');
+Route::patch('/restaurants/review/update', [ReviewController::class, 'update'])->name('review.update');
+Route::get('/restaurants/review/delete/{restaurant_id}', [ReviewController::class, 'delete'])->name('review.destroy');
+Route::post('/restaurants/review/delete', [ReviewController::class, 'destroy'])->name('review.destroy');
+
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
