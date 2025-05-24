@@ -11,13 +11,26 @@ class Review extends Model
     
     protected $fillable = ['user_id', 'restaurant_id', 'rating', 'comment'];
 
-    public function restaurants()
+    public function restaurant()
     {
-        return $this->belongsTo('App\Models\Restaurant', "restaurant_id");
+        return $this->belongsTo(Restaurant::class, "restaurant_id");
     }
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function image()
+    {
+        //1対1
+        return $this->hasOne(ReviewImage::class,'review_id');
+    }
+
+    public static function isExists($restaurant_id, $user_id)
+    {
+        return Review::where('restaurant_id', $restaurant_id)
+            ->where('user_id', $user_id)
+            ->exists();
     }
 }

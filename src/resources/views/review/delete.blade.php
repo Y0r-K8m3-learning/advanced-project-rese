@@ -14,23 +14,26 @@
         <div class="row w-100">
             <!--  レストラン情報 -->
             <div class="col-md-6 d-flex flex-column align-items-center">
-              
+
                 <x-restaurant-info :restaurant="$restaurant" :favoriteRestaurantIds="$favoriteRestaurantIds ?? []" />
             </div>
 
             <!-- 口コミフォーム -->
             <div class="col-md-6 bg-gray-100 d-flex flex-column justify-content-center">
-                <div class="p-4">
+                <div class="p-3">
                     <form id="rateForm" method="POST" action="{{ route('review.destroy') }}"
                         enctype="multipart/form-data">
                         @method('DELETE')
                         @csrf
-                        <x-review-input :restaurant="$restaurant" :user_review="$user_review" user_action="update" />
-                        <button type="submit" class="btn m-auto btn-primary rounded w-50">口コミを削除する</button>
-                        
-                        
+                        <x-review-input :restaurant="$restaurant" :user_review="$user_review" user_action="delete" />
+
                 </div>
             </div>
+            <div class="text-center mb-5">
+                <button type="submit" class="btn m-auto btn-primary rounded w-50">口コミを削除する</button>
+            </div>
+            </form>
         </div>
+
     </div>
 </x-app-layout>
