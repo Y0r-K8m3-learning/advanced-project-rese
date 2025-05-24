@@ -58,8 +58,8 @@
             }, doneTypingInterval);
         });
 
-        $('#area, #genre').on('change', function() {
-            $('#searchFrom').submit();
+        $('#area, #genre, #sort').on('change', function() {
+           $('#searchFrom').submit();
 
         });
 

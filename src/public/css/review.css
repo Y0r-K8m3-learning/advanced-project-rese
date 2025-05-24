@@ -61,30 +61,49 @@
     display: flex;
     flex-direction: row-reverse;
     justify-content: flex-end;
-  }
-  .rate-form input[type=radio] {
+}
+.rate-form input[type="radio"] {
     display: none;
-  }
-  .rate-form label {
+}
+.rate-form label {
     position: relative;
     padding: 0 5px;
     color: #ccc;
     cursor: pointer;
     font-size: 35px;
-  }
-  .rate-form label:hover {
-    color: #ffcc00;
-  }
-  .rate-form label:hover ~ label {
-    color: #ffcc00;
-  }
-  .rate-form input[type=radio]:checked ~ label {
-    color: #ffcc00;
-  }
+}
 
-  .upload-area {
-    border: 2px dashed #aaa;
-    border-radius: 8px;
+.rate-form label:hover {
+    color: #006aff;
+}
+.rate-form label:hover ~ label {
+    color: #006aff;
+}
+
+.rate-form label ~ label:hover {
+    color: #006aff;
+}
+
+.rate-form input[type="radio"]:checked ~ label {
+    color: #006aff !important;
+}
+label {
+    outline: none;
+    box-shadow: none;
+    caret-color: transparent;
+}
+
+.rate-form input[type="radio"]:disabled + label,
+.rate-form input[type="radio"]:disabled + label ~ label,
+.rate-form input[type="radio"]:disabled + label:hover,
+.rate-form input[type="radio"]:disabled + label:hover ~ label,
+.rate-form input[type="radio"]:disabled + label ~ label:hover {
+    color: #ccc;
+    cursor: not-allowed;
+}
+
+.upload-area {
+    border: 2px #aaa;
     padding: 30px;
     text-align: center;
     color: #666;
@@ -95,10 +114,51 @@
     transition: border-color 0.2s;
     position: relative;
     background: #fafafa;
-  }
-  
-  .upload-area.dragover {
+}
+
+.upload-area.dragover {
     border-color: #3182ce;
-    background: #f0f8ff;
+    background: #f0f8ff68;
     color: #3182ce;
-  }
+    cursor: copy;
+}
+
+.heart {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    display: inline-block;
+    background-color: grey;
+    transform: rotate(-45deg);
+    margin: 10px;
+}
+
+.heart::before,
+.heart::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: grey;
+    border-radius: 50%;
+}
+
+.heart::before {
+    top: -10px;
+    left: 0;
+}
+
+.heart::after {
+    left: 10px;
+    top: 0;
+}
+
+.heart.favorited {
+    background-color: red;
+}
+
+.heart.favorited::before,
+.heart.favorited::after {
+    background-color: red;
+}

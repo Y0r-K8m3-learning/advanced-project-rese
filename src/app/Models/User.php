@@ -57,9 +57,15 @@ class User extends Authenticatable implements MustVerifyEmailContract
     {
         return $this->hasMany(Restaurant::class, 'owner_id');
     }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+    
     public function favorites()
     {
-        return $this->belongsToMany(User::class, 'favorites')->withTimestamps();
+        return $this->hasMany(Favorite::class);
     }
 
     // 管理者かどうかを確認
@@ -75,7 +81,7 @@ class User extends Authenticatable implements MustVerifyEmailContract
     }
 
     // 一般ユーザーかどうかを確認
-    public function isUser(): bool
+    public  function isUser(): bool
     {
         return $this->role_id === self::ROLE_USER;
     }

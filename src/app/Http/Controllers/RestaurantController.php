@@ -25,6 +25,7 @@ class RestaurantController extends Controller
         $areaId = $request->input('area');
         $genreId = $request->input('genre');
         $name = $request->input('name');
+        $sort = $request->input('sort');
         $query = Restaurant::query();
 
         if ($areaId) {
@@ -38,9 +39,17 @@ class RestaurantController extends Controller
         if ($name) {
             $query->where('name', 'LIKE', '%' . $name . '%');
         }
+        if ($sort) {
+            if ($sort == 'asc') {
+                $query->orderBy('reviews_avg_rating', 'desc');
+            } elseif ($sort == 'desc') {
+                $query->orderBy('reviews_avg_rating', 'asc');
+            } else {
+                $query->inRandomOrder();
+            }
+        }
 
-        $restaurants = $query->with(['area', 'genre'])->get();
-
+        $restaurants = $query->with(['area', 'genre', 'reviews'])->withAvg('reviews', 'rating')->get();
         $areas = Area::all();
         $genres = Genre::all();
         $user = Auth::user();
@@ -89,9 +98,15 @@ class RestaurantController extends Controller
 
     public function detail($restaurant_id)
     {
-        $restaurant = Restaurant::with(['area', 'genre'])->findOrFail($restaurant_id);
+        $restaurant = Restaurant::with(['area', 'genre', 'reviews.image'])->findOrFail($restaurant_id);
+        $user = Auth::user();
+        //既にレビュー済みかどうか
+        $hasReviewed = false;
+        if ($user) {
+            $hasReviewed = $restaurant->reviews()->where('user_id', $user->id)->exists();
+        }
 
-        return view('detail', compact('restaurant'));
+        return view('detail', compact('restaurant', 'hasReviewed'));
     }
 
     public function store(ReservationRequest  $request)
@@ -153,7 +168,7 @@ class RestaurantController extends Controller
     }
 
 
-   
+
 
     // QRコード生成メソッド
     public function showQrCode($id)

@@ -25,12 +25,18 @@ class Restaurant extends Model
 
     public function favorite()
     {
-        return $this->belongsToMany(User::class, 'favorites')->withTimestamps();
+        return $this->hasMany(Favorite::class)->withTimestamps();
     }
 
-    public function review()
+    public function reviews()
     {
-        return $this->belongsToMany(User::class, 'reviews')->withTimestamps();
+        return $this->hasMany(Review::class);
+    }
+
+    //平均値丸め
+    public function getReviewsAvgRatingAttribute($value)
+    {
+        return is_null($value) ? null : number_format($value,2, '.', '');
     }
 
     public function area()
