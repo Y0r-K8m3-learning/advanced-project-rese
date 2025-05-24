@@ -1,4 +1,4 @@
-<div class="ms-4 col-md-10 col-lg-9 col-12 mb-4 rounded shadow">
+<div class="ms-4 mt-4 col-md-10 col-lg-9 col-12 mb-4 rounded shadow" style="max-width: 350px;">
     <img src="{{ $restaurant['image_url'] }}" class="card-img-top" alt="{{ $restaurant['name'] }}">
     <div class="card-body">
         <h5 class="card-title fw-bold">{{ $restaurant['name'] }}</h5>
