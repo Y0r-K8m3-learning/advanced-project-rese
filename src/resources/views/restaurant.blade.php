@@ -30,8 +30,8 @@
                             @php
                             $sortOptions = [
                             ['sorttype' => 'random', 'text' => 'ランダム'],
-                            ['sorttype' => 'asc', 'text' => '昇順'],
-                            ['sorttype' => 'desc', 'text' => '降順'],
+                            ['sorttype' => 'asc', 'text' => '評価が高い順'],
+                            ['sorttype' => 'desc', 'text' => '評価が低い順'],
                             ];
                             @endphp
                             @foreach($sortOptions as $sortOption)

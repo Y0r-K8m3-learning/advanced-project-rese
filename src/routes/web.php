@@ -112,10 +112,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::delete('/restaurants/review/destroy', [ReviewController::class, 'destroy'])->name('review.destroy');
     });
 
-
-
-
-
     Route::get('/restaurants/review/complete/{restaurant_id}', [ReviewController::class, 'complete'])->name('review.complete');
 });
 

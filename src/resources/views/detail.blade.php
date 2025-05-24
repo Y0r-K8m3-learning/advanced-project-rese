@@ -9,10 +9,9 @@
 <x-app-layout>
     <div style="display: none" id="data" data-restaurant-id="{{ $restaurant->id }}"
         data-user-id="{{Auth::check() ? Auth::id() : '' }}"
-        data-isgeneraluser-id="{{ Auth::check()? Auth::user()->isUser() ?? null: '' }}">
-        data-isadminuser-id="{{Auth::check()?Auth::user()->isAdmin() ?? null: '' }}"
+        data-isgeneraluser-id="{{ Auth::check()? Auth::user()->isUser() ?? null: '' }}"
+        data-isadminuser-id="{{Auth::check()?Auth::user()->isAdmin() ?? null: '' }}">
     </div>
-    <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
     <div class="container ">

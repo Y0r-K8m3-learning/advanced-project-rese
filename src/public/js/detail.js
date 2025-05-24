@@ -127,6 +127,7 @@ $(document).ready(function () {
                     const isAdminUser = $("#data").data("isadminuser-id");
                     const isGeneralUser = $("#data").data("isgeneraluser-id");
                     const restaurantId = $("#data").data("restaurant-id");
+                    console.log(isAdminUser, isGeneralUser, restaurantId);
 
                     let $doButton = $(
                         '<div class="review-header d-flex justify-content-between"></div>'

@@ -29,6 +29,11 @@
 
                 </div>
             </div>
+            @if ($errors->has('error'))
+            <div class="alert alert-danger">
+                {{ $errors->first('error') }}
+            </div>
+            @endif
             <div class="text-center mb-5">
                 <button type="submit" class="btn m-auto btn-primary rounded w-50">口コミを削除する</button>
             </div>

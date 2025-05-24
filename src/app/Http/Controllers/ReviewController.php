@@ -216,12 +216,15 @@ class ReviewController extends Controller
     //口コミ削除
     public function destroy(Request $request)
     {
+
         $user = Auth::user();
         $review_id = $request->input('review_id');
         $restaurant_id = $request->input('restaurant_id');
 
+
         if ($user->role_id == User::ROLE_USER) {
-            //一般ユーザーの場合
+
+            //一般ユーザーの場合 他ユーザの口コミの削除エラー
             $review = Review::where('id', $review_id)
                 ->where('user_id', $user->id)
                 ->first();
@@ -231,6 +234,7 @@ class ReviewController extends Controller
         }
 
         DB::beginTransaction();
+
         try {
             $reviewImage = ReviewImage::where('review_id', $review_id)->first();
             $oldImagePath = null;
@@ -243,6 +247,7 @@ class ReviewController extends Controller
 
             DB::commit();
         } catch (\Exception $e) {
+
             DB::rollBack();
             Log::error('レビュー削除エラー: ' . $e->getMessage());
             return redirect()->route('review.complete', ['restaurant_id' => $restaurant_id])->with('error', '口コミの削除に失敗しました。');
@@ -251,7 +256,6 @@ class ReviewController extends Controller
         if ($oldImagePath && Storage::disk('public')->exists(str_replace('storage/', '', $oldImagePath))) {
             Storage::disk('public')->delete(str_replace('storage/', '',  $oldImagePath));
         }
-
 
         return redirect()->route('review.complete', ['restaurant_id' => $restaurant_id])->with('complete', '口コミを削除しました');
     }
