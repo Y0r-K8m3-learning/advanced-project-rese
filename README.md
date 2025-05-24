@@ -1,1 +1,138 @@
-# beginner-project-atte
+# beginner-project-atte(上級模擬案件)
+# アプリケーションの説明
+ - 飲食店予約サービスアプリ
+![image](https://github.com/user-attachments/assets/e8aa1cf5-c1ff-4b94-94a6-e3347a195e21)
+
+
+## 作成した目的
+ - 自社で予約サービスを展開するため
+
+ ## アプリケーションURL
+ - デプロイ用
+### [Atte](http://ec2-54-238-18-150.ap-northeast-1.compute.amazonaws.com/)
+
+
+ ## リポジトリURL
+ - 開発用
+ ### [github](https://github.com/Y0r-K8m3-learning/advanced-project-rese)
+ 
+ ## 機能一覧
+ - ログイン
+ - ユーザ登録(メール認証有)
+ - 店舗一覧
+   - 予約
+     　- 決済機能(Stripe)
+   - お気に入り
+ - マイページ
+   - 予約状況
+      - 予約変更
+      - 照会用QR
+ - 権限によって以下の画面が利用可能
+  　- 店舗代表者
+      - 店舗登録/編集（画像保存機能有）
+         
+    - 管理者
+      - 店舗代表者の登録
+      - 利用者へのお知らせメール
+ - その他の機能
+   - リマインダー：毎朝9時にその日の予約情報をメール送信
+   - レスポンシブデザイン:ブレキングポイント 768px 
+## 使用技術
+- PHP 8.3.7
+- laravel 11.10.0
+- MySQL 8.0.37
+
+
+## テーブル設計
+![image](https://github.com/user-attachments/assets/802ceb72-2ea1-48bc-b41d-fe8787a4d016)
+
+![image](https://github.com/user-attachments/assets/eed2fc3a-f7e9-4cf5-a3bc-75916bb6e64a)
+
+![image](https://github.com/user-attachments/assets/3036c1f8-35dd-43b0-9d4d-ff101754f53f)
+
+
+## ER図
+![rese_ER](https://github.com/user-attachments/assets/498601ea-6a44-4fbd-9892-9efed8434be8)
+
+## 環境構築
+### Docker環境で実行
+### ビルドからマイグレーション、シーディングまでを記述する
+- Dockerビルド 
+ 1. `git clone https://github.com/Y0r-K8m3-learning/advanced-project-rese.git`
+ 2. `cd advanced-project-rese`
+ 3. `docker-compose up -d --build`
+ 
+　※MySQLは、OSによって起動しない場合があるのでそれぞれのPCに合わせて docker-compose.ymlファイルを編集してください。
+ 
+- Laravel環境構築
+ 1. `docker-compose exec php bash`
+ 2. `composer install`
+ 3. `cp -p .env.example .env`
+ 4. `php artisan key:generate`
+ 5. `php artisan migrate`
+ 6. `php artisan db:seed`
+     - イニシャルセットについて
+       - 各マスタデータ[areas,genres,roles]
+       - 既定の店舗データ
+       - Users ダミーデータ 3件(一般、オーナ、管理者権限ユーザ）
+ 8. `npm install`
+ 9. `npm run build`
+ 10. 日時バッチメール設定 クーロンに下記を設定してください。
+     - crontab -e
+      - `* * * * * /usr/local/bin/php /var/www/artisan schedule:run >> /dev/null 2>&1`
+     - ※ 手動実行する場合 /src/routes/console.php内の下記日時部分を現在時刻に変更してrunコマンドを実行してください。
+       - `Schedule::command('send:reminder-emails')->dailyAt('09:00');`<br>
+       - `php artisan schedule:run`<br>
+     
+## 本番環境(AWS)について
+  ### http接続(非SSL認証)のため、ブラウザ設定によっては接続できません。
+　- 検証用ユーザ
+    メールサーバはmailtrapのテストサーバを使用しているため、ユーザ登録・リマインダーなどのメールはすべて開発者のmailtrapメールボックスに送信されます。
+    ログインして検証する場合は以下の各権限毎に以下のユーザ情報を使用してください。
+    
+    - 一般権限
+       - メールアドレス : test_user@example.com
+       - パスワード     : testtest
+    - オーナ権限
+       - メールアドレス : test_owner@example.com
+       - パスワード     : ownerowner
+    - 管理者
+       - メールアドレス : test_admin@example.com
+       - パスワード     : adminadmin
+       
+  - 決済について
+    stripeのテスト機能を使用しています。こちらも決済データはすべて開発者のstripeアカウントに送信されるため確認はできません。
+    カード番号は決済フォーム記載の番号　`4242 4242 4242 4242`を入力してください。
+    
+　　![image](https://github.com/user-attachments/assets/0ba7cda3-f37f-4b98-8f23-13c4dbe52b8e)
+
+    
+## その他
+  1. OSによっては実行時にログファイル権限エラーが発生します。
+ 　- (stream or flie ～ Permission deinied」）エラーが発生する場合はsrc内のファイル権限を変更してください。<br>
+     コマンド<br>
+     `cd src`
+     `sudo chmod 777 -R *`
+
+ 2. .envについて
+ - DB設定はそのまま利用できます。（確認用のため明記しています）
+ - 実行環境に応じて必要なメール設定を行ってください。
+```plaintext
+ MAIL_MAILER=
+ MAIL_HOST=
+ MAIL_PORT=
+ MAIL_USERNAME=
+ MAIL_PASSWORD=
+ MAIL_ENCRYPTION=
+ MAIL_FROM_ADDRESS=test@exmaple.come
+ MAIL_FROM_NAME="${APP_NAME}"
+```
+
+-決済機能を設定する場合はstripeのapikeyを設定してください。
+```plaintext
+STRIPE_PUBLIC_KEY=
+STRIPE_SECRET_KEY=
+STRIPE_WEBHOOK_SECRET=
+```
+ 
+
