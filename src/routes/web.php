@@ -7,7 +7,10 @@ use App\Http\Controllers\MailController;
 use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\MyPageController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\StripePaymentsController;
+use App\Models\User;
+use App\Http\Middleware\RoleMiddleware;
 
 //ユーザ登録
 Route::get('/register', [AuthController::class, 'getRegister']);
@@ -17,13 +20,6 @@ Route::post('/register', [AuthController::class, 'postRegister']);
 Route::get('/login', [AuthController::class, 'getLogin'])->name('login');;
 Route::post('/login', [AuthController::class, 'postLogin']);
 Route::get('/restaurant/{id}', [RestaurantController::class, 'detail'])->name('restaurant.detail');
-
-
-Route::get('/', [
-    RestaurantController::class,
-    'index'
-])->name('index');
-
 
 Route::get('/complete', [StripePaymentsController::class, 'complete'])->name('complete');
 
@@ -42,6 +38,11 @@ Route::get('/reservation/complete', function () {
 
 Route::get('/restaurants', [RestaurantController::class, 'index'])->name('restaurants.index');
 
+
+
+
+
+
 Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::post('/admin/sendMailToAll', [MailController::class, 'sendMailToAll'])->name('admin.sendMailToAll');
@@ -52,7 +53,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/payment/index', [StripePaymentsController::class, 'index'])->name('paymentindex');
     Route::post('/payment', [StripePaymentsController::class, 'payment'])->name('payment.store');
 
-    
+
 
 
     Route::get('/reservations/verify/{id}', [RestaurantController::class, 'verify'])->name('reservation.verify');
@@ -70,6 +71,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/restaurants/{id}/unfavorite', [RestaurantController::class, 'favorite'])->name('restaurants.favorite');
     Route::post('/restaurants/{id}/unfavorite', [RestaurantController::class, 'unfavorite'])->name('restaurants.unfavorite');
 
+
+
+
     Route::post('/reservations', [RestaurantController::class, 'store'])->name('reservation.store');
 
     Route::post('/restaurants/{id}/rate', [RestaurantController::class, 'rate'])->name('restaurant.rate');
@@ -85,7 +89,35 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/mypage', [MyPageController::class, 'index'])->name('mypage.index');
+
+
+    /**===pro課題 レビュー画面**/
+    Route::middleware(RoleMiddleware::class . ':' . User::ROLE_USER)->group(function () {
+        //一般ユーザのみ
+
+        Route::post('/restaurants/review', [ReviewController::class, 'store'])->name('review.store');
+
+        Route::get('/restaurants/review/{restaurant_id}', [ReviewController::class, 'create'])->name('review.create');
+        Route::post('/restaurants/review', [ReviewController::class, 'store'])->name('review.store');
+
+        Route::get('/restaurants/review/edit/{restaurant_id}/{review_id}', [ReviewController::class, 'edit'])->name('review.edit');
+        Route::patch('/restaurants/review/update', [ReviewController::class, 'update'])->name('review.update');
+    });
+
+
+    Route::middleware([RoleMiddleware::class . ':' . User::ROLE_ADMIN . ',' . User::ROLE_USER])->group(function () {
+        // 管理者とユーザ
+        Route::get('/restaurants/review/delete/{restaurant_id}/{review_id}', [ReviewController::class, 'delete'])->name('review.delete');
+
+        Route::delete('/restaurants/review/destroy', [ReviewController::class, 'destroy'])->name('review.destroy');
+    });
+
+    Route::get('/restaurants/review/complete/{restaurant_id}', [ReviewController::class, 'complete'])->name('review.complete');
 });
+
+Route::get('/restaurants/review/show/{restaurant_id}', [ReviewController::class, 'show'])->name('review.show');
+/**pro課題 レビュー画面====**/
+
 
 require __DIR__ . '/auth.php';
 require __DIR__ . '/owner.php';

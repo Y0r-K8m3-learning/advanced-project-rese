@@ -12,7 +12,15 @@ services:
       - php
 
   php:
-    build: ./docker/php
+    build:
+      context: ./docker/php
+      dockerfile: Dockerfile
+      args:
+        APP_USER_ID: ${APP_USER_ID}
+        APP_USER_NAME: ${APP_USER_NAME}
+    user: "${APP_USER_ID}:${APP_USER_ID}"
+    ports:
+      - 5173:5173
     volumes:
       - ./src:/var/www/
 

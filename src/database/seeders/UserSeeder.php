@@ -15,14 +15,15 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         // 一般ユーザー
-        User::create([
-            'name' => 'Test User',
-            'email' => 'test_user@example.com',
-            'password' => Hash::make('testtest'),
-            'role_id' =>  User::ROLE_USER,
-            'email_verified_at' => Carbon::now(),
-
-        ]);
+        for ($i = 1; $i <= 10; $i++) {
+            User::create([
+                'name' => "Test User{$i}",
+                'email' => "test_user{$i}@example.com",
+                'password' => Hash::make('testtest'),
+                'role_id' => User::ROLE_USER,
+                'email_verified_at' => \Carbon\Carbon::now(),
+            ]);
+        }
 
         // オーナー
         User::create([

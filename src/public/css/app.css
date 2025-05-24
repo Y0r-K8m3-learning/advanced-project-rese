@@ -1,103 +1,102 @@
+/* メニューボタンのスタイル */
+.menu-button-container {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 2000;
+}
+.menu-button {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #007bff;
+    background-color: rgb(1, 162, 255);
+    border-radius: 5px;
+    cursor: pointer;
+}
 
- /* メニューボタンのスタイル */
-   .menu-button-container {
-       display: flex;
-       align-items: center;
-       cursor: pointer;
-       position: fixed;
-       top: 20px;
-       left: 20px;
-       z-index: 2000;
-   }
-   .menu-button {
-       width: 40px;
-       height: 40px;
-       display: flex;
-       align-items: center;
-       justify-content: center;
-       border: 1px solid #007bff;
-       background-color: rgb(1, 162, 255);
-       border-radius: 5px;
-       cursor: pointer;
-   }
- 
-   .menu-icon {
-       width: 25px; /* もとの幅を保持 */
-       display: flex;
-       flex-direction: column;
-       align-items: flex-start; /* 左寄せに変更 */
-       justify-content: center;
-   }
-   .menu-icon span {
-       display: block;
-       width: 25px;
-       height: 3px;
-       background-color: #ffffff;
-       margin: 4px 0;
-       transition: all 0.3s ease;
-   }
-   /* 1本目の線のスタイル */
-   .menu-icon span:nth-child(1) {
-       margin-right: 10px;
-       width: 15px; /* 1本目の線の長さ */
-   }
-   /* 2本目の線のスタイル（中央の線の長さ） */
-   .menu-icon span:nth-child(2) {
-       width: 25px; /* 2本目の線の長さ */
-   }
-   /* 3本目の線のスタイル */
-   .menu-icon span:nth-child(3) {
-       width: 20px; /* 3本目の線の長さ */
-   }
-   /* 全画面のスライドメニューのスタイル */
-   .side-menu {
-       width: 100%;
-       height: 100%;
-       background-color: white; /* 背景の白色 */
-       position: fixed;
-       top: 0;
-       left: -100%; /* 初期状態でメニューを画面の外に隠す */
-       transition: left 0.3s ease;
-       z-index: 1000;
-       display: flex;
-       flex-direction: column;
-       align-items: center;
-       justify-content: center;
-   }
-   .side-menu.open {
-       left: 0; /* メニューを全画面で表示 */
-   }
-   .side-menu a {
-       padding: 15px 20px;
-       text-decoration: none;
-       font-size: 24px;
-       color: rgb(10, 57, 247);
-       margin: 10px 0;
-       transition: color 0.3s ease;
-   }
-   .side-menu a:hover {
-       color: rgb(0, 51, 255);
-   }
-   /* 閉じるボタンのスタイル */
-   .close-button {
-       position: absolute;
-       top: 20px;
-       left: 30px; /* 左側に配置 */
-       font-size: 36px;
-       color: rgb(5, 5, 255);
-       cursor: pointer;
-       z-index: 100;
-   }
-   /* メニュー表示時にメニューボタンを非表示にする */
-   .side-menu.open ~ .menu-button {
-       display: none;
-   }
-
-   .container{
-    margin-top:3em;
-   }
-
-   
+.menu-icon {
+    width: 25px; /* もとの幅を保持 */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* 左寄せに変更 */
+    justify-content: center;
+}
+.menu-icon span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: #ffffff;
+    margin: 4px 0;
+    transition: all 0.3s ease;
+}
+/* 1本目の線のスタイル */
+.menu-icon span:nth-child(1) {
+    margin-right: 10px;
+    width: 15px; /* 1本目の線の長さ */
+}
+/* 2本目の線のスタイル（中央の線の長さ） */
+.menu-icon span:nth-child(2) {
+    width: 25px; /* 2本目の線の長さ */
+}
+/* 3本目の線のスタイル */
+.menu-icon span:nth-child(3) {
+    width: 20px; /* 3本目の線の長さ */
+}
+/* 全画面のスライドメニューのスタイル */
+.side-menu {
+    width: 100%;
+    height: 100%;
+    background-color: white; /* 背景の白色 */
+    position: fixed;
+    top: 0;
+    left: -100%; /* 初期状態でメニューを画面の外に隠す */
+    transition: left 0.3s ease;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.side-menu.open {
+    left: 0; /* メニューを全画面で表示 */
+}
+.side-menu a {
+    padding: 15px 20px;
+    text-decoration: none;
+    font-size: 24px;
+    color: rgb(10, 57, 247);
+    margin: 10px 0;
+    transition: color 0.3s ease;
+}
+.side-menu a:hover {
+    color: rgb(0, 51, 255);
+}
+/* 閉じるボタンのスタイル */
+.close-button {
+    position: absolute;
+    top: 20px;
+    left: 30px; /* 左側に配置 */
+    font-size: 36px;
+    color: rgb(5, 5, 255);
+    cursor: pointer;
+    z-index: 100;
+}
+/* メニュー表示時にメニューボタンを非表示にする */
+.side-menu.open ~ .menu-button {
+    display: none;
+}
 
 
-   
+
+.content-container {
+    margin-top: 55px;
+    padding: 20px;
+    height: calc(100vh - 80px);
+    overflow-y: auto;
+}

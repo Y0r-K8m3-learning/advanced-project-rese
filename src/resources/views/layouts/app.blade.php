@@ -22,10 +22,12 @@
 
     @yield('css')
     @yield('js')
+    <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
 </head>
 
-<body class="font-sans antialiased">
+<body class="font-sans antialiased bg-gray-100">
     <!-- Header (固定) -->
     <div class="header" style="position: fixed; top: 0; width: 100%; z-index: 1000; background-color: white; ">
         <div class="d-flex align-items-center">
@@ -45,13 +47,16 @@
         </div>
 
         <!-- ハンバーガーメニュー -->
-        <div class="side-menu" id="sideMenu" style="position: fixed; top: 0; left: 0; width: 250px; height: 100vh; background-color: #f8f9fa; transform: translateX(-100%); transition: transform 0.3s;">
-            <div class="close-button" onclick="toggleMenu()" style="cursor: pointer; font-size: 24px; margin: 10px;">×</div>
+        <div class="side-menu" id="sideMenu"
+            style="position: fixed; top: 0; left: 0; width: 250px; height: 100vh; background-color: #f8f9fa; transform: translateX(-100%); transition: transform 0.3s;">
+            <div class="close-button" onclick="toggleMenu()" style="cursor: pointer; font-size: 24px; margin: 10px;">×
+            </div>
             <a class="nav-link active" href="/">Home</a>
             @if (Auth::check())
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
-                <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">
+                <x-dropdown-link :href="route('logout')"
+                    onclick="event.preventDefault(); this.closest('form').submit();">
                     <div class="nav-link">
                         {{ __('Log Out') }}
                     </div>
@@ -66,7 +71,7 @@
     </div>
 
     <!-- コンテンツ  -->
-    <div class="content-container" style="margin-top: 30px; padding: 20px; height: calc(100vh - 80px); overflow-y: auto;">
+    <div class="content-container " >
         @isset($header)
         <header class="bg-white shadow">
             <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
