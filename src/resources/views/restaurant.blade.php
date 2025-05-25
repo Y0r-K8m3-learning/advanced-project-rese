@@ -96,6 +96,10 @@
                 <input type="file" name="csvFile" class="ms-3" id="csvFile" />
                 <button type="submit" class="btn btn-primary">アップロード</button>
 
+                @error('csvFile')
+                <div class="alert alert-danger">{{ $message }}</div>
+                @enderror
+
                 @if (session('error'))
                 <div class="alert alert-danger mt-3">
                     {{ session('error') }}
@@ -120,6 +124,7 @@
 
 
         </form>
+
     </div>
     @endif
     <div class="container ">

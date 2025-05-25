@@ -44,7 +44,7 @@ class AdminController extends Controller
     }
 
     //CSV import処理
-    public function csvImportStore(RestaurantCsvImportRequest $request)
+    public function csvImportStore(RestaurantCsvImportRequest  $request)
     {
 
         $file = $request->file('csvFile');
@@ -144,7 +144,6 @@ class AdminController extends Controller
             }
             if (count($errors) > 0) {
                 DB::rollBack();
-
                 return back()->with('error', 'ファイル内容にエラーがあります(ファイル' . $rowindex . '行目)')
                     ->withErrors($errors);
             }

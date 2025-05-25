@@ -5,7 +5,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\RestaurantController;
-use App\Http\Controllers\AdminController;
 use App\Http\Controllers\MyPageController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\StripePaymentsController;
