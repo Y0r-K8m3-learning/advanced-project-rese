@@ -33,13 +33,20 @@
                     <p class="card-text">{{ $restaurant['description'] }}</p>
                 </div>
 
-                @if(Auth::check() && Auth::user()->isUser() && !$hasReviewed && $isPastReservationExists)
+                @if(Auth::check() && Auth::user()->isUser() )
                 <div class="mt-3">
+                    @if($hasReviewed)
+                    <sub class="mt-3 text-gray-600 border-gray">口コミを投稿済みです</sub>
+                    @elseif(!$isPastReservationExists)
+                    <sub class="mt-3 text-gray-600 border-gray">予約後、終了日以降に口コミが投稿できます</sub>
+                    @else
                     <a href="{{ route('review.create',$restaurant->id) }}"><span
                             class="border-bottom border-3 text-black-100 border-gray ">口コミを投稿する</span></a>
+
+
+                    @endif
                 </div>
-                @else
-                <sub class="mt-3 text-gray-600 border-gray">予約終了後に口コミが投稿できます</sub>
+
                 @endif
                 <button type="button" data-restaurant-id="{{ $restaurant->id }}" class="btn btn-primary mt-3 w-100"
                     id="rate-list">全ての口コミ情報</button>
