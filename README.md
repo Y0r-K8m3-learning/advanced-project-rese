@@ -103,7 +103,7 @@
      - :point_right: イニシャルセットについて
        - 既定の各マスタデータ[areas,genres,roles]
        - 既定の店舗データ
-       - Users: ダミーデータ 12件(一般:test_user* 10件、オーナ:test_owner 1件、管理者:test_admin 1件）
+       - Users: ダミーデータ 12件(一般:test_user*@example.com 10件、オーナ:test_owner@example.com 1件、管理者:test_admin@example.com 1件）
          　- 一般は test_user1～10(test_user1@example.com～test_user10@example.com)まで
          <br> パスワード：test_user1～10→ `testtest`,test_owner→`ownerowner` ,test_admin→`adminadmin`
          <br>
