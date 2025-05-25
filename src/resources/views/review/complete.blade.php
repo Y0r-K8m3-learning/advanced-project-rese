@@ -7,7 +7,12 @@
             {{ session('complete') }}
         </div>
         @endif
-        
+        @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+        @endif
+
         <a href="{{ route('restaurant.detail', ['id' => $restaurant_id]) }}" class="btn btn-primary">店舗詳細へ戻る</a>
     </div>
 </x-app-layout>

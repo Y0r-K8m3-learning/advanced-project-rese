@@ -15,10 +15,10 @@ class ReservationsTableSeeder extends Seeder
     public function run(): void
     {
         // 例として30件のダミーデータを作成
-        for ($i = 1; $i <= 30; $i++) {
+        for ($i = 1; $i <= 20; $i++) {
             DB::table('reservations')->insert([
                 'user_id'           => 1,
-                'restaurant_id'     => rand(1, 20),
+                'restaurant_id'     => $i,
                 'reservation_date'  => Carbon::today()->addDays(rand(-1, -30))->toDateString(),
                 'reservation_time'  => fake()->time(),
                 'number_of_people'  => rand(1, 6),

@@ -169,20 +169,21 @@ class ReviewController extends Controller
                 // 元画像のパスを取得
                 $oldImagePath = $reviewImage->where('review_id', $review->id)->pluck('file_path')->first() ?? null;
 
-                //元画像パス
 
-
-                // 新しい画像を更新
-                $reviewImage->where('review_id', $review->id)->update([
-                    'file_name' => $fileName,
-                    'file_path' => 'storage/review_images/' . $fileName,
-                    'file_type' => $image->getClientMimeType(),
-                    'file_size' => $image->getSize(),
-                    'file_mime' => $image->getClientMimeType(),
-                    'file_extension' => $extension,
-                    'file_original_name' => $image->getClientOriginalName(),
-                    'file_original_path' => $image->getPathname(),
-                ]);
+                // update/insert
+                ReviewImage::updateOrCreate(
+                    ['review_id' => $review->id],
+                    [
+                        'file_name' => $fileName,
+                        'file_path' => 'storage/review_images/' . $fileName,
+                        'file_type' => $image->getClientMimeType(),
+                        'file_size' => $image->getSize(),
+                        'file_mime' => $image->getClientMimeType(),
+                        'file_extension' => $extension,
+                        'file_original_name' => $image->getClientOriginalName(),
+                        'file_original_path' => $image->getPathname(),
+                    ]
+                );
 
                 // 更新画像の保存
                 $image->storeAs('review_images', $fileName, 'public');
