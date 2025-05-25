@@ -11,11 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Facades\Storage;
-
-
 use App\Http\Requests\ReservationRequest;
-use App\Http\Requests\ReviewRequest;
-use App\Models\ReviewImage;
 
 class RestaurantController extends Controller
 {
@@ -99,14 +95,22 @@ class RestaurantController extends Controller
     public function detail($restaurant_id)
     {
         $restaurant = Restaurant::with(['area', 'genre', 'reviews.image'])->findOrFail($restaurant_id);
+
         $user = Auth::user();
-        //既にレビュー済みかどうか
-        $hasReviewed = false;
+
+        $hasReviewed = false; //既にレビュー済み
+        $isPastReservationExists = false; //予約終了日時以降
         if ($user) {
             $hasReviewed = $restaurant->reviews()->where('user_id', $user->id)->exists();
+
+            //予約終了日時以降か
+
+            $isPastReservationExists =  Reservation::isPastReservationExists($restaurant->id, $user->id);
         }
 
-        return view('detail', compact('restaurant', 'hasReviewed'));
+
+
+        return view('detail', compact('restaurant', 'hasReviewed', 'isPastReservationExists'));
     }
 
     public function store(ReservationRequest  $request)

@@ -9,7 +9,7 @@
     $disabled = $user_action == "delete" ? 'disabled' : '';
     @endphp
     <div class="rate-form">
-        @foreach(range(1,5) as $starindex)
+        @foreach(range(5,1) as $starindex)
 
         <input {{ $disabled }} type="radio" id="star{{ $starindex }}" name="rating" value="{{ $starindex }}"
             class="star-input" @checked(old('rating', $user_review->rating ?? null) == $starindex) />

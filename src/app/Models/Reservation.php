@@ -28,4 +28,20 @@ class Reservation extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public static function isPastReservationExists($restaurant_id, $user_id)
+    {
+        $currentDateTime = now();
+
+        return Reservation::where('restaurant_id', $restaurant_id)
+            ->where('user_id', $user_id)
+            ->where(function ($query) use ($currentDateTime) {
+                $query->where('reservation_date', '<', $currentDateTime->toDateString())
+                    ->orWhere(function ($q) use ($currentDateTime) {
+                        $q->where('reservation_date', $currentDateTime->toDateString())
+                            ->where('reservation_time', '<=', $currentDateTime->format('H:i:s'));
+                    });
+            })
+            ->exists();
+    }
 }

@@ -6,6 +6,7 @@ use Illuminate\Support\Str;
 use App\Models\Review;
 use App\Models\ReviewImage;
 use App\Http\Requests\ReviewRequest;
+use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Restaurant;
@@ -58,6 +59,10 @@ class ReviewController extends Controller
             return back()->with('error', 'この店舗の口コミは既に投稿済みです')->withInput();
         }
 
+        //予約終了日時以降か
+        if (!Reservation::isPastReservationExists($restaurant_id, $user->id)) {
+            return back()->with('error', '予約終了日以降に口コミを投稿してください。')->withInput();
+        }
 
         DB::beginTransaction();
         try {
