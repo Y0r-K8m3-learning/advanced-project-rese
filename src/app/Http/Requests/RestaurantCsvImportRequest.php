@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use \Illuminate\Contracts\Validation\Validator;
+
 use Illuminate\Foundation\Http\FormRequest;
 
 class RestaurantCsvImportRequest extends FormRequest
@@ -15,7 +17,6 @@ class RestaurantCsvImportRequest extends FormRequest
     }
 
 
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -23,6 +24,7 @@ class RestaurantCsvImportRequest extends FormRequest
      */
     public function rules(): array
     {
+
         return [
             'csvFile' => 'required|file|mimes:csv|max:2048',
 
@@ -31,6 +33,7 @@ class RestaurantCsvImportRequest extends FormRequest
 
     public function messages()
     {
+
         return [
 
             'csvFile.required' => 'csvファイルを選択してください。',

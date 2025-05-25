@@ -38,8 +38,7 @@ class Reservation extends Model
             ->where(function ($query) use ($currentDateTime) {
                 $query->where('reservation_date', '<', $currentDateTime->toDateString())
                     ->orWhere(function ($q) use ($currentDateTime) {
-                        $q->where('reservation_date', $currentDateTime->toDateString())
-                            ->where('reservation_time', '<=', $currentDateTime->format('H:i:s'));
+                        $q->where('reservation_date', $currentDateTime->toDateString());
                     });
             })
             ->exists();

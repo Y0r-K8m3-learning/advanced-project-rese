@@ -33,7 +33,8 @@
                     <p class="card-text">{{ $restaurant['description'] }}</p>
                 </div>
 
-                @if(Auth::check() && Auth::user()->isUser() )
+                @if(Auth::check())
+                @if(Auth::user()->isUser())
                 <div class="mt-3">
                     @if($hasReviewed)
                     <sub class="mt-3 text-gray-600 border-gray">口コミを投稿済みです</sub>
@@ -46,6 +47,9 @@
 
                     @endif
                 </div>
+                @elseif(Auth::user()->isAdmin() || Auth::user()->isOwner())
+                <sub class="mt-3 text-gray-600 border-gray">一般ユーザのみ口コミが投稿できます</sub>
+                @endif
                 @else
                 <div class="mt-3">
                     <sub class="mt-3 text-gray-600 border-gray">ログイン後、予約終了日以降に口コミが投稿できます</sub>
