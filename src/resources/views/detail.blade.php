@@ -38,13 +38,17 @@
                     @if($hasReviewed)
                     <sub class="mt-3 text-gray-600 border-gray">口コミを投稿済みです</sub>
                     @elseif(!$isPastReservationExists)
-                    <sub class="mt-3 text-gray-600 border-gray">予約後、終了日以降に口コミが投稿できます</sub>
+                    <sub class="mt-3 text-gray-600 border-gray">予約終了日以降に口コミが投稿できます</sub>
                     @else
                     <a href="{{ route('review.create',$restaurant->id) }}"><span
                             class="border-bottom border-3 text-black-100 border-gray ">口コミを投稿する</span></a>
 
 
                     @endif
+                </div>
+                @else
+                <div class="mt-3">
+                    <sub class="mt-3 text-gray-600 border-gray">ログイン後、予約終了日以降に口コミが投稿できます</sub>
                 </div>
 
                 @endif
