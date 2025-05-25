@@ -1,7 +1,8 @@
-# beginner-project-atte(上級模擬案件)
+# beginner-project-atte(上級模擬案件+proテスト)
+:point_right:マーク : proテストで追加した機能
 # アプリケーションの説明
  - 飲食店予約サービスアプリ
-![image](https://github.com/user-attachments/assets/e8aa1cf5-c1ff-4b94-94a6-e3347a195e21)
+![image](https://github.com/user-attachments/assets/aa098673-010a-4d6b-9698-7a2d691e8d69)
 
 
 ## 作成した目的
@@ -9,7 +10,7 @@
 
  ## アプリケーションURL
  - デプロイ用
-### [Atte](http://ec2-54-238-18-150.ap-northeast-1.compute.amazonaws.com/)
+### [店舗予約アプリ(AWS)](http://ec2-54-221-5-154.compute-1.amazonaws.com/)
 
 
  ## リポジトリURL
@@ -19,9 +20,25 @@
  ## 機能一覧
  - ログイン
  - ユーザ登録(メール認証有)
- - 店舗一覧
+ - 店舗情報
+   - :point_right: 検索
+     - ソート検索(ランダム,評価が高い順, 評価が低い順)
+     - 各店舗の評価平均点数が表示されます（検索する度に更新されます）
+   - :point_right: 口コミ登録
+     -詳細画面:全ての口コミ表示、登録更新削除ができます
+      ![image](https://github.com/user-attachments/assets/c502110f-395e-4d78-8e9e-e9a843e76fd4)
+      - 登録：一般ユーザで予約終了日以降の場合。その他の場合は、状態に合わせて画像のような表示になります
+       ![image](https://github.com/user-attachments/assets/440fb162-9550-4be4-be99-25bdba257533)
+       ※確認用のため、予約日が当日であれば未来時刻でもレビュー投稿が可能です。
+        
+      - 更新：自分の投稿のみ編集可能です。
+      - 削除：投稿者または管理者が可能です。※管理者はすべての投稿を削除できます。
+      - 更新、削除ボタンは使用可能なユーザ以外は非表示になります
+       ![image](https://github.com/user-attachments/assets/88fa4053-ee45-46cb-a7ee-72b7820e2b6a)
+　　　　
    - 予約
      　- 決済機能(Stripe)
+     
    - お気に入り
  - マイページ
    - 予約状況
@@ -34,25 +51,31 @@
     - 管理者
       - 店舗代表者の登録
       - 利用者へのお知らせメール
+      - :point_right: CSVファイルから店舗一括登録
+        店舗一覧画面からcsvをアップロードして店舗を一括登録できます
+        <br>※管理者ログインのトップページは店舗一覧でないため、サイトメニューから「Home」を選択して店舗一覧に遷移してください。
+        <br>テスト用csvファイル(10件ダミーデータ)→[こちら](https://github.com/Y0r-K8m3-learning/advanced-project-rese/blob/main/src/test_utf.csv)
+        ![image](https://github.com/user-attachments/assets/973985b4-49df-4540-a684-a4b83079c92a)
+
  - その他の機能
    - リマインダー：毎朝9時にその日の予約情報をメール送信
-   - レスポンシブデザイン:ブレキングポイント 768px 
+   - レスポンシブデザイン:ブレキングポイント 768px
+   - 
 ## 使用技術
 - PHP 8.3.7
 - laravel 11.10.0
 - MySQL 8.0.37
 
 
-## テーブル設計
+## テーブル設計 :point_right: reviews,review_images
 ![image](https://github.com/user-attachments/assets/802ceb72-2ea1-48bc-b41d-fe8787a4d016)
 
 ![image](https://github.com/user-attachments/assets/eed2fc3a-f7e9-4cf5-a3bc-75916bb6e64a)
 
-![image](https://github.com/user-attachments/assets/3036c1f8-35dd-43b0-9d4d-ff101754f53f)
+![image](https://github.com/user-attachments/assets/9924792a-170b-4a77-9885-0a116fc47fbb)
 
-
-## ER図
-![rese_ER](https://github.com/user-attachments/assets/498601ea-6a44-4fbd-9892-9efed8434be8)
+## :point_right: ER図
+![rese_ER](https://github.com/user-attachments/assets/fbb1de42-c467-4c7c-8c9e-eb58acca4e2b)
 
 ## 環境構築
 ### Docker環境で実行
@@ -60,7 +83,8 @@
 - Dockerビルド 
  1. `git clone https://github.com/Y0r-K8m3-learning/advanced-project-rese.git`
  2. `cd advanced-project-rese`
- 3. `docker-compose up -d --build`
+ 3. `cp -p　host.env .env` ※host.env：phpコンテナ内のユーザ名を変更したい場合は、更新してください
+ 4. `docker-compose up -d --build`
  
 　※MySQLは、OSによって起動しない場合があるのでそれぞれのPCに合わせて docker-compose.ymlファイルを編集してください。
  
@@ -71,10 +95,16 @@
  4. `php artisan key:generate`
  5. `php artisan migrate`
  6. `php artisan db:seed`
-     - イニシャルセットについて
-       - 各マスタデータ[areas,genres,roles]
+     - :point_right: イニシャルセットについて
+       - 既定の各マスタデータ[areas,genres,roles]
        - 既定の店舗データ
-       - Users ダミーデータ 3件(一般、オーナ、管理者権限ユーザ）
+       - Users: ダミーデータ 12件(一般 10件、オーナ 1件、管理者権限ユーザ 1件）
+         　- test_user1～10(test_user1@example.com～test_user10@example.com)まで
+         ![image](https://github.com/user-attachments/assets/9c98dee9-109a-41ca-afee-2bfa60a4bac5)
+       - レビュー(reviwes):ダミーデータ5件 test_user1の店舗IDが1～5の店舗のレビュー
+       - 予約(reservatopms):ダミーデータ20件 test_user1の全ての店舗の予約を過去日で登録（レビュー表示、登録用）
+
+       - 
  8. `npm install`
  9. `npm run build`
  10. 日時バッチメール設定 クーロンに下記を設定してください。
@@ -89,9 +119,10 @@
 　- 検証用ユーザ
     メールサーバはmailtrapのテストサーバを使用しているため、ユーザ登録・リマインダーなどのメールはすべて開発者のmailtrapメールボックスに送信されます。
     ログインして検証する場合は以下の各権限毎に以下のユーザ情報を使用してください。
+    <br>一般権限ユーザのパスワードはすべて`testtest`
     
     - 一般権限
-       - メールアドレス : test_user@example.com
+       - メールアドレス : test_user1@example.com　～ test_user20@example.com
        - パスワード     : testtest
     - オーナ権限
        - メールアドレス : test_owner@example.com
