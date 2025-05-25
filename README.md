@@ -37,7 +37,7 @@
        ![image](https://github.com/user-attachments/assets/88fa4053-ee45-46cb-a7ee-72b7820e2b6a)
 　　　　
    - 予約
-     　- 決済機能(Stripe)
+     - 決済機能(Stripe)
      
    - お気に入り
  - マイページ
@@ -60,7 +60,7 @@
  - その他の機能
    - リマインダー：毎朝9時にその日の予約情報をメール送信
    - レスポンシブデザイン:ブレキングポイント 768px
-   - 
+   
 ## 使用技術
 - PHP 8.3.7
 - laravel 11.10.0
@@ -98,8 +98,10 @@
      - :point_right: イニシャルセットについて
        - 既定の各マスタデータ[areas,genres,roles]
        - 既定の店舗データ
-       - Users: ダミーデータ 12件(一般 10件、オーナ 1件、管理者権限ユーザ 1件）
-         　- test_user1～10(test_user1@example.com～test_user10@example.com)まで
+       - Users: ダミーデータ 12件(一般:test_user* 10件、オーナ:test_owner 1件、管理者:test_admin 1件）
+         　- 一般は test_user1～10(test_user1@example.com～test_user10@example.com)まで
+         <br> パスワード：test_user1～10→ `testtest`,test_owner→`ownerowner` ,test_admin→`adminadmin`
+         <br>
          ![image](https://github.com/user-attachments/assets/9c98dee9-109a-41ca-afee-2bfa60a4bac5)
        - レビュー(reviwes):ダミーデータ5件 test_user1の店舗IDが1～5の店舗のレビュー
        - 予約(reservatopms):ダミーデータ20件 test_user1の全ての店舗の予約を過去日で登録（レビュー表示、登録用）
