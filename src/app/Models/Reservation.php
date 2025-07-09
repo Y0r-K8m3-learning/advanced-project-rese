@@ -11,10 +11,10 @@ class Reservation extends Model
 
     protected $fillable = [
         'user_id',
-        'restaurant_id  ',
+        'restaurant_id',
         'reservation_date',
-        'reservation_time ',
-        'number_of_people ',
+        'reservation_time',
+        'number_of_people',
         'is_verified',
         'verified_datetime',
     ];

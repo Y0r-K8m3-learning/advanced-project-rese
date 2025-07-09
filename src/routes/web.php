@@ -24,7 +24,6 @@ Route::get('/complete', [StripePaymentsController::class, 'complete'])->name('co
 
 Route::get('/reservation/complete', [RestaurantController::class, 'complete'])->name('reservation.complete');
 
-Route::get('/', [RestaurantController::class, 'index'])->name('index');
 Route::get('/', [RestaurantController::class, 'index'])->name('home');
 
 Route::get('/register/complete', function () {
@@ -67,7 +66,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::post('/restaurants/{id}/favorite', [RestaurantController::class, 'favorite']);
 
-    Route::post('/restaurants/{id}/unfavorite', [RestaurantController::class, 'favorite'])->name('restaurants.favorite');
     Route::post('/restaurants/{id}/unfavorite', [RestaurantController::class, 'unfavorite'])->name('restaurants.unfavorite');
 
 

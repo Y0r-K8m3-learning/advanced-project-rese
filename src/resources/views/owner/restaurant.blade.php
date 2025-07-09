@@ -99,7 +99,7 @@
                         <!-- 画像URL/アップロード -->
                         <div class="form-group">
                             <label for="image_url">店舗画像</label>
-                            <input type="file" class="form-control" id="image_url" name="image_url" accept="image/*">
+                            <input type="file" class="form-control" id="image_url" name="image_url" accept="image/*" required>
                         </div>
                     </div>
                     <div class="modal-footer">
