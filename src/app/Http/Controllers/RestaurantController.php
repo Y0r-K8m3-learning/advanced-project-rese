@@ -39,7 +39,7 @@ class RestaurantController extends Controller
             if ($sort == 'asc') {
                 $query->orderBy('reviews_avg_rating', 'desc');
             } elseif ($sort == 'desc') {
-                $query->orderBy('reviews_avg_rating', 'asc');
+                $query->orderByRaw('reviews_avg_rating is null asc')->orderBy('reviews_avg_rating', 'asc');
             } else {
                 $query->inRandomOrder();
             }
@@ -59,7 +59,7 @@ class RestaurantController extends Controller
     }
 
 
-    public function favorite($restaurant_id)
+    public function favorite($id)
     {
         if (!Auth::check()) {
             return response()->json(['status' => 'not_logged_in'], 401);
@@ -67,10 +67,10 @@ class RestaurantController extends Controller
 
 
         $user = Auth::user();
-        if (!$user->favorites()->where('restaurant_id', $restaurant_id)->exists()) {
+        if (!$user->favorites()->where('restaurant_id', $id)->exists()) {
             Favorite::create([
                 'user_id' => $user->id,
-                'restaurant_id' => $restaurant_id,
+                'restaurant_id' => $id,
             ]);
         }
         return response()->json(['status' => 'added']);
@@ -78,9 +78,9 @@ class RestaurantController extends Controller
 
 
 
-    public function unfavorite($restaurant_id)
+    public function unfavorite($id)
     {
-        $restaurant = Restaurant::findOrFail($restaurant_id);
+        $restaurant = Restaurant::findOrFail($id);
         $user = Auth::user();
 
         if ($user->favorites()->where('restaurant_id', $restaurant->id)->exists()) {
@@ -228,7 +228,7 @@ class RestaurantController extends Controller
             'description' => 'required|string',
             'area_id' => 'required|exists:areas,id',
             'genre_id' => 'required|exists:genres,id',
-            'image_url' => 'nullable|image|max:2048',
+            'image_url' => 'required|image|max:2048',
         ]);
 
         $restaurant = new Restaurant();

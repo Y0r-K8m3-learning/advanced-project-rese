@@ -212,6 +212,7 @@ return [
         'group' => 'グループ',
         'hour' => '時間',
         'image' => '画像',
+        'image_url' => '画像URL',
         'last_name' => '姓',
         'lesson' => 'レッスン',
         'line_address_1' => '回線アドレス1',
