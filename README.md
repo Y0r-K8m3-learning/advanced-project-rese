@@ -172,5 +172,23 @@ STRIPE_PUBLIC_KEY=
 STRIPE_SECRET_KEY=
 STRIPE_WEBHOOK_SECRET=
 ```
+3.テストについて
+テスト実行時には専用の環境設定ファイル `.env.testing` を使用します。
+`cd src`
+`cp -p .env .env.testing`
+
+# テスト用データベース設定に変更
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_PORT=3306
+DB_DATABASE=laravel_test_db
+DB_USERNAME=laravel_user
+DB_PASSWORD=laravel_pass
+DB_CHARSET=utf8mb4
+DB_COLLATION=utf8mb4_unicode_ci
+
+#テスト実行
+docker-compose exec php php artisantest
+
  
 
