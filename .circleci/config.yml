@@ -62,6 +62,9 @@ jobs:
           name: Check migration status
           command: php artisan migrate:status --env=testing
       - run:
+          name: Run database seeder
+          command: php artisan db:seed --env=testing --force
+      - run:
           name: run tests
           command: ./vendor/bin/phpunit --testsuite=Feature
   deploy:
