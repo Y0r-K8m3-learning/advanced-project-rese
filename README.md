@@ -178,6 +178,7 @@ STRIPE_WEBHOOK_SECRET=
 `cp -p .env .env.testing`
 
 # テスト用データベース設定に変更
+```plaintext
 DB_CONNECTION=mysql
 DB_HOST=mysql
 DB_PORT=3306
@@ -186,9 +187,9 @@ DB_USERNAME=laravel_user
 DB_PASSWORD=laravel_pass
 DB_CHARSET=utf8mb4
 DB_COLLATION=utf8mb4_unicode_ci
-
-#テスト実行
-docker-compose exec php php artisantest
+```
+# テスト実行
+`docker-compose exec php php artisantest`
 
  
 
