@@ -30,12 +30,24 @@ jobs:
     # Install php packages and run tests
     docker:
       - image: cimg/php:8.2-node
+      - image: cimg/mysql:8.0
+        environment:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: laravel_test_db
+          MYSQL_USER: laravel_user
+          MYSQL_PASSWORD: laravel_pass
     working_directory: ~/project/src
     steps:
       - checkout:
           path: ~/project
       - php/install-packages:
           app-dir: ~/project/src
+      - run:
+          name: Wait for MySQL
+          command: dockerize -wait tcp://localhost:3306 -timeout 1m
+      - run:
+          name: Run migrations
+          command: php artisan migrate --env=testing --force
       - run:
           name: run tests
           command: ./vendor/bin/phpunit --testsuite=Feature
@@ -102,7 +114,7 @@ workflows:
           filters:
             branches:
               ignore: main
-  
+
   # mainブランチマージ後にテスト→デプロイ実行
   deploy-on-main:
     jobs:
