@@ -184,13 +184,13 @@ class ReservationTest extends TestCase
 
     public function test_unauthenticated_user_cannot_access_payment()
     {
-        $response = $this->post('/payment', [
+        $response = $this->post('/payment/store', [
             'restaurant_id' => $this->restaurant->id,
             'date' => Carbon::tomorrow()->format('Y-m-d'),
             'time' => '18:00',
             'number' => 2,
             'total_price' => 5000,
-            'stripeToken' => 'tok_visa'
+            'payment_method_id' => 'pm_card_visa'
         ]);
 
         $response->assertRedirect('/login');
