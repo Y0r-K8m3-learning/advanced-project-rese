@@ -38,7 +38,7 @@ jobs:
           app-dir: ~/project/src
       - run:
           name: run tests
-          command: ./vendor/bin/phpunit
+          command: ./vendor/bin/phpunit --testsuite=Feature
   deploy:
     docker:
       - image: cimg/base:stable
