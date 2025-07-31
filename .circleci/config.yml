@@ -52,7 +52,7 @@ jobs:
       - run:
           name: Deploy to EC2
           command: |
-            ssh $EC2_USER@$EC2_HOST << 'EOF'
+            ssh $EC2_USER@$EC2_HOST \<< 'EOF'
               # アプリケーションディレクトリに移動
               cd /home/ec2-user/rese/advanced-project-rese
               
@@ -93,12 +93,27 @@ jobs:
               docker system prune -f
             EOF
 workflows:
-  build-and-test:
+  # 別ブランチ（main以外）でのunittest実行
+  test-on-branches:
     jobs:
+      - test-php:
+          filters:
+            branches:
+              ignore: main
+  
+  # mainブランチマージ後にテスト→デプロイ実行
+  deploy-on-main:
+    jobs:
+      - test-php:
+          filters:
+            branches:
+              only: main
       - build-node:
           requires:
             - test-php
-      - test-php
+          filters:
+            branches:
+              only: main
       - deploy:
           requires:
             - build-node
