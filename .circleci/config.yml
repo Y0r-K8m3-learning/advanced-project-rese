@@ -30,6 +30,7 @@ jobs:
     # Install php packages and run tests
     docker:
       - image: cimg/php:8.2-node
+    working_directory: ~/project/src
     steps:
       - checkout:
           path: ~/project
