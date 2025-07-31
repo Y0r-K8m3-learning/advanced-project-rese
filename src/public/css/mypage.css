@@ -1,12 +1,17 @@
 .container {
-    display: flex;
-    flex-direction: row;
     border: none;
+    gap: 20px;
+    padding: 20px;
+    background-color: #f5f5f5;
+    min-height: 100vh;
 }
 
 .left-half {
     flex: 1;
-    padding: 15px;
+    padding: 20px;
+    background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .left-half img {
@@ -17,10 +22,10 @@
 
 .right-half {
     flex: 1;
-    background-color: #f8f9fa;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 35em;
+    padding: 20px;
+    background: linear-gradient(135deg, #fff3e0 0%, #fce4ec 100%);
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .reserve-content {
@@ -41,11 +46,27 @@
 }
 
 .remove-button {
-    font-size: 0.8rem;
-    padding: 0px 3px;
-    border-color: #f8f9fa;
-    border-radius: 45%;
+    font-size: 1.5rem;
+    padding: 8px 12px;
+    background: linear-gradient(135deg, #ff4757 0%, #ff3742 100%);
+    color: white;
+    border: 2px solid transparent;
+    border-radius: 50%;
     cursor: pointer;
+    transition: all 0.3s ease;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 10px rgba(255, 71, 87, 0.4);
+    font-weight: bold;
+}
+
+.remove-button:hover {
+    background: linear-gradient(135deg, #ff3742 0%, #ff2f3a 100%);
+    transform: scale(1.1);
+    box-shadow: 0 5px 15px rgba(255, 71, 87, 0.6);
 }
 
 .under-right-content {
@@ -56,4 +77,239 @@
 
 .btn-reserve {
     background-color: #2600ff;
+}
+
+/* 予約状況セクション */
+.reservation-item {
+    background: white;
+    border: 2px solid #e3f2fd;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.reservation-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    border-color: #2196f3;
+}
+
+.reservation-header {
+    background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 10px 10px 0 0;
+}
+
+.reservation-content {
+    padding: 20px;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #f5f5f5;
+}
+
+.info-label {
+    font-weight: 600;
+    color: #555;
+    min-width: 60px;
+}
+
+.info-value {
+    font-weight: 500;
+    color: #333;
+}
+
+.reservation-actions {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 2px solid #f5f5f5;
+}
+
+.user-disp {
+    background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+    color: white;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(255, 152, 0, 0.3);
+}
+
+/* お気に入りカード */
+.favorite-card {
+    background: white;
+    border: 2px solid #fff3e0;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    height: 100%;
+}
+
+.favorite-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    border-color: #ff9800;
+}
+
+.favorite-image-wrapper {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    position: relative;
+}
+
+.favorite-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.favorite-card:hover .favorite-image {
+    transform: scale(1.05);
+}
+
+.favorite-details {
+    padding: 20px;
+}
+
+.favorite-title {
+    color: #333;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.favorite-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+.tag {
+    background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+    color: #555;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border: 1px solid #e0e0e0;
+    transition: all 0.3s ease;
+}
+
+.tag:hover {
+    background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.favorite-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 15px;
+    border-top: 2px solid #f5f5f5;
+}
+
+/* ハートアイコン */
+.heart {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    display: inline-block;
+    background-color: grey;
+    transform: rotate(-45deg);
+    margin: 10px;
+}
+
+.heart::before,
+.heart::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: grey;
+    border-radius: 50%;
+}
+
+.heart::before {
+    top: -10px;
+    left: 0;
+}
+
+.heart::after {
+    left: 10px;
+    top: 0;
+}
+
+.heart.favorited {
+    background-color: red;
+}
+
+.heart.favorited::before,
+.heart.favorited::after {
+    background-color: red;
+}
+
+/* ボタンスタイル */
+.btn-primary {
+    background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+    border: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(33, 150, 243, 0.3);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(33, 150, 243, 0.4);
+}
+
+.btn-info {
+    background: linear-gradient(135deg, #00bcd4 0%, #0097a7 100%);
+    border: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 188, 212, 0.3);
+}
+
+.btn-info:hover {
+    background: linear-gradient(135deg, #0097a7 0%, #00838f 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 188, 212, 0.4);
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, #757575 0%, #616161 100%);
+    border: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(117, 117, 117, 0.3);
+}
+
+.btn-secondary:hover {
+    background: linear-gradient(135deg, #616161 0%, #424242 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(117, 117, 117, 0.4);
+}
+
+/* タイトルスタイル */
+h2.text-primary {
+    color: #2196f3 !important;
+    text-shadow: 0 2px 4px rgba(33, 150, 243, 0.2);
+    margin-bottom: 20px;
+}
+
+h3.text-primary {
+    color: #ff9800 !important;
+    text-shadow: 0 2px 4px rgba(255, 152, 0, 0.2);
 }

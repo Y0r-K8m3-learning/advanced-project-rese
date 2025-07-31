@@ -1,5 +1,6 @@
 .container {
     border: none;
+    margin-top: 50px;
 }
 
 .left-half {
@@ -18,6 +19,7 @@
     background-color: #f8f9fa;
     flex-direction: column;
     justify-content: space-between;
+    margin-top: 15px;
     height: 35em;
 }
 
@@ -39,10 +41,26 @@
 }
 
 .back-button {
-    font-size: 1rem; /* ボタンの文字サイズを調整 */
-    padding: 2px 8px; /* ボタン内側の余白を小さくして領域を縮小 */
-    box-shadow: 0.5px 0.5px;
-    border-radius: 30%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border-color: #fff;
+    background-color: #6daeef;
+    color: #fff;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0px 2px 4px rgba(89, 179, 247, 0.726);
+}
+
+.back-button:hover {
+    border-color: #1489a993;
+    background-color: #268aef;
+    border: 1px solid #e9ecef;
+    color: #fff;
+    transform: translateY(-1px);
 }
 
 .under-right-content {
@@ -53,4 +71,89 @@
 
 .btn-reserve {
     background-color: #2600ff;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.btn-reserve:hover {
+    background-color: #1e00cc;
+}
+
+/* Favorites section styles */
+.favorite-section {
+    display: flex;
+    align-items: center;
+}
+
+.heart {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    display: inline-block;
+    background-color: grey;
+    transform: rotate(-45deg);
+    margin: 10px;
+}
+
+.heart::before,
+.heart::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: grey;
+    border-radius: 50%;
+}
+
+.heart::before {
+    top: -10px;
+    left: 0;
+}
+
+.heart::after {
+    left: 10px;
+    top: 0;
+}
+
+.heart.favorited {
+    background-color: red;
+}
+
+.heart.favorited::before,
+.heart.favorited::after {
+    background-color: red;
+}
+
+/* Reservation section styles */
+.reservation-section {
+    background: linear-gradient(135deg, #667eea 0%, #4b9ea2 100%);
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.reservation-input {
+    border: none;
+    padding: 10px 15px;
+    font-size: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.reservation-input:focus {
+    outline: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    border: 2px solid #fff;
+}
+
+.reserve-content {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+.reserve-content-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }

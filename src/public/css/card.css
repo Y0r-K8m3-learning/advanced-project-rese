@@ -12,6 +12,23 @@
     height: auto;
 }
 
+/* ダミー画像のスタイル */
+.no-image {
+    height: 200px;
+    min-height: 200px;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.no-image .material-symbols-outlined {
+    opacity: 0.5;
+}
+
+.no-image div {
+    font-size: 14px;
+    margin-top: 8px;
+}
+
 .card-body {
     padding: 15px;
 }
