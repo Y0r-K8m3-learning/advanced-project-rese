@@ -19,37 +19,40 @@ document.addEventListener("DOMContentLoaded", function() {
         event.preventDefault();
 
         if (!confirm('予約を確定します。よろしいですか？')) {
-            return; // 確認しない場合は中断
+            return;
         }
 
-        stripe.createToken(cardNumber).then(function(result) {
-            if (result.error) {
-                document.getElementById('card-errors').textContent = result.error.message;
-            } else {
-                stripeTokenHandler(result.token);
-            }
-        });
+        // PaymentMethodを作成してフォーム送信
+        createPaymentMethodAndSubmit();
     });
 
-    // Stripeトークンをフォームに追加して送信
-    function stripeTokenHandler(token) {
-        // 必要なデータを追加
-        const fields = {
-            stripeToken: token.id,
-            total_price: document.getElementById('total_price').value.replace(/[^\d]/g, ''),
-            date: document.getElementById('date').value,
-            time: document.getElementById('time').value,
-            restaurant_id: document.getElementById('restaurant_id').value,
-        };
-
-        Object.keys(fields).forEach(name => {
-            const input = document.createElement('input');
-            input.setAttribute('type', 'hidden');
-            input.setAttribute('name', name);
-            input.setAttribute('value', fields[name]);
-            form.appendChild(input);
+    // PaymentMethodを作成してフォームに追加して送信
+    async function createPaymentMethodAndSubmit() {
+        const {paymentMethod, error} = await stripe.createPaymentMethod({
+            type: 'card',
+            card: cardNumber,
         });
 
+        if (error) {
+            document.getElementById('card-errors').textContent = error.message;
+            return;
+        }
+
+        // PaymentMethodIDをフォームに追加
+        const paymentMethodInput = document.createElement('input');
+        paymentMethodInput.setAttribute('type', 'hidden');
+        paymentMethodInput.setAttribute('name', 'payment_method_id');
+        paymentMethodInput.setAttribute('value', paymentMethod.id);
+        form.appendChild(paymentMethodInput);
+
+        // 合計金額を追加
+        const totalPriceInput = document.createElement('input');
+        totalPriceInput.setAttribute('type', 'hidden');
+        totalPriceInput.setAttribute('name', 'total_price');
+        totalPriceInput.setAttribute('value', document.getElementById('total_price').value.replace(/[^\d]/g, ''));
+        form.appendChild(totalPriceInput);
+
+        // フォーム送信
         form.submit();
     }
 

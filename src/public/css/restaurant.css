@@ -1,3 +1,6 @@
+.card-title {
+    font-size: 1.05rem;
+}
 .heart {
     position: relative;
     width: 20px;
@@ -50,15 +53,19 @@
     box-shadow: none;
     border-radius: 0;
     outline: none;
+    width: 90%;
 }
 
-.custom-input {
-    width: 160px;
+.sort-select {
+    width: 50%;
 }
-
 @media (max-width: 576px) {
     .custom-input {
         width: 120px;
+    }
+
+    .search-item-bottom .custom-input {
+        width: calc(100% - 40px) !important;
     }
 }
 
@@ -66,15 +73,19 @@
     .custom-input {
         width: 140px;
     }
+
+    .search-item-bottom .custom-input {
+        width: calc(100% - 40px) !important;
+    }
 }
 
 /* 検索条件 */
 .search-container {
     position: fixed;
-    top: 0px; /* 上からの距離 */
-    right: 20px; /* 右からの距離 */
-    z-index: 1000; /* 他の要素の上に表示 */
-    padding: 10px; /* 内側の余白 */
+    top: 0px;
+    right: 20px;
+    z-index: 1000;
+    padding: 10px;
 }
 
 @media (max-width: 658px) {
@@ -87,10 +98,131 @@
 }
 
 /* 検索項目全体を1つに繋げる */
-.search-item {
+.search-item,
+.search-item-top,
+.search-item-bottom {
     border: none;
     padding: 5px;
     background-color: transparent;
+}
+
+/* 検索フォーム内の要素の高さ調整 */
+.search-item-top .form-group,
+.search-item-bottom .form-group {
+    margin: 0 !important;
+    height: 40px;
+    display: flex;
+    align-items: center;
+}
+
+.search-item-top .form-group > div {
+    margin: 0 !important;
+    height: 40px;
+    display: flex;
+    align-items: center;
+}
+
+.search-item-top select,
+.search-item-bottom input {
+    height: 30px !important;
+    line-height: 30px;
+    font-size: 14px !important;
+}
+
+.sort-label {
+    height: 30px !important;
+    line-height: 30px;
+    font-size: 14px !important;
+    width: 90px !important;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    padding: 0 8px !important;
+}
+
+/* 検索条件上段のスクロールバー対策 */
+.search-item-top {
+    height: 40px !important;
+    box-sizing: border-box;
+}
+
+.search-item-top .form-group {
+    box-sizing: border-box;
+}
+
+/* 検索テキスト2段 */
+.search-item-top {
+    display: flex !important;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.search-item-bottom {
+    display: flex !important;
+    width: 100% !important;
+}
+
+.search-item-top .form-group {
+    flex: 1;
+    min-width: 0;
+}
+
+.search-item-bottom .form-group {
+    width: 100%;
+}
+
+/* 並び替えラベルのサイズ調整 */
+.sort-label {
+    width: 70px !important;
+    font-size: 12px !important;
+    padding: 0 4px !important;
+    white-space: nowrap;
+    display: flex !important;
+    align-items: center !important;
+}
+
+/* セレクトボックスのサイズ調整 */
+.search-item-top select {
+    font-size: 12px !important;
+    padding: 0 4px !important;
+    min-width: 80px;
+}
+
+.search-item-top .form-group:first-child {
+    min-width: 140px;
+}
+
+.search-item-top .form-group:nth-child(2),
+.search-item-top .form-group:nth-child(3) {
+    min-width: 90px;
+}
+
+/* より小さいスマホサイズ向けの追加調整 */
+@media (max-width: 480px) {
+    .sort-label {
+        width: 65px !important;
+        font-size: 10px !important;
+        padding: 0 2px !important;
+        white-space: nowrap;
+        display: flex !important;
+        align-items: center !important;
+    }
+
+    .search-item-top select {
+        font-size: 11px !important;
+        padding: 0 2px !important;
+        min-width: 70px;
+    }
+
+    .search-item-top .form-group:first-child {
+        min-width: 120px;
+    }
+
+    .search-item-top .form-group:nth-child(2),
+    .search-item-top .form-group:nth-child(3) {
+        min-width: 80px;
+    }
 }
 
 /* 項目間の縦線 */
@@ -118,18 +250,19 @@
     display: none;
 }
 
+/* 管理者用コンテナのマージン設定 */
 .container {
-    margin-top: 30px;
+    margin-top: 140px !important;
 }
 
 @media (max-width: 576px) {
     .container {
-        margin-top: 55px;
+        margin-top: 190px !important;
     }
 }
 
 @media (min-width: 577px) and (max-width: 768px) {
     .container {
-        margin-top: 48px;
+        margin-top: 160px !important;
     }
 }

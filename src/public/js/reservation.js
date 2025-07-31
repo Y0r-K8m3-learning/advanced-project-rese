@@ -10,15 +10,11 @@ $(document).ready(function() {
                     _token: '{{ csrf_token() }}',
                 },
                 success: function(response) {
-                    console.log(response);
-
                     heart.addClass('favorited');
                 },
                 error: function(xhr) {
                     if (xhr.status === 401) {
                         window.location.href = '/login';
-                    } else {
-                        console.error(xhr.responseText);
                     }
                 }
             });
@@ -30,11 +26,9 @@ $(document).ready(function() {
                     _token: '{{ csrf_token() }}',
                 },
                 success: function(response) {
-                    console.log(response);
                     heart.removeClass('favorited');
                 },
                 error: function(xhr) {
-                    console.error(xhr.responseText);
                 }
             });
         }

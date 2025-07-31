@@ -11,6 +11,7 @@ use App\Models\Reservation;
 
 class StripePaymentsController extends Controller
 {
+    private $reservationService;
 
     public function __construct(ReservationService $reservationService)
     {
@@ -32,12 +33,11 @@ class StripePaymentsController extends Controller
 
     public function payment(Request $request)
     {
-
         if (!Auth::check()) {
-            // ログインしていない場合、現在のURLをセッションに保存
             session(['redirect_url' => url()->current()]);
             return redirect()->route('login');
         }
+
         // 重複チェック
         $existingReservation = Reservation::where('restaurant_id', $request->input('restaurant_id'))
             ->where('reservation_date', $request->input('date'))
@@ -50,20 +50,32 @@ class StripePaymentsController extends Controller
 
         \Stripe\Stripe::setApiKey(config('stripe.stripe_secret_key'));
         try {
-            \Stripe\Charge::create([
-                'source' => $request->stripeToken,
+            // Payment Intents APIを使用（3DS対応）
+            $paymentIntent = \Stripe\PaymentIntent::create([
                 'amount' => $request->total_price,
                 'currency' => 'jpy',
+                'payment_method' => $request->payment_method_id,
+                'confirmation_method' => 'manual',
+                'confirm' => true,
+                'return_url' => route('reservation.complete'),
             ]);
 
-            // サービスクラスを使って予約を登録
-            $this->reservationService->createReservation($request);
-        } catch (Exception $e) {
-            return back()->with('flash_alert', '決済に失敗しました！(' . $e->getMessage() . ')');
+            if ($paymentIntent->status === 'requires_action') {
+                // 3DS認証が必要な場合はセッションに保存してリダイレクト
+                session(['payment_intent_id' => $paymentIntent->id]);
+                session(['reservation_data' => $request->all()]);
+                return redirect()->away($paymentIntent->next_action->redirect_to_url->url);
+            } else if ($paymentIntent->status === 'succeeded') {
+                // 決済成功 - 予約を作成
+                $this->reservationService->createReservation($request);
+                return redirect()->route('reservation.complete')->with('success', '決済が完了しました！');
+            }
+        } catch (\Stripe\Exception\CardException $e) {
+            return redirect()->route('reservation.complete')->with('error', '決済に失敗しました：' . $e->getError()->message);
+        } catch (\Exception $e) {
+            return redirect()->route('reservation.complete')->with('error', '決済処理でエラーが発生しました：' . $e->getMessage());
         }
-        return view('reservation_complete')->with('status', '予約が完了しました！');
-
-        //return back()->with('status', '決済が完了しました！');
+        
     }
 
     public function complete()

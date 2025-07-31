@@ -1,4 +1,52 @@
+// ハートボタンのイベントバインド関数
+function bindHeartEvents() {
+    $(".heart").off("click").on("click", function () {
+        var heart = $(this);
+        var restaurantId = heart.data("id");
+        if (!heart.hasClass("favorited")) {
+            // お気に入り追加
+            $.ajax({
+                url: "/restaurants/" + restaurantId + "/favorite",
+                type: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                },
+                data: {
+                    _token: window.csrfToken,
+                },
+                success: function (response) {
+                    heart.addClass("favorited");
+                },
+                error: function (xhr) {
+                    if (xhr.status === 401) {
+                        window.location.href = "/login";
+                    }
+                },
+            });
+        } else {
+            // お気に入り解除
+            $.ajax({
+                url: "/restaurants/" + restaurantId + "/unfavorite",
+                type: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                },
+                data: {
+                    _token: window.csrfToken,
+                },
+                success: function (response) {
+                    heart.removeClass("favorited");
+                },
+                error: function (xhr) {
+                },
+            });
+        }
+    });
+}
+
 $(document).ready(function () {
+    // 初期化時にハートボタンをバインド
+    bindHeartEvents();
     // 時間が変更されたとき
     $("#time").change(function () {
         $("#selected-time").text($(this).val());
@@ -127,7 +175,6 @@ $(document).ready(function () {
                     const isAdminUser = $("#data").data("isadminuser-id");
                     const isGeneralUser = $("#data").data("isgeneraluser-id");
                     const restaurantId = $("#data").data("restaurant-id");
-                    console.log(isAdminUser, isGeneralUser, restaurantId);
 
                     let $doButton = $(
                         '<div class="review-header d-flex justify-content-between"></div>'
@@ -223,7 +270,6 @@ $(document).ready(function () {
                 );
                 $("#reviews").empty().append($errcontent.html());
                 $("#reviews").show();
-                console.error(errorMessage + "error:" + xhr.responseText);
             },
         });
     });

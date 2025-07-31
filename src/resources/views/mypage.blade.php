@@ -8,72 +8,84 @@
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
-    <div class="container">
+    <div class="container row">
         <!-- ページ左半分: 予約状況 -->
-        <div class="left-half">
-            <h2 class="fs-4 fw-bolder mt-5 mb-1">予約状況</h2>
-            <div class="reservation-list ">
+        <div class="left-half col-12 col-md-6">
+            <h2 class="fs-4 fw-bolder mb-4 text-primary">予約状況</h2>
+            <div class="reservation-list">
                 @foreach ($reservations as $reservation)
-                <div class="mb-3 bg-primary rounded p-1 reservation-item text-white"
-                    id="reservation-{{ $reservation->id }}">
-                    <div class="flex  ms-3 mb-1">
-                        <span class="material-symbols-outlined fs-5">
-                            schedule
-                        </span>予約{{$loop->iteration}}
-                    </div>
-                    <div class="mb-3">
-                        <div>
-                            <span class="border border-2   remove-button" data-id="{{ $reservation->id }}">×</span>
+                <div class="mb-4 reservation-item rounded shadow-sm" id="reservation-{{ $reservation->id }}">
+                    <div class="reservation-header d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            <span class="material-symbols-outlined text-primary me-2">schedule</span>
+                            <span class="fw-bold text-primary">予約{{$loop->iteration}}</span>
                         </div>
-                        <p><strong class="ms-2 me-5">Shop:</strong> {{ $reservation->restaurant->name }}</p>
-                        <p><strong class="ms-2 me-5">Date:</strong> {{ $reservation->reservation_date }}</p>
-                        <p><strong class="ms-2 me-5">Time:</strong> {{ $reservation->formatted_time }}</p>
-                        <p><strong class="ms-2 me-4">Number:</strong> {{ $reservation->number_of_people }}人</p>
+                        <span class="remove-button" data-id="{{ $reservation->id }}" title="予約を削除">×</span>
                     </div>
 
-                    <!-- QRコード表示ページへのリンク -->
-                    <a href="{{ route('reservation.qrcode', $reservation->id) }}" class="btn btn-info ms-2">予約QR</a>
+                    <div class="reservation-content p-3">
+                        <div class="reservation-info mb-3">
+                            <div class="info-item mb-2">
+                                <span class="info-label">店舗:</span>
+                                <span class="info-value">{{ $reservation->restaurant->name }}</span>
+                            </div>
+                            <div class="info-item mb-2">
+                                <span class="info-label">日付:</span>
+                                <span class="info-value">{{ $reservation->reservation_date }}</span>
+                            </div>
+                            <div class="info-item mb-2">
+                                <span class="info-label">時間:</span>
+                                <span class="info-value">{{ $reservation->formatted_time }}</span>
+                            </div>
+                            <div class="info-item mb-2">
+                                <span class="info-label">人数:</span>
+                                <span class="info-value">{{ $reservation->number_of_people }}人</span>
+                            </div>
+                        </div>
 
-
-                    <!-- 予約編集ボタン -->
-                    <button type="button" class="btn btn-secondary edit-button" data-id="{{ $reservation->id }}"
-                        data-date="{{ $reservation->reservation_date }}" data-time="{{ $reservation->formatted_time }}"
-                        data-number="{{ $reservation->number_of_people }}">編集</button>
+                        <div class="reservation-actions d-flex gap-2">
+                            <a href="{{ route('reservation.qrcode', $reservation->id) }}"
+                                class="btn btn-info btn-sm">予約QR</a>
+                            <button type="button" class="btn btn-secondary btn-sm edit-button"
+                                data-id="{{ $reservation->id }}" data-date="{{ $reservation->reservation_date }}"
+                                data-time="{{ $reservation->formatted_time }}"
+                                data-number="{{ $reservation->number_of_people }}">編集</button>
+                        </div>
+                    </div>
                 </div>
                 @endforeach
             </div>
         </div>
 
         <!-- ページ右半分: お気に入り店舗 -->
-        <div class="right-half ms-4 mt-2">
-            <div class="username mb-2 fs-4 fw-bolder">{{ Auth::user()->name }}さん</div>
-            <h2 class="mb-2 fs-4 fw-bolder">お気に入り店舗</h2>
-            <div class="favorite-list row ">
+        <div class="right-half ms-4 col-12 col-md-6">
+            <div class="user-disp mb-4">
+                <h2 class="fs-4 fw-bolder text-primary mb-2">{{ Auth::user()->name }}さん</h2>
+                <h3 class="fs-4 fw-bolder ">お気に入り店舗</h3>
+            </div>
+            <div class="favorite-list row">
                 @foreach ($favorites as $favorite)
                 <div class="col-12 col-md-6 mb-4">
-                    <!-- カラムサイズを指定 -->
-                    <div class="card shadow  w-100 h-100" id="favorite-{{ $favorite->restaurant->id }}">
-                        <img src="{{ $favorite->restaurant->image_url }}" alt="{{ $favorite->restaurant->name }}">
-                        <div class="details">
-                            <h5 class="card-title mt-2 ms-4 fs-4 fw-bold">{{ $favorite->restaurant->name }}</h3>
-                                <div class="ms-1 row fw-bold">
-                                    <div class="col-4 col-md-4 w-50">
-                                        #{{ $favorite->restaurant->area->name }}
-                                    </div>
-                                    <div class="col-3 col-md-4 w-50">
-                                        #{{ $favorite->restaurant->genre->name }}
-                                    </div>
-                                    <p hidden>{{ $favorite->restaurant->description }}</p>
-                                </div>
+                    <div class="favorite-card shadow rounded h-100" id="favorite-{{ $favorite->restaurant->id }}">
+                        <div class="favorite-image-wrapper">
+                            <img src="{{ $favorite->restaurant->image_url }}" alt="{{ $favorite->restaurant->name }}"
+                                class="favorite-image">
                         </div>
-                        <form method="GET" action="{{ route('restaurant.detail', $favorite->restaurant->id) }}">
-                            @csrf
-                            <div class="ms-1 d-flex align-items-center justify-content-between fw-bold">
-                                <button type="submit" class="btn btn-primary m-1">詳しく見る</button>
-                                <span class="heart favorited me-4" data-id="{{ $favorite->restaurant->id }}"></span>
-
+                        <div class="favorite-details p-3">
+                            <h5 class="favorite-title fw-bold mb-2">{{ $favorite->restaurant->name }}</h5>
+                            <div class="favorite-tags mb-3">
+                                <span class="tag">#{{ $favorite->restaurant->area->name }}</span>
+                                <span class="tag">#{{ $favorite->restaurant->genre->name }}</span>
                             </div>
-                        </form>
+                            <div class="favorite-actions d-flex justify-content-between align-items-center">
+                                <form method="GET" action="{{ route('restaurant.detail', $favorite->restaurant->id) }}">
+                                    @csrf
+                                    <button type="submit" class="btn btn-primary btn-sm">詳しく見る</button>
+                                </form>
+                                <span class="heart favorited" data-id="{{ $favorite->restaurant->id }}"
+                                    title="お気に入りから削除"></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 @endforeach
@@ -84,28 +96,28 @@
 
     <!-- 予約変更モーダル -->
     <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content edit-modal">
                 <form id="editReservationForm" method="POST">
                     @csrf
                     @method('PUT')
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="editModalLabel">予約変更</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="閉じる">
+                    <div class="modal-header edit-modal-header">
+                        <h5 class="modal-title text-white fw-bold" id="editModalLabel">予約変更</h5>
+                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="閉じる">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body edit-modal-body">
                         <input type="hidden" name="restaurant_id" id="restaurant_id">
 
-                        <div class="form-group">
-                            <label for="edit-date">日付</label>
-                            <input type="date" id="edit-date" name="date" class="form-control" required
+                        <div class="form-group mb-3">
+                            <label for="edit-date" class="form-label fw-bold">日付</label>
+                            <input type="date" id="edit-date" name="date" class="form-control edit-input" required
                                 value="{{ date('Y-m-d') }}" min="{{ date('Y-m-d') }}">
                         </div>
-                        <div class=" form-group">
-                            <label for="edit-time">時間</label>
-                            <select id="edit-time" name="time" class="form-control" required>
+                        <div class="form-group mb-3">
+                            <label for="edit-time" class="form-label fw-bold">時間</label>
+                            <select id="edit-time" name="time" class="form-control edit-input" required>
                                 @php
                                 $currentTime = date('H:i');
                                 $currentMinutes = date('i');
@@ -120,15 +132,15 @@
                                     @endphp
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label for="edit-number">人数</label>
-                            <select id="edit-number" name="number_of_people" class="form-control" required>
+                        <div class="form-group mb-3">
+                            <label for="edit-number" class="form-label fw-bold">人数</label>
+                            <select id="edit-number" name="number_of_people" class="form-control edit-input" required>
                                 @for ($i = 1; $i <= 10; $i++) <option value="{{ $i }}">{{ $i }}人</option>
                                     @endfor
                             </select>
                         </div>
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer edit-modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">キャンセル</button>
                         <button type="submit" class="btn btn-primary">変更</button>
                     </div>

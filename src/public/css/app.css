@@ -6,6 +6,9 @@
     position: fixed;
     top: 20px;
     left: 20px;
+    background: linear-gradient(220.55deg, #00e0ee 0%, #ad00fe 100%);
+    width: 125px;
+
     z-index: 2000;
 }
 .menu-button {
@@ -92,11 +95,8 @@
     display: none;
 }
 
-
-
 .content-container {
-    margin-top: 55px;
     padding: 20px;
-    height: calc(100vh - 80px);
+    /* height: calc(100vh - 80px); */
     overflow-y: auto;
 }
