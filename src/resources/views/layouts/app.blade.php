@@ -32,7 +32,7 @@
     <div class="header" style="position: fixed; top: 0; width: 100%; z-index: 1000; background-color: white; ">
         <div class="d-flex align-items-center">
             <!-- メニューボタンとテキスト -->
-            <div class="menu-button-container d-flex align-items-center" onclick="toggleMenu()">
+            <div class="menu-button-container d-flex align-items-center bg-info rounded shadow" onclick="toggleMenu()">
                 <div class="menu-button bg-blue-500 border-start-0" id="menuButton" style="cursor: pointer;">
                     <div class="menu-icon">
                         <span></span>
@@ -40,7 +40,7 @@
                         <span></span>
                     </div>
                 </div>
-                <div id="menuText" style="margin-left: 10px; color: #007bff; font-size: 24px;">
+                <div id="menuText" style="margin-left: 20px; color: #1900ffc9; font-size: 24px;ext-align: left;">
                     <h1 class="fw-bold">Rese</h1>
                 </div>
             </div>
@@ -52,6 +52,15 @@
             <div class="close-button" onclick="toggleMenu()" style="cursor: pointer; font-size: 24px; margin: 10px;">×
             </div>
             <a class="nav-link active" href="/">Home</a>
+
+            @if(Auth::check() && Auth::user()->isOwner())
+            <a class="nav-link" href="/owner">Owner Page</a>
+            @elseif(Auth::check() && Auth::user()->isAdmin())
+            <a class="nav-link" href="/admin/owners">Admin Page</a>
+            @endif
+
+
+
             @if (Auth::check())
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
@@ -62,7 +71,10 @@
                     </div>
                 </x-dropdown-link>
             </form>
+         
             <a class="nav-link" href="/mypage">Mypage</a>
+           
+
             @else
             <a class="nav-link" href="/register">Registration</a>
             <a class="nav-link" href="/login">Login</a>
@@ -71,7 +83,7 @@
     </div>
 
     <!-- コンテンツ  -->
-    <div class="content-container " >
+    <div class="content-container ">
         @isset($header)
         <header class="bg-white shadow">
             <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">

@@ -20,13 +20,15 @@
     <!-- 検索バー（固定） -->
     <div class="search-container w-75 w-md-100 mt-2 mb-2" id="all-content">
         <form method="GET" id="searchFrom" action="{{ route('restaurants.index') }}" class="form-inline pull-right">
-            <div class="shadow search-item d-flex align-items-center w-100 rounded bg-white"
-                style=" height: 40px; padding: 0; ">
+            <!-- 上段：並び替え、エリア、ジャンル -->
+            <div class="shadow search-item-top d-flex align-items-center w-100 rounded-top bg-white mb-1"
+                style="height: 40px; padding: 0;">
                 <div class="form-group position-relative mt-3">
-                    <div class="d-flex align-items-center mb-3 ">
-                        <label for="sort" class="mb-0 bg-white ps-1 pt-2 pb-2"
-                            style="width: 110px; height: 40px; vertical-align: middle;">並び替え:</label>
-                        <select name="sort" id="sort" class="form-select border-0 rounded-0 w-75" style="height: 40px;">
+                    <div class="d-flex w-100 align-items-center mb-3">
+                        <label for="sort" class="mb-0 bg-white ps-1 pt-2 pb-2 sort-label"
+                            style="width: 80px; height: 40px; vertical-align: middle;">並び替え:</label>
+                        <select name="sort" id="sort" class="custom-select text-sm border-0 rounded-0 sort-select"
+                            style="height: 40px;">
                             @php
                             $sortOptions = [
                             ['sorttype' => 'random', 'text' => 'ランダム'],
@@ -40,13 +42,11 @@
                                 {{ $sortOption['text'] }}
                             </option>
                             @endforeach
-
                         </select>
                     </div>
                     <div class="vertical-line order-outline"></div>
-
                 </div>
-                <div class="form-group position-relative">
+                <div class="form-group position-relative ">
                     <select name="area" id="area" class="custom-select">
                         <option value="">All area</option>
                         @foreach($areas as $area)
@@ -57,7 +57,6 @@
                     </select>
                     <div class="vertical-line"></div>
                 </div>
-
                 <div class="form-group position-relative">
                     <select name="genre" id="genre" class="custom-select">
                         <option value="">All genre</option>
@@ -67,18 +66,19 @@
                         </option>
                         @endforeach
                     </select>
-                    <div class="vertical-line"></div>
                 </div>
-
-                <div class="form-group position-relative search-input bg-white ">
-                    <div class="d-flex">
-                        <span class="material-symbols-outlined ps-1 pt-2 pb-2 bg-white "
+            </div>
+            <!-- 下段：文字列検索 -->
+            <div class="shadow search-item-bottom d-flex align-items-center w-100 rounded-bottom bg-white"
+                style="height: 40px; padding: 0;">
+                <div class="form-group position-relative search-input bg-white w-100">
+                    <div class="d-flex w-100 align-items-center">
+                        <span class="material-symbols-outlined ps-1 pt-2 pb-2 bg-white"
                             style="caret-color: transparent; margin: 0;">
                             search
                         </span>
-                        <input type="text" name="name" id="name" class="custom-input  bg-white" style=""
+                        <input type="text" name="name" id="name" class="custom-input bg-white " style=""
                             value="{{ request('name') }}" placeholder="Search...">
-
                     </div>
                 </div>
             </div>
@@ -128,50 +128,20 @@
     </div>
     @endif
     <div class="container ">
-        <div class="row " id="search-result">
-            @foreach($restaurants as $restaurant)
-            <div class="col-md-4 col-lg-3 col-6 mb-4">
-                <div class="card h-100 w-100 mt-0">
-                    <img src="{{ $restaurant['image_url'] }}" class="card-img-top" alt="{{ $restaurant['name'] }}">
-                    <div class="card-body">
-                        <h5 class="card-title fw-bold">{{ $restaurant['name'] }}<sup style="font-size: smaller;"><span
-                                    class="text-warning">★</span>
-                                @if($restaurant['reviews_avg_rating'])
-                                <span class="fs-6">{{ $restaurant['reviews_avg_rating'] }}</span>
-                                @else
-                                <sup>投稿なし</sup>
-                                @endif
-                            </sup>
-                        </h5>
-                        <p hidden class="card-text">{{ $restaurant['description'] }} </p>
+        <div class="row " id="restaurant-container" style="min-height: 800px;">
+            @include('partials.restaurant-cards', ['restaurants' => $restaurants, 'favoriteRestaurantIds' =>
+            $favoriteRestaurantIds])
+        </div>
 
-                        <div class="row fs-10 fw-bold ">
-                            <div class="col-3 col-md-4 w-50">
-                                #{{ $restaurant['area']['name'] }}
-                            </div>
-                            <div class="col-3 col-md-4 w-50">
-                                #{{ $restaurant['genre']['name'] }}
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center mt-3">
-                            <form method="GET" action="{{ route('restaurant.detail', $restaurant->id) }}">
-                                @csrf
-                                <button type="submit" class="btn btn-primary">詳しく見る</button>
-                            </form>
 
-                            @if (Auth::check())
 
-                            <span
-                                class="heart {{ in_array($restaurant->id, $favoriteRestaurantIds) ? 'favorited' : '' }}"
-                                data-id="{{ $restaurant->id }}"></span>
-                            @else
-                            <span class="heart" data-id="{{ $restaurant->id }} "></span>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-            </div>
-            @endforeach
+        <div id="loading" style="display:none; text-align:center;">
+            読み込み中...
+        </div>
+
+        <!-- 最後まで読み込んだら表示 -->
+        <div id="end-message" style="display:none; text-align:center;">
+            全ての店舗が表示されました!!
         </div>
     </div>
 </x-app-layout>

@@ -1,6 +1,8 @@
 @section('css')
+<link rel="stylesheet" href="{{ asset('css/card.css') }}">
 <link rel="stylesheet" href="{{ asset('css/owner.css') }}">
-
+<link rel="stylesheet" 
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 @endsection
 
 <x-app-layout>
@@ -17,8 +19,8 @@
         <!-- 店舗一覧 -->
         <div class="row mt-4">
             @foreach($restaurants as $restaurant)
-            <div class="col-md-4">
-                <div class="card">
+            <div class="col-md-4 col-lg-3 col-6 mb-4">
+                <div class="card h-100 w-100 mt-0">
                     @php
                     $imagePath = $restaurant->image_url;
                     // ストレージにファイルが存在するか確認
@@ -29,27 +31,40 @@
                     $imageUrl = $restaurant->image_url;
                     }
                     @endphp
-                    <img src="{{ $imageUrl }}" class="card-img-top h-75" alt="{{ $restaurant->name }}">
+                    @if($imageUrl)
+                        <div class="image-container">
+                            <img src="{{ $imageUrl }}" class="card-img-top" alt="{{ $restaurant->name }}" 
+                                 onerror="this.parentElement.innerHTML='<div class=&quot;card-img-top d-flex align-items-center justify-content-center bg-light text-muted no-image&quot;><div class=&quot;text-center&quot;><i class=&quot;material-symbols-outlined&quot; style=&quot;font-size: 48px;&quot;>image</i><div>画像がありません</div></div></div>';">
+                        </div>
+                    @else
+                        <div class="card-img-top d-flex align-items-center justify-content-center bg-light text-muted no-image">
+                            <div class="text-center">
+                                <i class="material-symbols-outlined" style="font-size: 48px;">image</i>
+                                <div>画像がありません</div>
+                            </div>
+                        </div>
+                    @endif
                     <div class="card-body">
                         <h5 class="card-title fw-bold">{{ $restaurant['name'] }}</h5>
                         <p hidden class="card-text">{{ $restaurant['description'] }}</p>
 
-                        <div class="row fw-bold">
-                            <div class="col-5">
+                        <div class="row fs-10 fw-bold">
+                            <div class="col-3 col-md-4 w-50">
                                 #{{ $restaurant['area']['name'] }}
                             </div>
-                            <div class="col-5">
+                            <div class="col-3 col-md-4 w-50">
                                 #{{ $restaurant['genre']['name'] }}
                             </div>
-
                         </div>
-                        <!-- 編集ボタン -->
-                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#restaurantEditModal" data-id="{{ $restaurant->id }}" data-name="{{ $restaurant->name }}" data-description="{{ $restaurant->description }}" data-area-id="{{ $restaurant->area_id }}" data-genre-id="{{ $restaurant->genre_id }}" data-image-url="{{ $restaurant->image_url }}">
-                            編集
-                        </button>
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <!-- 編集ボタン -->
+                            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#restaurantEditModal" data-id="{{ $restaurant->id }}" data-name="{{ $restaurant->name }}" data-description="{{ $restaurant->description }}" data-area-id="{{ $restaurant->area_id }}" data-genre-id="{{ $restaurant->genre_id }}" data-image-url="{{ $restaurant->image_url }}">
+                                編集
+                            </button>
 
-                        <!-- 予約一覧ボタン -->
-                        <a href="{{ route('reservations', $restaurant->id) }}" class="btn btn-primary">予約一覧</a>
+                            <!-- 予約一覧ボタン -->
+                            <a href="{{ route('reservations', $restaurant->id) }}" class="btn btn-primary">予約一覧</a>
+                        </div>
                     </div>
                 </div>
             </div>
