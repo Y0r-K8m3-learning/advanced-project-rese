@@ -22,17 +22,15 @@ Route::get('/restaurant/{id}', [RestaurantController::class, 'detail'])->name('r
 
 Route::get('/complete', [StripePaymentsController::class, 'complete'])->name('complete');
 
-Route::get('/reservation/complete', [RestaurantController::class, 'complete'])->name('reservation.complete');
+Route::get('/reservation/complete', function () {
+    return view('reservation_complete');
+})->name('reservation.complete');
 
 Route::get('/', [RestaurantController::class, 'index'])->name('home');
 
 Route::get('/register/complete', function () {
     return view('register_complete');
 })->name('register.complete');
-
-Route::get('/reservation/complete', function () {
-    return view('reservation_complete');
-});
 
 Route::get('/restaurants', [RestaurantController::class, 'index'])->name('restaurants.index');
 
@@ -49,7 +47,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/admin/sendMail', [MailController::class, 'sendMail'])->name('admin.sendMail');
 
     Route::post('/payment/index', [StripePaymentsController::class, 'index'])->name('paymentindex');
-    Route::post('/payment', [StripePaymentsController::class, 'payment'])->name('payment.store');
+    Route::post('/payment/store', [StripePaymentsController::class, 'payment'])->name('payment.store');
+    Route::get('/payment/complete', [StripePaymentsController::class, 'complete'])->name('payment.complete');
 
 
 

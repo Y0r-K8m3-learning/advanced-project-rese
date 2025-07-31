@@ -113,17 +113,19 @@ class RestaurantController extends Controller
 
         $hasReviewed = false; //既にレビュー済み
         $isPastReservationExists = false; //予約終了日時以降
+        $favoriteRestaurantIds = []; //お気に入りレストランのID配列
+        
         if ($user) {
             $hasReviewed = $restaurant->reviews()->where('user_id', $user->id)->exists();
 
             //予約終了日時以降か
-
             $isPastReservationExists =  Reservation::isPastReservationExists($restaurant->id, $user->id);
+            
+            //お気に入り状態を取得
+            $favoriteRestaurantIds = $user->favorites()->pluck('restaurant_id')->toArray();
         }
 
-
-
-        return view('detail', compact('restaurant', 'hasReviewed', 'isPastReservationExists'));
+        return view('detail', compact('restaurant', 'hasReviewed', 'isPastReservationExists', 'favoriteRestaurantIds'));
     }
 
     public function store(ReservationRequest  $request)

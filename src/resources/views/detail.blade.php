@@ -2,6 +2,9 @@
 <link rel="stylesheet" href="{{ asset('css/detail.css') }}">
 @endsection
 @section('js')
+<script>
+    window.csrfToken = "{{ csrf_token() }}";
+</script>
 <script src="{{ asset('js/detail.js') }}">
 
 </script>
@@ -14,10 +17,28 @@
     </div>
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
-    <div class="container ">
-        <div class="">
-            <a href="{{ route('home') }}" class="border back-button p-2">&lt;</a>
-            <span class="pl-2 fs-3 fw-bold">{{ $restaurant['name'] }}</span>
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center ">
+                <div class="back-button me-1">
+                    <a href="{{ route('home') }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                            class="bi bi-chevron-left" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+                        </svg>
+                    </a>
+                </div>
+                <span class="fs-3 fw-bold">{{ $restaurant['name'] }}</span>
+            </div>
+            <div class="favorite-section">
+                @if (Auth::check())
+                <span class="heart {{ in_array($restaurant->id, $favoriteRestaurantIds ?? []) ? 'favorited' : '' }}"
+                    data-id="{{ $restaurant->id }}" title="お気に入り"></span>
+                @else
+                <span class="heart" data-id="{{ $restaurant->id }}" title="お気に入り（ログインが必要）"></span>
+                @endif
+            </div>
         </div>
         <div class="d-flex flex-column flex-md-row align-items-stretch">
             <div class="left-half d-flex flex-column fw-bold w-100 w-md-50 p-3 h-100" style="min-width:0;">
@@ -66,29 +87,31 @@
 
             </div>
 
-            <div class="right-half bg-primary rounded shadow d-flex flex-column justify-content-start w-100 w-md-50 p-3 h-100"
+            <div class="right-half reservation-section bg-primary rounded shadow d-flex flex-column justify-content-start w-100 w-md-50 p-4 h-100"
                 style="min-width:0;">
                 <!-- エラーメッセージの表示 -->
                 @if ($errors->has('error'))
-                <div class="alert alert-danger">
+                <div class="alert alert-danger mb-3">
                     {{ $errors->first('error') }}
                 </div>
                 @endif
-                <h2 class="text-white fs-5 fw-bold ps-3 mt-3">予約</h2>
+                <h2 class="text-white fs-4 fw-bold text-center mb-4">予約</h2>
 
-                <div class="d-flex flex-column w-100 flex-grow-1 mt-3 p-3">
+                <div class="d-flex flex-column w-100 flex-grow-1 p-2">
                     <form method="POST" action="{{ route('paymentindex') }}">
                         @csrf
                         <input type="hidden" name="restaurant_id" value="{{ $restaurant->id }}">
 
-                        <div class="form-group">
-                            <input type="date" id="date" name="date" class="form-control w-50 ms-4 rounded" required
-                                value="{{ date('Y-m-d') }}" min="{{ date('Y-m-d') }}">
+                        <div class="form-group mb-3">
+                            <label for="date" class="form-label text-white mb-2">日付</label>
+                            <input type="date" id="date" name="date" class="form-control reservation-input rounded"
+                                required value="{{ date('Y-m-d') }}" min="{{ date('Y-m-d') }}">
                             <x-input-error :messages="$errors->get('date')" class="mt-2" />
                         </div>
 
-                        <div class="form-group mt-2">
-                            <select id="time" name="time" class="form-control w-75 ms-4" required>
+                        <div class="form-group mb-3">
+                            <label for="time" class="form-label text-white mb-2">時間</label>
+                            <select id="time" name="time" class="form-control reservation-input rounded" required>
                                 @php
                                 $currentTime = date('H:i');
                                 $currentMinutes = date('i');
@@ -101,35 +124,40 @@
                                     }
                                     @endphp
                             </select>
-                            <x-input-error :messages="$errors->get('time')" class="mt-2 pl-9" />
+                            <x-input-error :messages="$errors->get('time')" class="mt-2" />
                         </div>
 
-                        <div class="form-group mt-2">
-                            <select id="number" name="number" class="form-control w-75 ms-4" required>
+                        <div class="form-group mb-3">
+                            <label for="number" class="form-label text-white mb-2">人数</label>
+                            <select id="number" name="number" class="form-control reservation-input rounded" required>
                                 @for ($i = 1; $i <= 10; $i++) <option value="{{ $i }}">{{ $i }}人</option>
                                     @endfor
                             </select>
-                            <x-input-error :messages="$errors->get('number')" class="mt-2 pl-9" />
+                            <x-input-error :messages="$errors->get('number')" class="mt-2" />
                         </div>
 
-                        <div class="mt-3 reserve-content w-75 ms-4 text-left ps-3 rounded text-light ">
-                            <div class="reserve-content-item mt-5 mb-3 pt-3">
-                                Shop <span id="shop-name" class="ms-5">{{ $restaurant['name'] }}</span>
+                        <div class="mt-4 reserve-content rounded text-light p-3">
+                            <h5 class="text-white mb-3 fw-bold">予約内容</h5>
+                            <div class="reserve-content-item mb-2">
+                                <span class="fw-bold">店舗:</span> <span id="shop-name" class="ms-2">{{
+                                    $restaurant['name'] }}</span>
                             </div>
-                            <div class="reserve-content-item  mb-3">
-                                Date <span id="selected-date" class="ms-5">{{ date('Y-m-d') }}</span>
+                            <div class="reserve-content-item mb-2">
+                                <span class="fw-bold">日付:</span> <span id="selected-date" class="ms-2">{{ date('Y-m-d')
+                                    }}</span>
                             </div>
-                            <div class="reserve-content-item mb-3">
-                                Time <span id="selected-time" class="ms-5">{{ $selectedTime }}</span>
+                            <div class="reserve-content-item mb-2">
+                                <span class="fw-bold">時間:</span> <span id="selected-time" class="ms-2">{{ $selectedTime
+                                    }}</span>
                             </div>
-                            <div class="reserve-content-item mb-3 pb-2">
-                                Number <span id="selected-number" class="ms-4">1人</span>
+                            <div class="reserve-content-item mb-2">
+                                <span class="fw-bold">人数:</span> <span id="selected-number" class="ms-2">1人</span>
                             </div>
                         </div>
                 </div>
                 <!-- 予約ボタン -->
-                <div class="under-right-content">
-                    <button type="submit" class="btn-reserve  w-100 text-white shadow rounded"
+                <div class="under-right-content mt-3">
+                    <button type="submit" class="btn-reserve w-100 text-white shadow rounded fw-bold py-2"
                         id="reservation-button">予約する</button>
                 </div>
                 </form>
