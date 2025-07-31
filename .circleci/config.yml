@@ -38,14 +38,60 @@ jobs:
           name: run tests
           command: ./vendor/bin/phpunit
   deploy:
-    # This is an example deploy job, not actually used by the workflow
     docker:
       - image: cimg/base:stable
     steps:
-      # Replace this with steps to deploy to users
+      - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - $SSH_KEY_FINGERPRINT
       - run:
-          name: deploy
-          command: '#e.g. ./deploy.sh'
+          name: Add EC2 to known_hosts
+          command: |
+            ssh-keyscan -H $EC2_HOST >> ~/.ssh/known_hosts
+      - run:
+          name: Deploy to EC2
+          command: |
+            ssh $EC2_USER@$EC2_HOST << 'EOF'
+              # アプリケーションディレクトリに移動
+              cd /home/ec2-user/rese/advanced-project-rese
+              
+              # Gitから最新のコードを取得
+              git fetch origin
+              git reset --hard origin/main
+              
+              # Dockerコンテナを停止
+              docker-compose down
+              
+              # 最新のイメージをビルド
+              docker-compose build --no-cache
+              
+              # Composerの依存関係を更新
+              docker-compose run --rm app composer install --no-dev --optimize-autoloader
+              
+              # Laravel設定の最適化
+              docker-compose run --rm app php artisan config:clear
+              docker-compose run --rm app php artisan cache:clear
+              docker-compose run --rm app php artisan route:clear
+              docker-compose run --rm app php artisan view:clear
+              
+              # 設定とキャッシュを最適化
+              docker-compose run --rm app php artisan config:cache
+              docker-compose run --rm app php artisan route:cache
+              docker-compose run --rm app php artisan view:cache
+              
+              # データベースマイグレーション実行
+              docker-compose run --rm app php artisan migrate --force
+              
+              # ストレージリンクを作成（必要に応じて）
+              docker-compose run --rm app php artisan storage:link
+              
+              # Dockerコンテナを起動
+              docker-compose up -d
+              
+              # 不要なDockerリソースをクリーンアップ
+              docker system prune -f
+            EOF
 workflows:
   build-and-test:
     jobs:
@@ -53,6 +99,9 @@ workflows:
           requires:
             - test-php
       - test-php
-    # - deploy:
-    #     requires:
-    #       - build-node
+      - deploy:
+          requires:
+            - build-node
+          filters:
+            branches:
+              only: main
