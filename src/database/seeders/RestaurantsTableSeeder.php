@@ -42,8 +42,17 @@ class RestaurantsTableSeeder extends Seeder
             ['name' => '木船', 'area_id' => 27, 'genre_id' => 5, 'description' => '毎日店主自ら市場等に出向き、厳選した魚介類が、お鮨をはじめとした繊細な料理に仕立てられます。また、選りすぐりの種類豊富なドリンクもご用意しております。', 'image_url' => 'https://coachtech-matter.s3-ap-northeast-1.amazonaws.com/image/sushi.jpg']
         ];
 
+        // テストユーザーを除外してオーナーIDを割り当て
+        $testEmails = ['test_admin@example.com', 'test_owner@example.com', 'test_user1@example.com', 'test_user2@example.com'];
+        $availableOwners = User::whereNotIn('email', $testEmails)->get();
+
         foreach ($restaurants as $restaurant) {
-            $restaurant['owner_id'] = User::inRandomOrder()->first()->id; // ランダムにユーザーを選択
+            if ($availableOwners->isNotEmpty()) {
+                $restaurant['owner_id'] = $availableOwners->random()->id;
+            } else {
+                // テスト以外のユーザーがいない場合は、最初のユーザーを使用
+                $restaurant['owner_id'] = User::first()->id;
+            }
 
             Restaurant::create($restaurant); // Eloquentのcreateメソッドを使用してレコードを作成
         }

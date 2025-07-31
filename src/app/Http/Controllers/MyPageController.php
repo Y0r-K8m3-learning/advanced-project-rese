@@ -16,18 +16,13 @@ class MyPageController extends Controller
 
         $now = Carbon::now();
 
-        $reservations = Reservation::where('user_id', $user->id)->where('reservation_date', '>', $now->format('Y-m-d'))
-            ->orWhere(function ($query) use ($now) {
-                $query->where(
-                    'reservation_date',
-                    '=',
-                    $now->format('Y-m-d')
-                )
-                    ->where(
-                        'reservation_time',
-                        '>',
-                        $now->format('H:i:s')
-                    );
+        $reservations = Reservation::where('user_id', $user->id)
+            ->where(function ($query) use ($now) {
+                $query->where('reservation_date', '>', $now->format('Y-m-d'))
+                    ->orWhere(function ($subQuery) use ($now) {
+                        $subQuery->where('reservation_date', '=', $now->format('Y-m-d'))
+                            ->where('reservation_time', '>', $now->format('H:i:s'));
+                    });
             })
             ->with('restaurant')
             ->get();

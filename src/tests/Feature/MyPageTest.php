@@ -56,7 +56,7 @@ class MyPageTest extends TestCase
 
     public function test_mypage_shows_future_reservations_only()
     {
-    
+
 
         $pastReservation = Reservation::create([
             'user_id' => $this->user->id,
@@ -85,19 +85,21 @@ class MyPageTest extends TestCase
 
     public function test_mypage_shows_todays_future_reservations()
     {
+        // 当日の過去の時間の予約（表示されない）
         $pastTimeReservation = Reservation::create([
             'user_id' => $this->user->id,
             'restaurant_id' => $this->restaurant->id,
             'reservation_date' => Carbon::today()->format('Y-m-d'),
-            'reservation_time' => Carbon::now()->subHour()->format('H:i:s'),
+            'reservation_time' => '00:00:01',
             'number_of_people' => 2
         ]);
 
+        // 当日の未来の時間の予約（表示される）
         $futureTimeReservation = Reservation::create([
             'user_id' => $this->user->id,
             'restaurant_id' => $this->restaurant->id,
             'reservation_date' => Carbon::today()->format('Y-m-d'),
-            'reservation_time' => Carbon::now()->addHour()->format('H:i:s'),
+            'reservation_time' => '23:59:59',
             'number_of_people' => 2
         ]);
 

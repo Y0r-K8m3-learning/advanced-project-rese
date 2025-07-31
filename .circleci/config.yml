@@ -30,13 +30,43 @@ jobs:
     # Install php packages and run tests
     docker:
       - image: cimg/php:8.2-node
+      - image: cimg/mysql:8.0
+        environment:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: laravel_test_db
+          MYSQL_USER: laravel_user
+          MYSQL_PASSWORD: laravel_pass
+    working_directory: ~/project/src
     steps:
       - checkout:
           path: ~/project
-      - php/install-packages
+      - php/install-packages:
+          app-dir: ~/project/src
+      - run:
+          name: Wait for MySQL
+          command: dockerize -wait tcp://localhost:3306 -timeout 1m
+      - run:
+          name: Setup test environment
+          command: |
+            sed -i 's/DB_HOST=mysql/DB_HOST=127.0.0.1/' .env.testing
+            sed -i 's/DB_USERNAME=laravel_user/DB_USERNAME=laravel_user/' .env.testing
+            sed -i 's/DB_PASSWORD=laravel_pass/DB_PASSWORD=laravel_pass/' .env.testing
+      - run:
+          name: Check database connection
+          command: |
+            php artisan tinker --execute="echo 'DB Host: ' . config('database.connections.mysql.host'); echo '\nDB Name: ' . config('database.connections.mysql.database');" --env=testing
+      - run:
+          name: Run migrations with verbose output
+          command: php artisan migrate --env=testing --force --verbose
+      - run:
+          name: Check migration status
+          command: php artisan migrate:status --env=testing
+      - run:
+          name: Run database seeder
+          command: php artisan db:seed --env=testing --force
       - run:
           name: run tests
-          command: ./vendor/bin/phpunit
+          command: ./vendor/bin/phpunit --testsuite=Feature
   deploy:
     docker:
       - image: cimg/base:stable
@@ -52,7 +82,7 @@ jobs:
       - run:
           name: Deploy to EC2
           command: |
-            ssh $EC2_USER@$EC2_HOST << 'EOF'
+            ssh $EC2_USER@$EC2_HOST \<< 'EOF'
               # アプリケーションディレクトリに移動
               cd /home/ec2-user/rese/advanced-project-rese
               
@@ -93,12 +123,27 @@ jobs:
               docker system prune -f
             EOF
 workflows:
-  build-and-test:
+  # 別ブランチ（main以外）でのunittest実行
+  test-on-branches:
     jobs:
+      - test-php:
+          filters:
+            branches:
+              ignore: main
+
+  # mainブランチマージ後にテスト→デプロイ実行
+  deploy-on-main:
+    jobs:
+      - test-php:
+          filters:
+            branches:
+              only: main
       - build-node:
           requires:
             - test-php
-      - test-php
+          filters:
+            branches:
+              only: main
       - deploy:
           requires:
             - build-node

@@ -17,7 +17,6 @@ class RestaurantController extends Controller
 {
     public function index(Request $request)
     {
-
         $areaId = $request->input('area');
         $genreId = $request->input('genre');
         $name = $request->input('name');
@@ -25,7 +24,6 @@ class RestaurantController extends Controller
         $query = Restaurant::query();
 
         if ($areaId) {
-
             $query->where('area_id', $areaId);
         }
 
@@ -45,12 +43,24 @@ class RestaurantController extends Controller
             }
         }
 
-        $restaurants = $query->with(['area', 'genre', 'reviews'])->withAvg('reviews', 'rating')->get();
+        $restaurants = $query->with(['area', 'genre', 'reviews'])->withAvg('reviews', 'rating')->paginate(10);
         $areas = Area::all();
         $genres = Genre::all();
         $user = Auth::user();
 
         $favoriteRestaurantIds = $user ? $user->favorites()->pluck('restaurant_id')->toArray() : [];
+
+        // AJAX リクエストの場合は部分的なビューを返す
+        if ($request->ajax()) {
+            if ($restaurants->isEmpty() || $restaurants->count() === 0) {
+                return response()->json(['message' => 'No more data'], 204);
+            }
+            
+            // デバッグ用コメント追加
+            $html = view('partials.restaurant-cards', compact('restaurants', 'favoriteRestaurantIds'))->render();
+            $debugInfo = "<!-- DEBUG: Page {$restaurants->currentPage()}, Count {$restaurants->count()}, Total {$restaurants->total()} -->\n";
+            return response($debugInfo . $html);
+        }
 
         return view(
             'restaurant',
@@ -91,6 +101,9 @@ class RestaurantController extends Controller
 
         return response()->json(['status' => 'removed']);
     }
+
+    
+
 
     public function detail($restaurant_id)
     {
@@ -213,7 +226,7 @@ class RestaurantController extends Controller
     public function owner(Request $request)
     {
         $owner = Auth::user();
-        $restaurants = $owner->restaurant;
+        $restaurants = Restaurant::where('owner_id', $owner->id)->get();
         $areas = Area::all();
         $genres = Genre::all();
 
