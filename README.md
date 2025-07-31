@@ -1,4 +1,4 @@
-# beginner-project-atte(上級模擬案件+proテスト)
+# project-rese(上級模擬案件+proテスト)
 :point_right:マーク : proテストで追加した機能
 # アプリケーションの説明
  - 飲食店予約サービスアプリ
