@@ -48,9 +48,9 @@ jobs:
       - run:
           name: Setup test environment
           command: |
-            echo "DB_HOST=127.0.0.1" >> .env.testing
-            echo "DB_USERNAME=laravel_user" >> .env.testing
-            echo "DB_PASSWORD=laravel_pass" >> .env.testing
+            sed -i 's/DB_HOST=mysql/DB_HOST=127.0.0.1/' .env.testing
+            sed -i 's/DB_USERNAME=laravel_user/DB_USERNAME=laravel_user/' .env.testing
+            sed -i 's/DB_PASSWORD=laravel_pass/DB_PASSWORD=laravel_pass/' .env.testing
       - run:
           name: Check database connection
           command: |
