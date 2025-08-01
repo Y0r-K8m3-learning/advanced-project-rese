@@ -9,8 +9,8 @@
  - 自社で予約サービスを展開するため
 
  ## アプリケーションURL
- - デプロイ用 ※現在停止中
-### [店舗予約アプリ(AWS)](http://ec2-54-221-5-154.compute-1.amazonaws.com/)
+ - デプロイ用 
+### [店舗予約アプリ(AWS)](http://ec2-13-158-8-45.ap-northeast-1.compute.amazonaws.com/)
 
 
  ## リポジトリURL
