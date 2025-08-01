@@ -1,52 +1,60 @@
 // ハートボタンのイベントバインド関数
 function bindHeartEvents() {
-    $(".heart").off("click").on("click", function () {
-        var heart = $(this);
-        var restaurantId = heart.data("id");
-        if (!heart.hasClass("favorited")) {
-            // お気に入り追加
-            $.ajax({
-                url: "/restaurants/" + restaurantId + "/favorite",
-                type: "POST",
-                headers: {
-                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-                },
-                data: {
-                    _token: window.csrfToken,
-                },
-                success: function (response) {
-                    heart.addClass("favorited");
-                },
-                error: function (xhr) {
-                    if (xhr.status === 401) {
-                        window.location.href = "/login";
-                    }
-                },
-            });
-        } else {
-            // お気に入り解除
-            $.ajax({
-                url: "/restaurants/" + restaurantId + "/unfavorite",
-                type: "POST",
-                headers: {
-                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-                },
-                data: {
-                    _token: window.csrfToken,
-                },
-                success: function (response) {
-                    heart.removeClass("favorited");
-                },
-                error: function (xhr) {
-                },
-            });
-        }
-    });
+    $(".heart")
+        .off("click")
+        .on("click", function () {
+            var heart = $(this);
+            var restaurantId = heart.data("id");
+            if (!heart.hasClass("favorited")) {
+                // お気に入り追加
+                $.ajax({
+                    url: "/restaurants/" + restaurantId + "/favorite",
+                    type: "POST",
+                    headers: {
+                        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                            "content"
+                        ),
+                    },
+                    data: {
+                        _token: window.csrfToken,
+                    },
+                    success: function (response) {
+                        heart.addClass("favorited");
+                    },
+                    error: function (xhr) {
+                        if (xhr.status === 401) {
+                            window.location.href = "/login";
+                        }
+                    },
+                });
+            } else {
+                // お気に入り解除
+                $.ajax({
+                    url: "/restaurants/" + restaurantId + "/unfavorite",
+                    type: "POST",
+                    headers: {
+                        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                            "content"
+                        ),
+                    },
+                    data: {
+                        _token: window.csrfToken,
+                    },
+                    success: function (response) {
+                        heart.removeClass("favorited");
+                    },
+                    error: function (xhr) {},
+                });
+            }
+        });
 }
 
 $(document).ready(function () {
     // 初期化時にハートボタンをバインド
     bindHeartEvents();
+
+    let selectedDate = $("#date").val();
+    updateTimes(selectedDate);
     // 時間が変更されたとき
     $("#time").change(function () {
         $("#selected-time").text($(this).val());
@@ -57,16 +65,23 @@ $(document).ready(function () {
         $("#selected-number").text($(this).val() + "人");
     });
 
+    // 日付変更時に時間の選択肢を更新
+    $("#date").change(function () {
+        console.log($(this).val() + "aa");
+        var selectedDate = $(this).val();
+        updateTimes(selectedDate);
+    });
+
     // 現在の日付と現在時刻以降の時間を選択肢にする関数
-    function updateTimes() {
+    function updateTimes(selectedDate) {
         var timeSelect = $("#time");
         var selectedTime = timeSelect.val(); // 現在選択されている時間を保存
         timeSelect.empty(); // 既存の選択肢をクリア
 
         var now = new Date();
         var currentDate = now.toISOString().split("T")[0]; // 今日の日付を取得
-        var selectedDate = $("#date").val();
-        var currentTimeMinutes = now.getHours() * 60 + now.getMinutes(); // 現在時刻を分単位で取得
+        // var selectedDate = $("#date").val();
+        // var currentTimeMinutes = now.getHours() * 60 + now.getMinutes(); // 現在時刻を分単位で取得
 
         // 現在時刻を次の30分単位の丸めた時間に変更
         if (now.getMinutes() > 30) {
@@ -93,31 +108,46 @@ $(document).ready(function () {
                 var optionTime = parseInt(hours) * 60 + parseInt(minutes);
 
                 var option = $("<option>").val(optionValue).text(optionValue);
-
+                console.log(
+                    `selectedDate:${selectedDate},currentDate:${currentDate}
+                    :::: selectedDate === currentDate→ ${
+                        selectedDate === currentDate
+                    }::::
+                    optionTime < roundedTimeMinutes}→${
+                        optionTime < roundedTimeMinutes
+                    }
+                    `
+                );
                 // 選択日が今日の場合、現在時刻以降のみ選択可能にする
                 if (
                     selectedDate === currentDate &&
                     optionTime < roundedTimeMinutes
                 ) {
                     option.prop("disabled", true);
+                    selectedTime = initialTime;
                 }
 
                 timeSelect.append(option);
             }
+
+            console.log(selectedTime);
 
             // ユーザーが以前に選択した時間を再選択
             if (
                 selectedTime &&
                 timeSelect.find('option[value="' + selectedTime + '"]').length
             ) {
+                console.log("選択済み");
                 timeSelect.val(selectedTime);
                 $("#selected-time").text(selectedTime);
             } else {
+                console.log("初期表示");
                 // 初期表示に選択された時間を設定
                 var initialTime =
                     now.getHours().toString().padStart(2, "0") +
                     ":" +
                     now.getMinutes().toString().padStart(2, "0");
+                console.log(initialTime);
                 timeSelect.val(initialTime);
                 $("#selected-time").text(initialTime);
             }
